@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include <ncurses.h>
 #include <string.h>
+#include <time.h>
 
 #define PORT 5000
 #define MAXMSG 100
@@ -104,6 +105,8 @@ int main(void)
                                 i_message++;
                         } else if (events[i].data.fd == sockfd) { //from server
                                 char buffer[MAXMSG] = {0};
+                                time_t timep;
+                                struct tm *tm_s;
                                 long int status = recv(events[i].data.fd, buffer, sizeof(buffer), 0);
                                 if (status == -1) {
                                         handle_error("recv");
@@ -111,7 +114,11 @@ int main(void)
                                 else if (status == 0) { //connection to server closed
                                         handle_error("recv");
                                 }
-                                mvwprintw(messages_window, j, 1, "Received: %s", buffer);
+
+                                timep = time(NULL);
+                                tm_s = localtime(&timep);
+                                mvwprintw(messages_window, j, 1, "%02d:%02d:%02d %s", tm_s->tm_hour,
+                                                                tm_s->tm_min, tm_s->tm_sec, buffer);
                                 j++;
                         } else {
                                 handle_error("fd");
