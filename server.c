@@ -8,6 +8,7 @@
 #include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
 #define LISTEN_BACKLOG 50
 #define PORT 5000
@@ -84,6 +85,8 @@ int main(void)
 
                         } else { //event from client socket
                                 char buffer[MAXMSG] = {0};
+                                time_t timep;
+                                struct tm *tm_s;
                                 long int status = recv(events[i].data.fd, buffer, sizeof(buffer), 0);
 
                                 if (status == -1) { //error
@@ -95,8 +98,11 @@ int main(void)
                                 }
                                 //else
                                 printf("Received: %s\n", buffer);
+                                timep = time(NULL);
+                                tm_s = localtime(&timep);
                                 send(events[i].data.fd, buffer, sizeof(buffer), 0);
-                                printf("Sent: %s\n", buffer);
+                                printf("%02d:%02d:%02d %s\n", tm_s->tm_hour,
+                                                                tm_s->tm_min, tm_s->tm_sec, buffer);
                         }
                 }
         }

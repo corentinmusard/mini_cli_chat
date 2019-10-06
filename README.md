@@ -10,10 +10,10 @@ First things to be done first
 - [x] server: epoll: asynchrone connections 
 - [x] client: epoll: asynchrone gestion of output(new messages from server) and input(new messages from keyboard)
 - [x] client: display with ncurses
+- [x] add date to message
 - [ ] server: forward messages received by a client to every clients connected to the server
 - [ ] server: notify clients when someone leave server
 - [ ] add nicknames support
-- [ ] add date to message
 - [ ] connection to server with with ssl
 - [ ] add channels support
 - [ ] add privates messages support
