@@ -60,7 +60,7 @@ int main(void)
                 }
 
                 for (int i = 0; i < nfds; i++) {
-                        if (events[i].data.fd == sockfd) {
+                        if (events[i].data.fd == sockfd) { //event from server socket
                                 conn_sock = accept4(sockfd, NULL, NULL, SOCK_NONBLOCK);
                                 if (conn_sock == -1) {
                                         handle_error("accept");
@@ -70,19 +70,22 @@ int main(void)
                                 if (epoll_ctl(epollfd, EPOLL_CTL_ADD, conn_sock, &ev) == -1) {
                                         handle_error("epoll_ctl: conn_sock");
                                 }
-                        } else {
-                                //do_use_fd(events[i].data.fd);
-                                //Got a connection
+                                printf("Connection open: %d\n", conn_sock);
+                        } else { //event from client socket
                                 char buffer[MAXMSG] = {0};
-                                //printf("%ld\n", sizeof(buffer));
-                                if (recv(events[i].data.fd, buffer, sizeof(buffer), 0) == -1) {
+                                long int status = recv(events[i].data.fd, buffer, sizeof(buffer), 0);
+
+                                if (status == -1) { //error
                                         handle_error("recv");
+                                } else if (status == 0) { //connection closed
+                                        printf("Connection closed: %d\n", events[i].data.fd);
+                                        close(events[i].data.fd);
+                                        continue;
                                 }
+                                //else
                                 printf("Received: %s\n", buffer);
-                                //printf("Got a connection; writing CHAT_BANNER then closing.\n");
                                 send(events[i].data.fd, buffer, sizeof(buffer), 0);
                                 printf("Sent: %s\n", buffer);
-                                //close(events[i].data.fd);
                         }
                 }
         }
