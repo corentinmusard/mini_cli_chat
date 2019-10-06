@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <ncurses.h>
+#include <string.h>
 
 #define PORT 5000
 #define MAXMSG 100
@@ -19,7 +20,9 @@ int main(void)
         struct epoll_event ev, events[MAX_EVENTS];
         int nfds, epollfd;
         int sockfd;
-       // char buffer[100] = {0};
+        int j = 3, i_message = 0;
+        char buffer_message[MAXMSG] = {0};
+        WINDOW *messages_window, *input_window;
 
         const struct sockaddr_in addr = {
                 .sin_family = AF_INET,
@@ -53,13 +56,18 @@ int main(void)
                 handle_error("epoll_ctl: STDIN_FILENO");
         }
 
-        initscr(); //init screen
-        printw("Hello World");
-        refresh();
-        getch();
-
+        initscr();
+        messages_window = subwin(stdscr, LINES-2, COLS, 0, 0);
+        input_window = subwin(stdscr, 2, COLS, LINES-2, 0);
+        mvwprintw(messages_window, 1, 1, "Ceci est la fenetre du messages_window\n");
+        mvwprintw(messages_window, 2, 1, "Salut toi\n");
+        mvwprintw(input_window, 1, 1, ">> ");
+        box(messages_window, ACS_VLINE, ACS_HLINE);
+        move(LINES-1, 4);
+        
         while(1) {
-                printf("Envoyer >> ");
+                wrefresh(messages_window);
+                wrefresh(input_window);
                 nfds = epoll_wait(epollfd, events, MAX_EVENTS, -1);
                 if (nfds == -1) {
                         handle_error("epoll_wait");
@@ -67,26 +75,49 @@ int main(void)
 
                 for (int i = 0; i < nfds; i++) {
                         if (events[i].data.fd == STDIN_FILENO) { //from stdin
-                                char buffer[MAXMSG] = {0};
-                                fgets(buffer, MAXMSG, stdin);
-                                if (send(sockfd, buffer, sizeof(buffer), 0) == -1) {
-                                        handle_error("send");
+                                char buffer[1] = {0};
+                                if (read(events[i].data.fd, buffer, 1) == -1) {
+                                        handle_error("read");
                                 }
-                                printf("Fait.\n");
+
+                                if (buffer[0] == '\r') { //end of the message, send it
+                                        if (send(sockfd, buffer_message, sizeof(buffer_message), 0) == -1) {
+                                                handle_error("send");
+                                        }
+                                        memset(buffer_message, 0, sizeof(buffer_message));
+                                        i_message = 0;
+                                        clrtoeol();
+                                        wmove(input_window, LINES-1, 4);
+                                        continue;
+                                } else if (buffer[0] == 127) { //DEL
+                                        buffer_message[i_message] = '\0';
+                                        i_message--;
+                                        if (i_message < 0) {
+                                                i_message = 0;
+                                        }
+                                        wmove(input_window, 1, i_message+4);
+                                        wdelch(input_window);
+                                        continue;
+                                }
+                                buffer_message[i_message] = buffer[0];
+                                mvwprintw(input_window, 1, i_message+4, "%c", buffer[0]);
+                                i_message++;
                         } else if (events[i].data.fd == sockfd) { //from server
                                 char buffer[MAXMSG] = {0};
-                                if (recv(events[i].data.fd, buffer, sizeof(buffer), 0) == -1) {
+                                long int status = recv(events[i].data.fd, buffer, sizeof(buffer), 0);
+                                if (status == -1) {
                                         handle_error("recv");
                                 }
-                                printf("Received: %s\n", buffer);
+                                else if (status == 0) { //connection to server closed
+                                        handle_error("recv");
+                                }
+                                mvwprintw(messages_window, j, 1, "Received: %s", buffer);
+                                j++;
                         } else {
                                 handle_error("fd");
                         }
-                }
-
-                
+                }  
         }
-
 
         if (close(sockfd) == -1) {
                 handle_error("close");

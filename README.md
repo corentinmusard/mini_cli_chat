@@ -9,7 +9,7 @@ First things to be done first
 - [x] server: allow clients to connect
 - [x] server: epoll: asynchrone connections 
 - [x] client: epoll: asynchrone gestion of output(new messages from server) and input(new messages from keyboard)
-- [ ] client: display with ncurses
+- [x] client: display with ncurses
 - [ ] server: forward messages received by a client to every clients connected to the server
 - [ ] server: notify clients when someone leave server
 - [ ] add nicknames support
