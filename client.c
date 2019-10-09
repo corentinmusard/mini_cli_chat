@@ -10,12 +10,13 @@
 #include <time.h>
 
 #include "cli.h"
+#include "asynchronous.h"
 #include "utils.h"
 
 
 int main(void)
 {
-        struct epoll_event ev, events[MAX_EVENTS];
+        struct epoll_event events[MAX_EVENTS];
         int nfds, epollfd;
         int sockfd;
         int j = 3, i_message = 0;
@@ -37,22 +38,9 @@ int main(void)
                 handle_error("connect");
         }
 
-        epollfd = epoll_create1(0);
-        if (epollfd == -1) {
-                handle_error("epoll_create1");
-        }
-
-        ev.events = EPOLLIN;
-        ev.data.fd = sockfd;
-        if (epoll_ctl(epollfd, EPOLL_CTL_ADD, sockfd, &ev) == -1) {
-                handle_error("epoll_ctl: sockfd");
-        }
-
-        ev.events = EPOLLIN;
-        ev.data.fd = STDIN_FILENO;
-        if (epoll_ctl(epollfd, EPOLL_CTL_ADD, STDIN_FILENO, &ev) == -1) {
-                handle_error("epoll_ctl: STDIN_FILENO");
-        }
+        epollfd = async_init();
+        register_event(epollfd, sockfd, EPOLLIN);
+        register_event(epollfd, STDIN_FILENO, EPOLLIN);
 
         init_cli(&messages_window, &input_window);
         

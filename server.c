@@ -12,10 +12,11 @@
 
 #include "utils.h"
 #include "log.h"
+#include "asynchronous.h"
 
 int main(void)
 {
-        struct epoll_event ev, events[MAX_EVENTS];
+        struct epoll_event events[MAX_EVENTS];
         int conn_sock, nfds, epollfd;
         int sockfd;
         const struct sockaddr_in addr = {
@@ -37,16 +38,8 @@ int main(void)
                 handle_error("listen");
         }
 
-        epollfd = epoll_create1(0);
-        if (epollfd == -1) {
-                handle_error("epoll_create1");
-        }
-
-        ev.events = EPOLLIN;
-        ev.data.fd = sockfd;
-        if (epoll_ctl(epollfd, EPOLL_CTL_ADD, sockfd, &ev) == -1) {
-                handle_error("epoll_ctl: sockfd");
-        }
+        epollfd = async_init();
+        register_event(epollfd, sockfd, EPOLLIN);
 
         while (1) {
                 nfds = epoll_wait(epollfd, events, MAX_EVENTS, -1);
@@ -60,13 +53,9 @@ int main(void)
                                 if (conn_sock == -1) {
                                         handle_error("accept");
                                 }
-                                ev.events = EPOLLIN | EPOLLET;
-                                ev.data.fd = conn_sock;
-                                if (epoll_ctl(epollfd, EPOLL_CTL_ADD, conn_sock, &ev) == -1) {
-                                        handle_error("epoll_ctl: conn_sock");
-                                }
-                                if (send(conn_sock, CHAT_BANNER, sizeof(CHAT_BANNER), 0) == -1) {
+                                register_event(epollfd, conn_sock, EPOLLIN | EPOLLET);
                                 info("Connection open: %d\n", conn_sock);
+                                /*if (send(conn_sock, CHAT_BANNER, sizeof(CHAT_BANNER), 0) == -1) {
                                         printf("send1");
                                         exit(1);
                                 }
@@ -75,7 +64,7 @@ int main(void)
                                 if (send(conn_sock, m2, sizeof(m2), 0) == -1) {
                                         printf("send2");
                                         exit(1);
-                                }
+                                }*/
 
                         } else { //event from client socket
                                 char buffer[MAXMSG] = {0};

@@ -16,7 +16,11 @@ client.o: cli.h utils.h #asynchronous.h
 server.o: utils.h log.h #asynchronous.h
 
 cli.o: cli.h
+
+asynchronous.o: asynchronous.h
+
 utils.o: utils.h
+
 log.o: log.h
 
 clean:
