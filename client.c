@@ -5,10 +5,11 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <ncurses.h>
+#include <curses.h>
 #include <string.h>
 #include <time.h>
 
+#include "cli.h"
 #define PORT 5000
 #define MAXMSG 100
 #define MAX_EVENTS 10
@@ -23,7 +24,7 @@ int main(void)
         int sockfd;
         int j = 3, i_message = 0;
         char buffer_message[MAXMSG] = {0};
-        WINDOW *messages_window, *input_window;
+        WINDOW *messages_window = NULL, *input_window = NULL;
 
         const struct sockaddr_in addr = {
                 .sin_family = AF_INET,
@@ -57,14 +58,7 @@ int main(void)
                 handle_error("epoll_ctl: STDIN_FILENO");
         }
 
-        initscr();
-        messages_window = subwin(stdscr, LINES-2, COLS, 0, 0);
-        input_window = subwin(stdscr, 2, COLS, LINES-2, 0);
-        mvwprintw(messages_window, 1, 1, "Ceci est la fenetre du messages_window\n");
-        mvwprintw(messages_window, 2, 1, "Salut toi\n");
-        mvwprintw(input_window, 1, 1, ">> ");
-        box(messages_window, ACS_VLINE, ACS_HLINE);
-        move(LINES-1, 4);
+        init_cli(&messages_window, &input_window);
         
         while(1) {
                 wrefresh(messages_window);

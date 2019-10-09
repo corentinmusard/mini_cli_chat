@@ -7,14 +7,17 @@ EXEC=client server
 
 all: $(EXEC)
 
+client: client.o cli.o #asynchronous.o utils.o
 client: client.o
 
 server: server.o
 
+client.o: cli.h #asynchronous.h utils.h
 client.o: client.c
 
 server.o: server.c
 
+cli.o: cli.h
 all: $(EXEC)
 
 clean:
