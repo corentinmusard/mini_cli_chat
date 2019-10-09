@@ -107,8 +107,9 @@ int main(void)
 
                                 timep = time(NULL);
                                 tm_s = localtime(&timep);
-                                mvwprintw(messages_window, j, 1, "%02d:%02d:%02d %s", tm_s->tm_hour,
-                                                                tm_s->tm_min, tm_s->tm_sec, buffer);
+                                //TODO: don't use format directly here
+                                mvwprintw(messages_window, j, 1, "%02d:%02d:%02d %.*s", tm_s->tm_hour,
+                                                                tm_s->tm_min, tm_s->tm_sec, MAXMSG, buffer);
                                 j++;
                         } else {
                                 handle_error("fd");
