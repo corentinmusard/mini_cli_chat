@@ -7,13 +7,13 @@ EXEC=client server
 
 all: $(EXEC)
 
-client: client.o cli.o utils.o #asynchronous.o 
+client: client.o cli.o utils.o asynchronous.o 
 
-server: server.o log.o utils.o #asynchronous.o
+server: server.o log.o utils.o asynchronous.o
 
-client.o: cli.h utils.h #asynchronous.h 
+client.o: cli.h utils.h asynchronous.h 
 
-server.o: utils.h log.h #asynchronous.h
+server.o: utils.h log.h asynchronous.h
 
 cli.o: cli.h
 
