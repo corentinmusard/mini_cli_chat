@@ -18,6 +18,7 @@
 
 #define handle_error(msg) \
            do { perror(msg); exit(EXIT_FAILURE); } while (0)
+#include "log.h"
 
 int main(void)
 {
@@ -71,8 +72,8 @@ int main(void)
                                 if (epoll_ctl(epollfd, EPOLL_CTL_ADD, conn_sock, &ev) == -1) {
                                         handle_error("epoll_ctl: conn_sock");
                                 }
-                                printf("Connection open: %d\n", conn_sock);
                                 if (send(conn_sock, CHAT_BANNER, sizeof(CHAT_BANNER), 0) == -1) {
+                                info("Connection open: %d\n", conn_sock);
                                         printf("send1");
                                         exit(1);
                                 }
@@ -92,17 +93,13 @@ int main(void)
                                 if (status == -1) { //error
                                         handle_error("recv");
                                 } else if (status == 0) { //connection closed
-                                        printf("Connection closed: %d\n", events[i].data.fd);
+                                        info("Connection closed: %d\n", events[i].data.fd);
                                         close(events[i].data.fd);
                                         continue;
                                 }
                                 //else
-                                printf("Received: %s\n", buffer);
-                                timep = time(NULL);
-                                tm_s = localtime(&timep);
-                                send(events[i].data.fd, buffer, sizeof(buffer), 0);
-                                printf("%02d:%02d:%02d %s\n", tm_s->tm_hour,
-                                                                tm_s->tm_min, tm_s->tm_sec, buffer);
+                                //send(events[i].data.fd, buffer, sizeof(buffer), 0);
+                                info("%.*s\n", MAXMSG, buffer);
                         }
                 }
         }

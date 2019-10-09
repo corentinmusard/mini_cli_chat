@@ -8,17 +8,15 @@ EXEC=client server
 all: $(EXEC)
 
 client: client.o cli.o #asynchronous.o utils.o
-client: client.o
 
-server: server.o
+server: server.o log.o #utils.o asynchronous.o
 
 client.o: cli.h #asynchronous.h utils.h
-client.o: client.c
 
-server.o: server.c
+server.o: utils.h log.h #asynchronous.h
 
 cli.o: cli.h
-all: $(EXEC)
+log.o: log.h
 
 clean:
 	rm -f *.o
