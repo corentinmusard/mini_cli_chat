@@ -10,14 +10,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-#define LISTEN_BACKLOG 50
-#define PORT 5000
-#define MAX_EVENTS 10
-#define MAXMSG 100
-#define CHAT_BANNER "Welcome to the basic chat!"
-
-#define handle_error(msg) \
-           do { perror(msg); exit(EXIT_FAILURE); } while (0)
+#include "utils.h"
 #include "log.h"
 
 int main(void)

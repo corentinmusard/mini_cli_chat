@@ -10,12 +10,8 @@
 #include <time.h>
 
 #include "cli.h"
-#define PORT 5000
-#define MAXMSG 100
-#define MAX_EVENTS 10
+#include "utils.h"
 
-#define handle_error(msg) \
-           do { perror(msg); endwin(); exit(EXIT_FAILURE); } while (0)
 
 int main(void)
 {
