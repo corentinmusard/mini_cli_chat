@@ -79,8 +79,6 @@ int main(void)
 
                         } else { //event from client socket
                                 char buffer[MAXMSG] = {0};
-                                time_t timep;
-                                struct tm *tm_s;
                                 long int status = recv(events[i].data.fd, buffer, sizeof(buffer), 0);
 
                                 if (status == -1) { //error
