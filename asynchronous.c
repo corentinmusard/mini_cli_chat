@@ -4,11 +4,7 @@
 #include "utils.h"
 
 int async_init(void) {
-        int epollfd = epoll_create1(0);
-        if (epollfd == -1) {
-                return -1;
-        }
-        return epollfd;
+        return epoll_create1(0);
 }
 
 int register_event(int epollfd, int fd, unsigned int events) {
