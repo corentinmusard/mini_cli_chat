@@ -45,7 +45,7 @@ int main(void)
                 goto clean_fd;
         }
 
-        if(sigaction(SIGINT, &act, NULL) == -1) {
+        if (sigaction(SIGINT, &act, NULL) == -1) {
                 perror("sigaction");
                 goto clean_fd;
         }
@@ -109,8 +109,7 @@ int main(void)
                                 if (status == -1) {
                                         perror("recv");
                                         goto clean;
-                                }
-                                else if (status == 0) { //connection to server closed
+                                } else if (status == 0) { //connection to server closed
                                         perror("recv");
                                         goto clean;
                                 }

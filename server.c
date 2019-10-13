@@ -42,7 +42,7 @@ int main(void)
                 goto clean_server_fd;
         }
 
-        if(sigaction(SIGINT, &act, NULL) == -1) {
+        if (sigaction(SIGINT, &act, NULL) == -1) {
                 perror("sigaction");
                 goto clean_server_fd;
         }
@@ -58,17 +58,17 @@ int main(void)
         }
 
         epollfd = async_init();
-        if(epollfd == -1) {
+        if (epollfd == -1) {
                 perror("async_init");
                 goto clean_server_fd;
         }
 
-        if(register_event(epollfd, server_sock_fd, EPOLLIN) == -1) {
+        if (register_event(epollfd, server_sock_fd, EPOLLIN) == -1) {
                 perror("register_event");
                 goto clean_server_fd;
         }
 
-        if(register_event(epollfd, server_sock_fd, EPOLLIN) == -1) {
+        if (register_event(epollfd, server_sock_fd, EPOLLIN) == -1) {
                 perror("register_event");
                 goto clean_server_fd;
         }
@@ -120,7 +120,7 @@ int main(void)
         }
 
         clean:
-        for (int i = 0; i < MAX_EVENTS; ++i) { //close each sockets still open
+        for (int i = 0; i < MAX_EVENTS; i++) { //close each sockets still open
                 close(events[i].data.fd);
         }
 
