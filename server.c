@@ -68,11 +68,6 @@ int main(void)
                 goto clean_server_fd;
         }
 
-        if (register_event(epollfd, server_sock_fd, EPOLLIN) == -1) {
-                perror("register_event");
-                goto clean_server_fd;
-        }
-
         while (!sigintRaised) {
                 nfds = epoll_wait(epollfd, events, MAX_EVENTS, -1);
                 if (nfds == -1 && errno != EINTR) {
