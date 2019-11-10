@@ -2,13 +2,9 @@
 #include <sys/socket.h>
 #include <sys/epoll.h>
 #include <netinet/in.h>
-#include <netinet/ip.h> /* superset of previous */
-#include <arpa/inet.h>
 #include <unistd.h>
 #include <errno.h>
 #include <stdio.h>
-#include <stdlib.h>
-#include <time.h>
 #include <signal.h>
 
 #include "utils.h"

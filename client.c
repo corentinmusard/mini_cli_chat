@@ -1,10 +1,8 @@
 #include <sys/socket.h>
 #include <sys/epoll.h>
 #include <netinet/in.h>
-#include <netinet/ip.h> /* superset of previous */
 #include <unistd.h>
 #include <stdio.h>
-#include <stdlib.h>
 #include <curses.h>
 #include <string.h>
 #include <time.h>

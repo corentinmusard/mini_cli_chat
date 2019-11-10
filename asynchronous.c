@@ -1,7 +1,6 @@
 #include <sys/epoll.h>
 
 #include "asynchronous.h"
-#include "utils.h"
 
 int async_init(void) {
         return epoll_create1(0);
