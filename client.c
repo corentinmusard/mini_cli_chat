@@ -97,6 +97,9 @@ int main(void)
                                         wdelch(input_window);
                                         continue;
                                 }
+                                if (i_message == MAXMSG-1) { //max message length reached
+                                        continue; //ignore character
+                                }
                                 buffer_message[i_message] = buffer[0];
                                 mvwprintw(input_window, 1, i_message+4, "%c", buffer[0]);
                                 i_message++;
