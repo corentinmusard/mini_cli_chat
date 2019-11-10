@@ -100,6 +100,9 @@ int main(void)
                                 buffer_message[i_message] = buffer[0];
                                 mvwprintw(input_window, 1, i_message+4, "%c", buffer[0]);
                                 i_message++;
+                                if (i_message > getmaxx(input_window)-4) {
+                                        i_message = getmaxx(input_window)-4;
+                                }
                         } else if (events[i].data.fd == sockfd) { //from server
                                 char buffer[MAXMSG] = {0};
                                 time_t timep;
