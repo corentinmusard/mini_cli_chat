@@ -62,8 +62,7 @@ int main(void)
         init_cli(&messages_window, &input_window);
         
         while (1) {
-                wrefresh(messages_window);
-                wrefresh(input_window);
+                refresh_cli(messages_window, input_window);
                 nfds = epoll_wait(epollfd, events, MAX_EVENTS, -1);
                 if (nfds == -1) {
                         perror("epoll_wait");
