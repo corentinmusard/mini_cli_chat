@@ -56,10 +56,25 @@ int main(void)
         }
 
         epollfd = async_init();
-        register_event(epollfd, sockfd, EPOLLIN);
-        register_event(epollfd, STDIN_FILENO, EPOLLIN);
+        if (epollfd == -1) {
+                perror("async_init");
+                goto clean_fd;
+        }
+
+        if (register_event(epollfd, sockfd, EPOLLIN) == -1) {
+                perror("register_event");
+                goto clean_fd;
+        }
+        if (register_event(epollfd, STDIN_FILENO, EPOLLIN) == -1) {
+                perror("register_event");
+                goto clean_fd;
+        }
 
         init_cli(&messages_window, &input_window);
+        if (messages_window == NULL || input_window == NULL) {
+                perror("init_cli");
+                goto clean;
+        }
         
         while (1) {
                 refresh_cli(messages_window, input_window);
