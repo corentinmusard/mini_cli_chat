@@ -3,14 +3,15 @@
 #include <netinet/in.h>
 #include <unistd.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <curses.h>
 #include <string.h>
-#include <time.h>
 #include <signal.h>
 
 #include "cli.h"
 #include "asynchronous.h"
 #include "utils.h"
+#include "log.h"
 
 volatile sig_atomic_t sigintRaised = 0;
 
@@ -121,8 +122,7 @@ int main(void)
                                 }
                         } else if (events[i].data.fd == sockfd) { //from server
                                 char buffer[MAXMSG] = {0};
-                                time_t timep;
-                                struct tm *tm_s;
+                                char *formated_message;
                                 long int status = recv(events[i].data.fd, buffer, sizeof(buffer), 0);
                                 if (status == -1) {
                                         perror("recv");
@@ -132,12 +132,10 @@ int main(void)
                                         goto clean;
                                 }
 
-                                timep = time(NULL);
-                                tm_s = localtime(&timep);
-                                //TODO: don't use format directly here
-                                mvwprintw(messages_window, j, 1, "%02d:%02d:%02d %.*s", tm_s->tm_hour,
-                                                                tm_s->tm_min, tm_s->tm_sec, MAXMSG, buffer);
+                                formated_message = log_format(buffer, sizeof(buffer));
+                                mvwprintw(messages_window, j, 1, formated_message);
                                 j++;
+                                free(formated_message);
                         } else {
                                 perror("fd");
                                 goto clean;
