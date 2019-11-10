@@ -85,7 +85,7 @@ int main(void)
                                         memset(buffer_message, 0, sizeof(buffer_message));
                                         i_message = 0;
                                         clrtoeol();
-                                        wmove(input_window, LINES-1, 4);
+                                        wmove(input_window, 1, 4);
                                         continue;
                                 } else if (buffer[0] == 127) { //DEL
                                         buffer_message[i_message] = '\0';
