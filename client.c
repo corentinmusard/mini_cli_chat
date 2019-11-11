@@ -93,7 +93,7 @@ int main(void)
                 goto clean;
         }
         
-        while (1) {
+        while (!sigintRaised) {
                 refresh_cli(messages_window, input_window);
                 nfds = epoll_wait(epollfd, events, MAX_EVENTS, -1);
                 if (nfds == -1) {
