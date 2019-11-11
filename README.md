@@ -14,7 +14,7 @@ First things to be done first
 - [ ] server: forward messages received by a client to every clients connected to the server
 - [ ] server: notify clients when someone leave server
 - [ ] add nicknames support
-- [ ] connection to server with with ssl
+- [ ] connection to server with ssl
 - [ ] add channels support
 - [ ] add privates messages support
 - [ ] add a way to login into a specific nickname with a password
