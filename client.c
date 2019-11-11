@@ -128,19 +128,17 @@ int main(void)
                                         i_message = 0;
                                         clrtoeol();
                                         wmove(input_window, 1, INITIAL_MESSAGE_X);
-                                        continue;
                                 } else if (buffer[0] == 127) { //DEL
                                         delete_message_character(input_window, buffer_message, &i_message);
-                                        continue;
-                                }
-                                if (i_message == MAXMSG-1) { //max message length reached
-                                        continue; //ignore character
-                                }
-                                buffer_message[i_message] = buffer[0];
-                                mvwprintw(input_window, 1, i_message+INITIAL_MESSAGE_X, "%c", buffer[0]);
-                                i_message++;
-                                if (i_message > getmaxx(input_window)-INITIAL_MESSAGE_X) {
-                                        i_message = getmaxx(input_window)-INITIAL_MESSAGE_X;
+                                } else if (i_message == MAXMSG-1) { //max message length reached
+                                        //ignore character
+                                } else {
+                                        buffer_message[i_message] = buffer[0];
+                                        mvwprintw(input_window, 1, i_message+INITIAL_MESSAGE_X, "%c", buffer[0]);
+                                        i_message++;
+                                        if (i_message > getmaxx(input_window)-INITIAL_MESSAGE_X) {
+                                                i_message = getmaxx(input_window)-INITIAL_MESSAGE_X;
+                                        }
                                 }
                         } else if (events[i].data.fd == sockfd) { //from server
                                 int e = server_message_handling(messages_window, sockfd, ++j);
