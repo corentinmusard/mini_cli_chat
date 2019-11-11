@@ -13,7 +13,7 @@ void init_cli(WINDOW **messages_window, WINDOW **input_window) {
         move(LINES-1, 4);
 }
 
-void refresh_cli(WINDOW *messages_window, WINDOW*input_window) {
+void refresh_cli(WINDOW *messages_window, WINDOW *input_window) {
         wrefresh(messages_window);
         wrefresh(input_window);
 }
