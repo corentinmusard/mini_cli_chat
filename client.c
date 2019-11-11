@@ -137,7 +137,7 @@ int main(void)
                                 j++;
                                 free(formated_message);
                         } else {
-                                perror("fd");
+                                fprintf(stderr, "unknown fd: %d\n", events[i].data.fd);
                                 goto clean;
                         }
                 }  
