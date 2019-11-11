@@ -117,7 +117,7 @@ int main(void)
                                         memset(buffer_message, 0, sizeof(buffer_message));
                                         i_message = 0;
                                         clrtoeol();
-                                        wmove(input_window, 1, 4);
+                                        wmove(input_window, 1, INITIAL_MESSAGE_X);
                                         continue;
                                 } else if (buffer[0] == 127) { //DEL
                                         buffer_message[i_message] = '\0';
@@ -125,7 +125,7 @@ int main(void)
                                         if (i_message < 0) {
                                                 i_message = 0;
                                         }
-                                        wmove(input_window, 1, i_message+4);
+                                        wmove(input_window, 1, i_message+INITIAL_MESSAGE_X);
                                         wdelch(input_window);
                                         continue;
                                 }
@@ -133,10 +133,10 @@ int main(void)
                                         continue; //ignore character
                                 }
                                 buffer_message[i_message] = buffer[0];
-                                mvwprintw(input_window, 1, i_message+4, "%c", buffer[0]);
+                                mvwprintw(input_window, 1, i_message+INITIAL_MESSAGE_X, "%c", buffer[0]);
                                 i_message++;
-                                if (i_message > getmaxx(input_window)-4) {
-                                        i_message = getmaxx(input_window)-4;
+                                if (i_message > getmaxx(input_window)-INITIAL_MESSAGE_X) {
+                                        i_message = getmaxx(input_window)-INITIAL_MESSAGE_X;
                                 }
                         } else if (events[i].data.fd == sockfd) { //from server
                                 int e = server_message_handling(messages_window, sockfd, ++j);
