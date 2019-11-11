@@ -37,6 +37,16 @@ static int server_message_handling(WINDOW *messages_window, int sockfd, int j) {
         return 0;
 }
 
+static void delete_message_character(WINDOW *input_window, char *buffer_message, int *i_message) {
+        buffer_message[*i_message] = '\0';
+        (*i_message)--;
+        if (*i_message < 0) {
+                *i_message = 0;
+        }
+        wmove(input_window, 1, *i_message+INITIAL_MESSAGE_X);
+        wdelch(input_window);
+}
+
 int main(void)
 {
         struct epoll_event events[MAX_EVENTS];
@@ -120,13 +130,7 @@ int main(void)
                                         wmove(input_window, 1, INITIAL_MESSAGE_X);
                                         continue;
                                 } else if (buffer[0] == 127) { //DEL
-                                        buffer_message[i_message] = '\0';
-                                        i_message--;
-                                        if (i_message < 0) {
-                                                i_message = 0;
-                                        }
-                                        wmove(input_window, 1, i_message+INITIAL_MESSAGE_X);
-                                        wdelch(input_window);
+                                        delete_message_character(input_window, buffer_message, &i_message);
                                         continue;
                                 }
                                 if (i_message == MAXMSG-1) { //max message length reached
