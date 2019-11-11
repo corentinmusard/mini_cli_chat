@@ -29,8 +29,7 @@
 *.dylib
 
 # Executables
-client
-server
+bin/*
 *.exe
 *.out
 *.app
