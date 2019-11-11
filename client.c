@@ -19,6 +19,24 @@ static void int_handler(int sig __attribute__ ((unused))) {
         sigintRaised = 1;
 }
 
+static int server_message_handling(WINDOW *messages_window, int sockfd, int j) {
+        char buffer[MAXMSG] = {0};
+        char *formated_message;
+        long int status = recv(sockfd, buffer, sizeof(buffer), 0);
+        if (status == -1) {
+                perror("recv");
+                return -1;
+        } else if (status == 0) { //connection to server closed
+                perror("recv");
+                return -1;
+        }
+
+        formated_message = log_format(buffer, sizeof(buffer));
+        mvwprintw(messages_window, j, 1, formated_message);
+        free(formated_message);
+        return 0;
+}
+
 int main(void)
 {
         struct epoll_event events[MAX_EVENTS];
@@ -121,21 +139,10 @@ int main(void)
                                         i_message = getmaxx(input_window)-4;
                                 }
                         } else if (events[i].data.fd == sockfd) { //from server
-                                char buffer[MAXMSG] = {0};
-                                char *formated_message;
-                                long int status = recv(events[i].data.fd, buffer, sizeof(buffer), 0);
-                                if (status == -1) {
-                                        perror("recv");
-                                        goto clean;
-                                } else if (status == 0) { //connection to server closed
-                                        perror("recv");
+                                int e = server_message_handling(messages_window, sockfd, ++j);
+                                if (e == -1) {
                                         goto clean;
                                 }
-
-                                formated_message = log_format(buffer, sizeof(buffer));
-                                mvwprintw(messages_window, j, 1, formated_message);
-                                j++;
-                                free(formated_message);
                         } else {
                                 fprintf(stderr, "unknown fd: %d\n", events[i].data.fd);
                                 goto clean;
