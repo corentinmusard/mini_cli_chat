@@ -80,16 +80,16 @@ int main(void)
                                 }
                                 register_event(epollfd, conn_sock, EPOLLIN | EPOLLET);
                                 info("Connection open: %d\n", conn_sock);
-                                /*if (send(conn_sock, CHAT_BANNER, sizeof(CHAT_BANNER), 0) == -1) {
+                                if (send(conn_sock, CHAT_BANNER, sizeof(CHAT_BANNER), 0) == -1) {
                                         printf("send1");
-                                        exit(1);
+                                        return 1;
                                 }
                                 sleep(2);
                                 char m2[] = "You're still connected";
                                 if (send(conn_sock, m2, sizeof(m2), 0) == -1) {
                                         printf("send2");
-                                        exit(1);
-                                }*/
+                                        return 1;
+                                }
 
                         } else { //event from client socket
                                 char buffer[MAXMSG] = {0};
