@@ -110,12 +110,12 @@ int main(void)
                 }
         }
 
-        clean:
+clean:
         for (int i = 0; i < MAX_EVENTS; i++) { //close each sockets still open
                 close(events[i].data.fd);
         }
 
-        clean_server_fd:
+clean_server_fd:
         close(server_sock_fd);
 
         return 0;

@@ -158,10 +158,10 @@ int main(void)
                 }  
         }
 
-        clean:
+clean:
         endwin();
 
-        clean_fd:
+clean_fd:
         close(sockfd);
 
         return 0;
