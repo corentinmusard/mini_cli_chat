@@ -47,6 +47,15 @@ static void delete_message_character(WINDOW *input_window, char *buffer_message,
         wdelch(input_window);
 }
 
+static void update_indice_message(const WINDOW *input_window, int *i_message) {
+        int max_x = getmaxx(input_window)-INITIAL_MESSAGE_X;
+
+        (*i_message)++;
+        if (*i_message > max_x) {
+                *i_message = max_x;
+        }
+}
+
 int main(void)
 {
         struct epoll_event events[MAX_EVENTS];
@@ -135,10 +144,7 @@ int main(void)
                                 } else {
                                         buffer_message[i_message] = buffer[0];
                                         mvwprintw(input_window, 1, i_message+INITIAL_MESSAGE_X, "%c", buffer[0]);
-                                        i_message++;
-                                        if (i_message > getmaxx(input_window)-INITIAL_MESSAGE_X) {
-                                                i_message = getmaxx(input_window)-INITIAL_MESSAGE_X;
-                                        }
+                                        update_indice_message(input_window, &i_message);
                                 }
                         } else if (events[i].data.fd == sockfd) { //from server
                                 int e = server_message_handling(messages_window, sockfd, ++j);
