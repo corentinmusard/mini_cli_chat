@@ -15,7 +15,7 @@
 
 volatile sig_atomic_t sigintRaised = 0;
 
-void int_handler(int sig __attribute__ ((unused))) {
+static void int_handler(int sig __attribute__ ((unused))) {
         sigintRaised = 1;
 }
 
