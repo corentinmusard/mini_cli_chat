@@ -5,6 +5,8 @@ CC=gcc
 CFLAGS=--std=gnu11 -g -Wall -Wextra ${W} ${RUNTIME_CHECKS} -Wconversion
 LDFLAGS=-lncurses ${RUNTIME_CHECKS}
 
+CFLAGS += -D_GNU_SOURCE
+
 EXEC=server client
 BIN_DIR=../bin
 

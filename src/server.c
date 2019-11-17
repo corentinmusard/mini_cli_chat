@@ -1,4 +1,3 @@
-#define _GNU_SOURCE             /* See feature_test_macros(7) */
 #include <sys/socket.h>
 #include <sys/epoll.h>
 #include <netinet/in.h>

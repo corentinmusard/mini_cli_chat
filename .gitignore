@@ -30,6 +30,7 @@
 
 # Executables
 bin/*
+tests/run_all_tests
 *.exe
 *.out
 *.app
