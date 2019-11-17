@@ -19,11 +19,11 @@ $(EXEC):
 %.o : %.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
-client: client.o cli.o utils.o asynchronous.o log.o
+client: client.o cli.o utils.o asynchronous.o log.o client_lib.o
 
 server: server.o log.o utils.o asynchronous.o
 
-client.o: cli.h utils.h asynchronous.h log.h
+client.o: cli.h utils.h asynchronous.h log.h client_lib.h
 
 server.o: utils.h log.h asynchronous.h
 
@@ -34,6 +34,8 @@ asynchronous.o: asynchronous.h
 utils.o: utils.h
 
 log.o: log.h
+
+client_lib.o: client_lib.h
 
 clean:
 	-rm -f *.o $(addprefix ${BIN_DIR}/, ${EXEC})
