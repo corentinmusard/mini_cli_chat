@@ -27,7 +27,7 @@ client.o: cli.h utils.h asynchronous.h log.h
 
 server.o: utils.h log.h asynchronous.h
 
-cli.o: cli.h
+cli.o: cli.h utils.h
 
 asynchronous.o: asynchronous.h
 

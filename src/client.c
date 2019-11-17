@@ -56,6 +56,11 @@ static void update_indice_message(const WINDOW *input_window, int *i_message) {
         }
 }
 
+static void reset_variables(char buffer_message[MAXMSG], size_t n, int *i_message) {
+        memset(buffer_message, 0, n);
+        *i_message = 0;
+}
+
 int main(void)
 {
         struct epoll_event events[MAX_EVENTS];
@@ -133,10 +138,8 @@ int main(void)
                                                 perror("send");
                                                 goto clean;
                                         }
-                                        memset(buffer_message, 0, sizeof(buffer_message));
-                                        i_message = 0;
-                                        clrtoeol();
-                                        wmove(input_window, 1, INITIAL_MESSAGE_X);
+                                        reset_variables(buffer_message, sizeof(buffer_message), &i_message);
+                                        clear_message_area(input_window);
                                 } else if (buffer[0] == 127) { //DEL
                                         delete_message_character(input_window, buffer_message, &i_message);
                                 } else if (i_message == MAXMSG-1) { //max message length reached

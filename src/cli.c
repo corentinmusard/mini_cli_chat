@@ -1,6 +1,7 @@
 #include <curses.h>
 
 #include "cli.h"
+#include "utils.h"
 
 void init_cli(WINDOW **messages_window, WINDOW **input_window) {
         initscr();
@@ -16,4 +17,9 @@ void init_cli(WINDOW **messages_window, WINDOW **input_window) {
 void refresh_cli(WINDOW *messages_window, WINDOW *input_window) {
         wrefresh(messages_window);
         wrefresh(input_window);
+}
+
+void clear_message_area(WINDOW *input_window) {
+        clrtoeol();
+        wmove(input_window, 1, INITIAL_MESSAGE_X);
 }
