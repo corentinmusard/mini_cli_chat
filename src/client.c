@@ -3,62 +3,18 @@
 #include <netinet/in.h>
 #include <unistd.h>
 #include <stdio.h>
-#include <stdlib.h>
 #include <curses.h>
-#include <string.h>
 #include <signal.h>
 
 #include "cli.h"
 #include "asynchronous.h"
 #include "utils.h"
-#include "log.h"
+#include "client_lib.h"
 
 volatile sig_atomic_t sigintRaised = 0;
 
 static void int_handler(int sig __attribute__ ((unused))) {
         sigintRaised = 1;
-}
-
-static int server_message_handling(WINDOW *messages_window, int sockfd, int j) {
-        char buffer[MAXMSG] = {0};
-        char *formated_message;
-        long int status = recv(sockfd, buffer, sizeof(buffer), 0);
-        if (status == -1) {
-                perror("recv");
-                return -1;
-        } else if (status == 0) { //connection to server closed
-                perror("recv");
-                return -1;
-        }
-
-        formated_message = log_format(buffer, sizeof(buffer));
-        mvwprintw(messages_window, j, 1, formated_message);
-        free(formated_message);
-        return 0;
-}
-
-static void delete_message_character(WINDOW *input_window, char *buffer_message, int *i_message) {
-        buffer_message[*i_message] = '\0';
-        (*i_message)--;
-        if (*i_message < 0) {
-                *i_message = 0;
-        }
-        wmove(input_window, 1, *i_message+INITIAL_MESSAGE_X);
-        wdelch(input_window);
-}
-
-static void update_indice_message(const WINDOW *input_window, int *i_message) {
-        int max_x = getmaxx(input_window)-INITIAL_MESSAGE_X;
-
-        (*i_message)++;
-        if (*i_message > max_x) {
-                *i_message = max_x;
-        }
-}
-
-static void reset_variables(char buffer_message[MAXMSG], size_t n, int *i_message) {
-        memset(buffer_message, 0, n);
-        *i_message = 0;
 }
 
 int main(void)
