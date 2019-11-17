@@ -11,6 +11,8 @@ First things to be done first
 - [x] client: epoll: asynchrone gestion of output(new messages from server) and input(new messages from keyboard)
 - [x] client: display with ncurses
 - [x] add date to message
+- [ ] make tests
+- [ ] write function docstring
 - [ ] server: forward messages received by a client to every clients connected to the server
 - [ ] server: notify clients when someone leave server
 - [ ] add nicknames support
@@ -24,6 +26,5 @@ First things to be done first
 - [ ] add moderation support
 - [ ] client: ncurses: add colors to nicknames, channels and more
 - [ ] add logs options for clients and server
-- [ ] make tests
 - [ ] improve README.md
 - [ ] add IPv6 support
