@@ -1,5 +1,5 @@
-#ifndef __CLI_H__
-#define __CLI_H__
+#ifndef CLI_H
+#define CLI_H
 
 #include <curses.h>
 
