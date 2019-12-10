@@ -11,7 +11,7 @@
 #include "utils.h"
 #include "client_lib.h"
 
-volatile sig_atomic_t sigintRaised = 0;
+volatile static sig_atomic_t sigintRaised = 0;
 
 static void int_handler(int sig __attribute__ ((unused))) {
         sigintRaised = 1;
