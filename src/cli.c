@@ -1,7 +1,6 @@
 #include <curses.h>
 
 #include "cli.h"
-#include "utils.h"
 
 void init_cli(WINDOW **messages_window, WINDOW **input_window) {
         initscr();

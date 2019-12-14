@@ -7,6 +7,7 @@
 #include "client_lib.h"
 #include "log.h"
 #include "utils.h"
+#include "cli.h"
 
 int server_message_handling(WINDOW *messages_window, int sockfd, int j) {
         char buffer[MAXMSG] = {0};

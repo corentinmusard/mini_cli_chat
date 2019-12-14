@@ -7,7 +7,6 @@
 #define MAX_EVENTS 10
 
 // client only
-#define INITIAL_MESSAGE_X 4
 
 // server only
 #define LISTEN_BACKLOG 50
