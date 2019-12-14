@@ -16,8 +16,7 @@ static void int_handler(int sig __attribute__ ((unused))) {
         sigintRaised = 1;
 }
 
-int main(void)
-{
+int main(void) {
         struct epoll_event events[MAX_EVENTS];
         int conn_sock, nfds, epollfd;
         int server_sock_fd;
