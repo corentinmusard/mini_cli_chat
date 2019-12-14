@@ -1,7 +1,19 @@
 #ifndef ASYNCHRONOUS_H
 #define ASYNCHRONOUS_H
 
+#include <stdint.h>
+
+/**
+ * Return a new epoll(7) instance
+ */
 int async_init(void);
-int register_event(int epollfd, int fd, unsigned int events);
+
+/**
+ * Register `fd` on the epoll instance `epollfd` and associate it with `events`
+ * Return 0 on succes
+ * Return -1 on failure and errno is set by epoll_ctl
+ * See man EPOLL_CTL(2) for more infos
+ */
+int register_event(int epollfd, int fd, uint32_t events);
 
 #endif
