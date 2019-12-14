@@ -3,6 +3,14 @@
 A minimal clients/server chat application.
 It uses Berkeley sockets, epoll, ncurses.
 
+## Coding Process
+### Tools used to ensure good code
+- [scan-build](//clang-analyzer.llvm.org/scan-build.html)
+- [clang-tidy](//clang.llvm.org/extra/clang-tidy/)
+- [iwyu](//github.com/include-what-you-use/include-what-you-use)
+- [cppcheck](//github.com/danmar/cppcheck)
+- `fsanitize` runtime checks instead of `valgrind`
+
 ## TODO LIST:
 First things to be done first
 
