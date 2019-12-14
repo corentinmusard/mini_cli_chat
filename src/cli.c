@@ -27,6 +27,6 @@ void refresh_cli(WINDOW *messages_window, WINDOW *input_window) {
 }
 
 void clear_message_area(WINDOW *input_window) {
-        clrtoeol();
         reset_message_cursor(input_window);
+        wclrtoeol(input_window);
 }
