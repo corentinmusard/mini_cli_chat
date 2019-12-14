@@ -80,13 +80,13 @@ int main(void) {
                                 info("Connection open: %d\n", conn_sock);
                                 if (send(conn_sock, CHAT_BANNER, sizeof(CHAT_BANNER), 0) == -1) {
                                         printf("send1");
-                                        return 1;
+                                        goto clean;
                                 }
                                 sleep(2);
                                 char m2[] = "You're still connected";
                                 if (send(conn_sock, m2, sizeof(m2), 0) == -1) {
                                         printf("send2");
-                                        return 1;
+                                        goto clean;
                                 }
 
                         } else { //event from client socket
