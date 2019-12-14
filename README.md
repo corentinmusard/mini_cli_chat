@@ -9,7 +9,7 @@ It uses Berkeley sockets, epoll, ncurses.
 - [clang-tidy](//clang.llvm.org/extra/clang-tidy/)
 - [iwyu](//github.com/include-what-you-use/include-what-you-use)
 - [cppcheck](//github.com/danmar/cppcheck)
-- `fsanitize` runtime checks instead of `valgrind`
+- [fsanitize](//clang.llvm.org/docs/AddressSanitizer.html) runtime checks instead of `valgrind`
 
 ## TODO LIST:
 First things to be done first
