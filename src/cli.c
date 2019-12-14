@@ -2,6 +2,13 @@
 
 #include "cli.h"
 
+/**
+ * Reset message cursor juste after the ">> " chars
+ */
+static void reset_message_cursor(WINDOW *input_window) {
+        wmove(input_window, 1, INITIAL_MESSAGE_X);
+}
+
 void init_cli(WINDOW **messages_window, WINDOW **input_window) {
         initscr();
         *messages_window = subwin(stdscr, LINES-2, COLS, 0, 0);
@@ -10,7 +17,8 @@ void init_cli(WINDOW **messages_window, WINDOW **input_window) {
         mvwprintw(*messages_window, 2, 1, "Salut toi\n");
         mvwprintw(*input_window, 1, 1, ">> ");
         box(*messages_window, ACS_VLINE, ACS_HLINE);
-        move(LINES-1, 4);
+
+        reset_message_cursor(*input_window);
 }
 
 void refresh_cli(WINDOW *messages_window, WINDOW *input_window) {
@@ -20,5 +28,5 @@ void refresh_cli(WINDOW *messages_window, WINDOW *input_window) {
 
 void clear_message_area(WINDOW *input_window) {
         clrtoeol();
-        wmove(input_window, 1, INITIAL_MESSAGE_X);
+        reset_message_cursor(input_window);
 }

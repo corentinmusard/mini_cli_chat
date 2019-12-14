@@ -11,8 +11,16 @@
 
 void init_cli(WINDOW **messages_window, WINDOW **input_window);
 
+/**
+ * Refresh both windows
+ */
 void refresh_cli(WINDOW *messages_window, WINDOW *input_window);
 
+/**
+ * Clear `input_window`
+ * Move cursor to the beginning of the window,
+ * to be able to type another message
+ */
 void clear_message_area(WINDOW *input_window);
 
 #endif
