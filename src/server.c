@@ -10,7 +10,7 @@
 #include "log.h"
 #include "asynchronous.h"
 
-volatile static sig_atomic_t sigintRaised = 0;
+static volatile sig_atomic_t sigintRaised = 0;
 
 static void int_handler(int sig __attribute__ ((unused))) {
         sigintRaised = 1;
