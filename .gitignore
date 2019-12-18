@@ -29,8 +29,9 @@
 *.dylib
 
 # Executables
-bin/*
 tests/run_all_tests
+build/*
+bin/*
 *.exe
 *.out
 *.app

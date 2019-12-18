@@ -1,7 +1,7 @@
 # Chat
 
 A minimal clients/server chat application.
-It uses Berkeley sockets, epoll, ncurses.
+It uses Berkeley sockets, epoll, ncurses, cmake.
 
 ## Coding Process
 ### Tools used to ensure good code
@@ -10,6 +10,19 @@ It uses Berkeley sockets, epoll, ncurses.
 - [iwyu](//github.com/include-what-you-use/include-what-you-use)
 - [cppcheck](//github.com/danmar/cppcheck)
 - [fsanitize](//clang.llvm.org/docs/AddressSanitizer.html) runtime checks instead of `valgrind`
+
+## Getting Started
+To build both client and server binary:
+```sh
+mkdir build
+cd build
+cmake ..
+make
+```
+Binaries are built into `bin/` directory.
+
+## Usage
+None for now because it's not really usable.
 
 ## TODO LIST:
 First things to be done first
