@@ -4,7 +4,7 @@
 #include <curses.h>
 
 /**
- * Initial x coordonate for input window
+ * Initial x coordinate for input window
  * First 3 chars are ">> "
  */
 #define INITIAL_MESSAGE_X 4
