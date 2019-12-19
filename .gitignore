@@ -29,7 +29,6 @@
 *.dylib
 
 # Executables
-tests/run_all_tests
 build/*
 bin/*
 *.exe

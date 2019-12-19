@@ -18,6 +18,7 @@ mkdir build
 cd build
 cmake ..
 make
+make test # Optionnal, it runs tests
 ```
 Binaries are built into `bin/` directory.
 
