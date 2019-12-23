@@ -98,11 +98,11 @@ int main(void) {
                                 } else if (buffer[0] == 127) { //DEL
                                         delete_message_character(input_window, buffer_message, &i_message);
                                 } else if (i_message == MAXMSG-1) { //max message length reached
-                                        //ignore character
+                                        //ignore character for now
                                 } else {
                                         buffer_message[i_message] = buffer[0];
-                                        mvwprintw(input_window, 1, i_message+INITIAL_MESSAGE_X, "%c", buffer[0]);
-                                        update_indice_message(input_window, &i_message);
+                                        mvwprintw(input_window, 1, INITIAL_MESSAGE_X + i_message, "%c", buffer[0]);
+                                        increment_indice_message(input_window, &i_message);
                                 }
                         } else if (events[i].data.fd == sockfd) { //from server
                                 int e = server_message_handling(messages_window, sockfd, ++j);
