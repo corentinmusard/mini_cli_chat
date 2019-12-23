@@ -4,7 +4,7 @@
 #include <curses.h>
 #include <stddef.h>
 
-#include "utils.h"
+#include "../utils/utils.h"
 
 /**
  * Print recv message from `sockfd` and print it into `messages_window` on line `j`

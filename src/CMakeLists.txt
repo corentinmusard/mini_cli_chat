@@ -75,45 +75,5 @@ elseif(CMAKE_C_COMPILER_ID MATCHES "Clang")
 endif()
 #end warning setup
 
-#begin server
-set(SERVER_SOURCES
-    server.c
-    asynchronous.c
-    log.c
-)
-
-add_executable(server ${SERVER_SOURCES})
-
-target_compile_definitions(server 
-    PUBLIC "_GNU_SOURCE"
-)
-target_compile_options(server 
-    PUBLIC ${W}
-    PUBLIC ${RUNTIME_CHECKS}
-)
-target_link_libraries(server
-    ${RUNTIME_CHECKS}
-)
-#end server
-
-#begin client
-set(CLIENT_SOURCES
-    client.c
-    asynchronous.c
-    cli.c
-    client_lib.c
-    log.c
-)
-
-add_executable(client ${CLIENT_SOURCES})
-
-target_compile_options(client 
-    PUBLIC ${W}
-    PUBLIC ${RUNTIME_CHECKS}
-)
-target_link_libraries(client
-    ${CURSES_LIBRARIES}
-    ${RUNTIME_CHECKS}
-)
-#end client
-
+add_subdirectory(server)
+add_subdirectory(client)

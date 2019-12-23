@@ -5,9 +5,9 @@
 #include <curses.h>
 
 #include "client_lib.h"
-#include "log.h"
-#include "utils.h"
 #include "cli.h"
+#include "../utils/log.h"
+#include "../utils/utils.h"
 
 int server_message_handling(WINDOW *messages_window, int sockfd, int j) {
         char buffer[MAXMSG] = {0};

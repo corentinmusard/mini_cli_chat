@@ -6,9 +6,9 @@
 #include <stdio.h>
 #include <signal.h>
 
-#include "utils.h"
-#include "log.h"
-#include "asynchronous.h"
+#include "../utils/utils.h"
+#include "../utils/log.h"
+#include "../utils/asynchronous.h"
 
 static volatile sig_atomic_t sigintRaised = 0;
 

@@ -7,9 +7,9 @@
 #include <signal.h>
 
 #include "cli.h"
-#include "asynchronous.h"
-#include "utils.h"
 #include "client_lib.h"
+#include "../utils/asynchronous.h"
+#include "../utils/utils.h"
 
 static volatile sig_atomic_t sigintRaised = 0;
 
