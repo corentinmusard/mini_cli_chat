@@ -1,3 +1,6 @@
+#binary will be into bin/ directory
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/../bin)
+
 #begin warning setup
 if (CMAKE_C_COMPILER_ID STREQUAL "GNU")
     set(W
