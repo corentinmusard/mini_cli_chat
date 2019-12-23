@@ -1,5 +1,6 @@
 set(SERVER_SOURCES
     server.c
+    clients.c
     ../utils/asynchronous.c
     ../utils/log.c
 )

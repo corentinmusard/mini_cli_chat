@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <signal.h>
 
+#include "clients.h"
 #include "../utils/utils.h"
 #include "../utils/log.h"
 #include "../utils/asynchronous.h"
@@ -16,10 +17,28 @@ static void int_handler(int sig __attribute__ ((unused))) {
         sigintRaised = 1;
 }
 
+/**
+ * Send message `buffer` of size `size` to every client in `clients_fd`
+ */
+static void broadcast_message(const clients *clients_fd, const char *buffer, size_t size) {
+        client *c;
+
+        if (clients_fd == NULL || clients_fd->head == NULL) {
+                return;
+        }
+
+        c = clients_fd->head;
+        while (c != NULL) {
+                send(c->fd, buffer, size, 0);
+                c = c->next;
+        }
+}
+
 int main(void) {
         struct epoll_event events[MAX_EVENTS];
         int conn_sock, nfds, epollfd;
         int server_sock_fd;
+        clients *clients_fd = init_clients();
         const struct sockaddr_in addr = {
                 .sin_family = AF_INET,
                 .sin_port = htons(PORT),
@@ -76,6 +95,7 @@ int main(void) {
                                         perror("accept");
                                         goto clean;
                                 }
+                                add_client(clients_fd, conn_sock);
                                 register_event(epollfd, conn_sock, EPOLLIN | EPOLLET);
                                 info("Connection open: %d\n", conn_sock);
                                 if (send(conn_sock, CHAT_BANNER, sizeof(CHAT_BANNER), 0) == -1) {
@@ -99,10 +119,11 @@ int main(void) {
                                 } else if (status == 0) { //connection closed
                                         info("Connection closed: %d\n", events[i].data.fd);
                                         close(events[i].data.fd);
+                                        delete_client(clients_fd, events[i].data.fd);
                                         continue;
                                 }
                                 //else
-                                //send(events[i].data.fd, buffer, sizeof(buffer), 0);
+                                broadcast_message(clients_fd, buffer, sizeof(buffer));
                                 info("%.*s\n", MAXMSG, buffer);
                         }
                 }
