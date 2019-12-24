@@ -94,6 +94,10 @@ int main(void) {
                                 }
 
                                 if (buffer[0] == '\r') { //end of the message, send it
+                                        if (i_message == 0) { //blank message
+                                                //don't send it
+                                                continue;
+                                        }
                                         if (write(sockfd, buffer_message, sizeof(buffer_message)) == -1) {
                                                 perror("write");
                                                 goto clean;
