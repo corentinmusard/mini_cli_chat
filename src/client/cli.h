@@ -9,6 +9,12 @@
  */
 #define INITIAL_MESSAGE_X 4
 
+/**
+ * Initialize ncurses
+ * Create and return 2 subwindow
+ * messages_window is for displaying messages received from server
+ * input_window is for new message typing
+ */
 void init_cli(WINDOW **messages_window, WINDOW **input_window);
 
 /**

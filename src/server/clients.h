@@ -2,12 +2,12 @@
 #define CLIENTS_H
 
 typedef struct client_s {
-        struct client_s *next;
-        int fd;
+        struct client_s *next; // next client or NULL
+        int fd; // client' socket fd
 } client;
 
 typedef struct {
-        client *head;
+        client *head; // first client
         int nb; // nb of client
 } clients;
 

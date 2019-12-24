@@ -18,12 +18,13 @@ static void int_handler(int sig __attribute__ ((unused))) {
 }
 
 int main(void) {
-        struct epoll_event events[MAX_EVENTS];
-        int nfds, epollfd;
+        int epollfd;
         int sockfd;
-        int j = 3, i_message = 0;
+        int j = 0;
+        int i_message = 0;
         char buffer_message[MAXMSG] = {0};
-        WINDOW *messages_window = NULL, *input_window = NULL;
+        WINDOW *messages_window = NULL; // to display messages received from server
+        WINDOW *input_window = NULL; // to type new message
 
         const struct sockaddr_in addr = {
                 .sin_family = AF_INET,
@@ -71,9 +72,13 @@ int main(void) {
                 perror("init_cli");
                 goto clean;
         }
-        
+
         while (!sigintRaised) {
+                struct epoll_event events[MAX_EVENTS] = {0};
+                int nfds;
+
                 refresh_cli(messages_window, input_window);
+
                 nfds = epoll_wait(epollfd, events, MAX_EVENTS, -1);
                 if (nfds == -1) {
                         perror("epoll_wait");

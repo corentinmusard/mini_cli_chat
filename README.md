@@ -34,8 +34,8 @@ First things to be done first
 - [x] client: display with ncurses
 - [x] add date to message
 - [x] server: forward messages received by a client to every clients connected to the server
+- [x] write function docstring
 - [ ] make tests
-- [ ] write function docstring
 - [ ] server: notify clients when someone leave server
 - [ ] add nicknames support
 - [ ] connection to server with ssl

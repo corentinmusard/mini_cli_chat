@@ -18,7 +18,7 @@ static void int_handler(int sig __attribute__ ((unused))) {
 }
 
 /**
- * Send message `buffer` of size `size` to every client in `clients_fd`
+ * Send message `buffer` of size `size` to each client in `clients_fd`
  */
 static void broadcast_message(const clients *clients_fd, const char *buffer, size_t size) {
         client *c;
