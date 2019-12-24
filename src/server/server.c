@@ -131,6 +131,6 @@ int main(void) {
 
 clean_server_fd:
         close(server_sock_fd);
-
+        free(clients_fd);
         return 0;
 }
