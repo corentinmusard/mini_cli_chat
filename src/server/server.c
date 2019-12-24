@@ -82,7 +82,7 @@ int main(void) {
         }
 
         while (!sigintRaised) {
-                struct epoll_event events[MAX_EVENTS] = {0};
+                struct epoll_event events[MAX_EVENTS];
                 int nfds;
 
                 nfds = epoll_wait(epollfd, events, MAX_EVENTS, -1);

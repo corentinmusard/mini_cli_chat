@@ -74,7 +74,7 @@ int main(void) {
         }
 
         while (!sigintRaised) {
-                struct epoll_event events[MAX_EVENTS] = {0};
+                struct epoll_event events[MAX_EVENTS];
                 int nfds;
 
                 refresh_cli(messages_window, input_window);
