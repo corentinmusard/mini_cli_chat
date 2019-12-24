@@ -1,7 +1,13 @@
 # Chat
+[![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://lbesson.mit-license.org/)
+[![HitCount](http://hits.dwyl.io/corentinmusard/mini_cli_chat.svg)](http://hits.dwyl.io/corentinmusard/mini_cli_chat)
 
 A minimal clients/server chat application.
 It uses Berkeley sockets, epoll, ncurses, cmake.
+
+## Build status
+[![Build Status](https://www.travis-ci.org/corentinmusard/mini_cli_chat.svg?branch=master)](https://www.travis-ci.org/corentinmusard/mini_cli_chat)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=corentinmusard_mini_cli_chat&metric=alert_status)](https://sonarcloud.io/dashboard?id=corentinmusard_mini_cli_chat)
 
 ## Coding Process
 ### Tools used to ensure good code
@@ -46,7 +52,6 @@ In no particular order
 - [ ] add moderation support
 - [ ] client: ncurses: add colors to nicknames, channels and more
 - [ ] add logs options for clients and server
-- [ ] improve README.md
 - [ ] connection to server with ssl
 - [ ] add IPv6 support
 - [ ] client: add setting configuration (nickname, server ip/port, log settings)
