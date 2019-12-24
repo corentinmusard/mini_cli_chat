@@ -1,0 +1,61 @@
+language: c
+sudo: false
+
+dist: trusty
+
+addons:
+  sonarcloud:
+    organization: "corentinmusard"
+    token:
+      secure: "**************************"
+
+matrix:
+  include:
+    - os: linux
+      addons:
+        apt:
+          sources:
+            ubuntu-toolchain-r-test
+          packages:
+            - g++-7
+      env:
+        - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7"
+
+matrix:
+  include:
+    - os: linux
+      addons:
+        apt:
+          sources:
+            llvm-toolchain-trusty-4.0
+          packages:
+            - clang-4.0
+      env:
+        - MATRIX_EVAL2="CC=clang-4.0 && CXX=clang++-4.0"
+
+before_install:
+  - eval "${MATRIX_EVAL}"
+  - eval "${MATRIX_EVAL2}"
+
+# command to install dependencies
+install:
+  - sudo apt-get install ncurses
+
+compiler:
+  - clang
+  - gcc
+
+# command to run tests
+script:
+  - make clean
+  # Wraps the compilation with the Build Wrapper to generate configuration (used
+  # later by the SonarQube Scanner) into the "bw-output" folder
+  - build-wrapper-linux-x86-64 --out-dir bw-output make all
+  # Execute some tests
+  - make test
+  # And finally run the SonarQube analysis - read the "sonar-project.properties"
+  # file to see the specific configuration
+  - sonar-scanner
+
+after_success:
+  - codecov  # Upload reports to codecov.io
