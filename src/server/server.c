@@ -101,11 +101,6 @@ int main(void) {
                                 add_client(clients_fd, conn_sock);
                                 register_event(epollfd, conn_sock, EPOLLIN | EPOLLET);
                                 info("Connection open: %d\n", conn_sock);
-                                sleep(2);
-                                char m2[] = "You're still connected";
-                                if (send(conn_sock, m2, sizeof(m2), 0) == -1) {
-                                        printf("send2");
-                                        goto clean_server_fd;
                                 if (write(conn_sock, CHAT_BANNER, sizeof(CHAT_BANNER)) == -1) {
                                         info("Error sending CHAT_BANNER to %d\n", conn_sock);
                                 }
