@@ -1,6 +1,5 @@
 language: c
 sudo: false
-
 dist: bionic
 
 addons:
@@ -17,7 +16,7 @@ compiler:
   - clang-6.0
   - gcc-8
 
-# command to run tests
+# command to build and run tests
 script:
   - mkdir build
   - cd build
@@ -29,8 +28,7 @@ script:
   - make test
   # And finally run the SonarQube analysis - read the "sonar-project.properties"
   # file to see the specific configuration
-  - cd ../
-  - sonar-scanner
+  - sonar-scanner -Dproject.settings=../myproject.properties
 
 after_success:
   - codecov  # Upload reports to codecov.io
