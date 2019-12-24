@@ -88,14 +88,14 @@ int main(void) {
                 for (int i = 0; i < nfds; i++) {
                         if (events[i].data.fd == STDIN_FILENO) { //from stdin
                                 char buffer[1] = {0};
-                                if (read(events[i].data.fd, buffer, 1) == -1) {
+                                if (read(STDIN_FILENO, buffer, 1) == -1) {
                                         perror("read");
                                         goto clean;
                                 }
 
                                 if (buffer[0] == '\r') { //end of the message, send it
-                                        if (send(sockfd, buffer_message, sizeof(buffer_message), 0) == -1) {
-                                                perror("send");
+                                        if (write(sockfd, buffer_message, sizeof(buffer_message)) == -1) {
+                                                perror("write");
                                                 goto clean;
                                         }
                                         reset_variables(buffer_message, sizeof(buffer_message), &i_message);

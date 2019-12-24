@@ -5,6 +5,7 @@
 #include <errno.h>
 #include <stdio.h>
 #include <signal.h>
+#include <stdlib.h>
 
 #include "clients.h"
 #include "../utils/utils.h"
@@ -29,7 +30,7 @@ static void broadcast_message(const clients *clients_fd, const char *buffer, siz
 
         c = clients_fd->head;
         while (c != NULL) {
-                send(c->fd, buffer, size, 0);
+                write(c->fd, buffer, size);
                 c = c->next;
         }
 }
@@ -94,29 +95,26 @@ int main(void) {
                         if (events[i].data.fd == server_sock_fd) { //event from server socket
                                 int conn_sock = accept4(server_sock_fd, NULL, NULL, SOCK_NONBLOCK);
                                 if (conn_sock == -1) {
-                                        perror("accept");
+                                        perror("accept4");
                                         goto clean_server_fd;
                                 }
                                 add_client(clients_fd, conn_sock);
                                 register_event(epollfd, conn_sock, EPOLLIN | EPOLLET);
                                 info("Connection open: %d\n", conn_sock);
-                                if (send(conn_sock, CHAT_BANNER, sizeof(CHAT_BANNER), 0) == -1) {
-                                        printf("send1");
-                                        goto clean_server_fd;
-                                }
                                 sleep(2);
                                 char m2[] = "You're still connected";
                                 if (send(conn_sock, m2, sizeof(m2), 0) == -1) {
                                         printf("send2");
                                         goto clean_server_fd;
+                                if (write(conn_sock, CHAT_BANNER, sizeof(CHAT_BANNER)) == -1) {
+                                        info("Error sending CHAT_BANNER to %d\n", conn_sock);
                                 }
-
                         } else { //event from client socket
                                 char buffer[MAXMSG] = {0};
-                                long int status = recv(events[i].data.fd, buffer, sizeof(buffer), 0);
+                                ssize_t status = read(events[i].data.fd, buffer, sizeof(buffer));
 
                                 if (status == -1) { //error
-                                        perror("recv");
+                                        perror("read");
                                         goto clean_server_fd;
                                 } else if (status == 0) { //connection closed
                                         info("Connection closed: %d\n", events[i].data.fd);

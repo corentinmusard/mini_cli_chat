@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <curses.h>
+#include <unistd.h>
 
 #include "client_lib.h"
 #include "cli.h"
@@ -12,11 +13,11 @@
 int server_message_handling(WINDOW *messages_window, int sockfd, int j) {
         char buffer[MAXMSG] = {0};
         char *formated_message;
-        long int status;
+        ssize_t status;
 
-        status = recv(sockfd, buffer, sizeof(buffer), 0);
+        status = read(sockfd, buffer, sizeof(buffer));
         if (status == -1 || status == 0) { //error or connection to server closed
-                perror("recv");
+                perror("read");
                 return -1;
         }
 
