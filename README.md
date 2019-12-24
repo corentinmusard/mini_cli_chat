@@ -26,7 +26,7 @@ Binaries are built into `bin/` directory.
 None for now because it's not really usable.
 
 ## TODO LIST:
-First things to be done first
+In no particular order
 
 - [x] server: allow clients to connect
 - [x] server: epoll: asynchrone connections 
@@ -36,17 +36,19 @@ First things to be done first
 - [x] server: forward messages received by a client to every clients connected to the server
 - [x] write function docstring
 - [ ] make tests
-- [ ] server: notify clients when someone leave server
 - [ ] add nicknames support
-- [ ] connection to server with ssl
+- [ ] server: notify clients when someone leave server
 - [ ] add channels support
 - [ ] add privates messages support
 - [ ] add a way to login into a specific nickname with a password
 - [ ] server: protect a nickname when it has been registred
-- [ ] add /me message support
 - [ ] add roles (modo/admin/muted) support
 - [ ] add moderation support
 - [ ] client: ncurses: add colors to nicknames, channels and more
 - [ ] add logs options for clients and server
 - [ ] improve README.md
+- [ ] connection to server with ssl
 - [ ] add IPv6 support
+- [ ] client: add setting configuration (nickname, server ip/port, log settings)
+- [ ] server: add setting configuration (server port, log settings)
+- [ ] client: add command via adding a slash like /quit, /me, /whoami, /whois
