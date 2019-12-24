@@ -35,8 +35,7 @@ static void broadcast_message(const clients *clients_fd, const char *buffer, siz
 }
 
 int main(void) {
-        struct epoll_event events[MAX_EVENTS];
-        int conn_sock, nfds, epollfd;
+        int epollfd;
         int server_sock_fd;
         clients *clients_fd = init_clients();
         const struct sockaddr_in addr = {
@@ -82,31 +81,34 @@ int main(void) {
         }
 
         while (!sigintRaised) {
+                struct epoll_event events[MAX_EVENTS] = {0};
+                int nfds;
+
                 nfds = epoll_wait(epollfd, events, MAX_EVENTS, -1);
                 if (nfds == -1 && errno != EINTR) {
                         perror("epoll_wait");
-                        goto clean;
+                        goto clean_server_fd;
                 }
 
                 for (int i = 0; i < nfds; i++) {
                         if (events[i].data.fd == server_sock_fd) { //event from server socket
-                                conn_sock = accept4(server_sock_fd, NULL, NULL, SOCK_NONBLOCK);
+                                int conn_sock = accept4(server_sock_fd, NULL, NULL, SOCK_NONBLOCK);
                                 if (conn_sock == -1) {
                                         perror("accept");
-                                        goto clean;
+                                        goto clean_server_fd;
                                 }
                                 add_client(clients_fd, conn_sock);
                                 register_event(epollfd, conn_sock, EPOLLIN | EPOLLET);
                                 info("Connection open: %d\n", conn_sock);
                                 if (send(conn_sock, CHAT_BANNER, sizeof(CHAT_BANNER), 0) == -1) {
                                         printf("send1");
-                                        goto clean;
+                                        goto clean_server_fd;
                                 }
                                 sleep(2);
                                 char m2[] = "You're still connected";
                                 if (send(conn_sock, m2, sizeof(m2), 0) == -1) {
                                         printf("send2");
-                                        goto clean;
+                                        goto clean_server_fd;
                                 }
 
                         } else { //event from client socket
@@ -115,7 +117,7 @@ int main(void) {
 
                                 if (status == -1) { //error
                                         perror("recv");
-                                        goto clean;
+                                        goto clean_server_fd;
                                 } else if (status == 0) { //connection closed
                                         info("Connection closed: %d\n", events[i].data.fd);
                                         close(events[i].data.fd);
@@ -127,11 +129,6 @@ int main(void) {
                                 info("%.*s\n", MAXMSG, buffer);
                         }
                 }
-        }
-
-clean:
-        for (int i = 0; i < MAX_EVENTS; i++) { //close each sockets still open
-                close(events[i].data.fd);
         }
 
 clean_server_fd:
