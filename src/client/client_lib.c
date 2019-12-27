@@ -61,3 +61,11 @@ void reset_variables(char *buffer_message, size_t n, int *i_message) {
 void int_handler(int sig __attribute__ ((unused))) {
         exit_wanted = 1;
 }
+
+int execute_command(const char *command) {
+        if (strcmp("/quit", command) == 0 || strcmp("/q", command) == 0) {
+                exit_wanted = 1;
+                return 1;
+        }
+        return 0;
+}

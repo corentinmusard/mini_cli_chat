@@ -92,7 +92,13 @@ int main(void) {
                                                 //don't send it
                                                 continue;
                                         }
-                                        if (write(sockfd, buffer_message, sizeof(buffer_message)) == -1) {
+                                        if (buffer_message[0] == '/') { //start with '/'
+                                                //It's a command
+                                                if (!execute_command(buffer_message)) {
+                                                        //command unknown
+                                                        print_message(messages_window, ++j, "Command unknown\n");
+                                                }
+                                        } else if (write(sockfd, buffer_message, sizeof(buffer_message)) == -1) {
                                                 perror("write");
                                                 goto clean;
                                         }

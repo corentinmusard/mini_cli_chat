@@ -56,4 +56,4 @@ In no particular order
 - [ ] add IPv6 support
 - [ ] client: add setting configuration (nickname, server ip/port, log settings)
 - [ ] server: add setting configuration (server port, log settings)
-- [ ] client: add command via adding a slash like /quit, /me, /whoami, /whois
+- [ ] client: add command via adding a slash like /list, /me, /whoami, /whois

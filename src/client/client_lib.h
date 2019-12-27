@@ -5,7 +5,6 @@
 #include <stddef.h>
 #include <signal.h>
 
-#include "../utils/utils.h"
 /**
  * Default value is 0
  * If value is not 0 then client is going to exit 
@@ -44,5 +43,12 @@ void reset_variables(char *buffer_message, size_t n, int *i_message);
  * Called when SIGINT is raised
  */
 void int_handler(int sig __attribute__ ((unused)));
+
+/**
+ * Execute `command`
+ * Return 1 on success
+ * Return 0 if `command` is unknown
+ */
+int execute_command(const char *command);
 
 #endif
