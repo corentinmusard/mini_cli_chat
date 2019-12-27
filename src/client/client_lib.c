@@ -24,10 +24,14 @@ int server_message_handling(WINDOW *messages_window, int sockfd, int j) {
         }
 
         formated_message = log_format(buffer, sizeof(buffer));
-        mvwprintw(messages_window, j, 1, formated_message);
+        print_message(messages_window, j, formated_message);
 
         free(formated_message);
         return 0;
+}
+
+void print_message(WINDOW *messages_window, int y, const char *message) {
+        mvwprintw(messages_window, y, 1, message);
 }
 
 void delete_message_character(WINDOW *input_window, char *buffer_message, int *i_message) {

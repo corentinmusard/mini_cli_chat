@@ -19,6 +19,11 @@ extern volatile sig_atomic_t exit_wanted;
 int server_message_handling(WINDOW *messages_window, int sockfd, int j);
 
 /**
+ * Print `message` to `messages_window` at y=`y`
+ */
+void print_message(WINDOW *messages_window, int y, const char *message);
+
+/**
  * Remove char at indice `i` from `input_window` and `buffer_message`
  * Move cursor at indice `i-1`
  * Update value of `i`
