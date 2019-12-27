@@ -11,12 +11,6 @@
 #include "../utils/asynchronous.h"
 #include "../utils/utils.h"
 
-static volatile sig_atomic_t sigintRaised = 0;
-
-static void int_handler(int sig __attribute__ ((unused))) {
-        sigintRaised = 1;
-}
-
 int main(void) {
         int epollfd;
         int sockfd;
@@ -73,7 +67,7 @@ int main(void) {
                 goto clean;
         }
 
-        while (!sigintRaised) {
+        while (!exit_wanted) {
                 struct epoll_event events[MAX_EVENTS];
                 int nfds;
 

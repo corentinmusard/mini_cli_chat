@@ -3,11 +3,14 @@
 #include <string.h>
 #include <curses.h>
 #include <unistd.h>
+#include <signal.h>
 
 #include "client_lib.h"
 #include "cli.h"
 #include "../utils/log.h"
 #include "../utils/utils.h"
+
+volatile sig_atomic_t exit_wanted = 0;
 
 int server_message_handling(WINDOW *messages_window, int sockfd, int j) {
         char buffer[MAXMSG] = {0};
@@ -49,4 +52,8 @@ void increment_indice_message(const WINDOW *input_window, int *i_message) {
 void reset_variables(char *buffer_message, size_t n, int *i_message) {
         memset(buffer_message, 0, n);
         *i_message = 0;
+}
+
+void int_handler(int sig __attribute__ ((unused))) {
+        exit_wanted = 1;
 }

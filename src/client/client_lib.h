@@ -3,8 +3,14 @@
 
 #include <curses.h>
 #include <stddef.h>
+#include <signal.h>
 
 #include "../utils/utils.h"
+/**
+ * Default value is 0
+ * If value is not 0 then client is going to exit 
+ */
+extern volatile sig_atomic_t exit_wanted;
 
 /**
  * Print recv message from `sockfd` and print it into `messages_window` on line `j`
@@ -28,5 +34,10 @@ void increment_indice_message(const WINDOW *input_window, int *i_message);
  * Reset variables `buffer_message` and `i_message` to default value
  */
 void reset_variables(char *buffer_message, size_t n, int *i_message);
+
+/**
+ * Called when SIGINT is raised
+ */
+void int_handler(int sig __attribute__ ((unused)));
 
 #endif
