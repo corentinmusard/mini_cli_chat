@@ -81,13 +81,13 @@ int main(void) {
 
                 for (int i = 0; i < nfds; i++) {
                         if (events[i].data.fd == STDIN_FILENO) { //from stdin
-                                char buffer[1] = {0};
-                                if (read(STDIN_FILENO, buffer, 1) == -1) {
+                                char c;
+                                if (read(STDIN_FILENO, &c, 1) == -1) {
                                         perror("read");
                                         goto clean;
                                 }
 
-                                if (buffer[0] == '\r') { //end of the message, send it
+                                if (c == '\r') { //end of the message, send it
                                         if (i_message == 0) { //blank message
                                                 //don't send it
                                                 continue;
@@ -104,13 +104,13 @@ int main(void) {
                                         }
                                         reset_variables(buffer_message, sizeof(buffer_message), &i_message);
                                         clear_message_area(input_window);
-                                } else if (buffer[0] == 127) { //DEL
+                                } else if (c == 127) { //DEL
                                         delete_message_character(input_window, buffer_message, &i_message);
                                 } else if (i_message == MAXMSG-1) { //max message length reached
                                         //ignore character for now
                                 } else {
-                                        buffer_message[i_message] = buffer[0];
-                                        mvwprintw(input_window, 1, INITIAL_MESSAGE_X + i_message, "%c", buffer[0]);
+                                        buffer_message[i_message] = c;
+                                        mvwprintw(input_window, 1, INITIAL_MESSAGE_X + i_message, "%c", c);
                                         increment_indice_message(input_window, &i_message);
                                 }
                         } else if (events[i].data.fd == sockfd) { //from server
