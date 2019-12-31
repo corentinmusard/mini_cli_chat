@@ -14,11 +14,9 @@
 int main(void) {
         int epollfd;
         int sockfd;
-        int i_message = 0;
         int y = 0;
-        char buffer_message[MAXMSG] = {0};
         WINDOW *messages_window = NULL; // to display messages received from server
-        WINDOW *input_window = NULL; // to type new message
+        Input *input = input_init();
 
         const struct sockaddr_in addr = {
                 .sin_family = AF_INET,
@@ -61,8 +59,8 @@ int main(void) {
                 goto clean_fd;
         }
 
-        init_cli(&messages_window, &input_window);
-        if (messages_window == NULL || input_window == NULL) {
+        init_cli(&messages_window, &input->window);
+        if (messages_window == NULL || input->window == NULL) {
                 perror("init_cli");
                 goto clean;
         }
@@ -71,7 +69,7 @@ int main(void) {
                 struct epoll_event events[MAX_EVENTS];
                 int nfds;
 
-                refresh_cli(messages_window, input_window);
+                refresh_cli(messages_window, input->window);
 
                 nfds = epoll_wait(epollfd, events, MAX_EVENTS, -1);
                 if (nfds == -1) {
@@ -88,30 +86,28 @@ int main(void) {
                                 }
 
                                 if (c == '\r') { //end of the message, send it
-                                        if (i_message == 0) { //blank message
+                                        if (input->i == 0) { //blank message
                                                 //don't send it
                                                 continue;
                                         }
-                                        if (buffer_message[0] == '/') { //start with '/'
+                                        if (input->buffer[0] == '/') { //start with '/'
                                                 //It's a command
-                                                if (!execute_command(buffer_message)) {
+                                                if (!execute_command(input->buffer)) {
                                                         //command unknown
                                                         print_message(messages_window, ++y, "Command unknown\n");
                                                 }
-                                        } else if (write(sockfd, buffer_message, sizeof(buffer_message)) == -1) {
+                                        } else if (write(sockfd, input->buffer, (size_t)input->i) == -1) {
                                                 perror("write");
                                                 goto clean;
                                         }
-                                        reset_variables(buffer_message, sizeof(buffer_message), &i_message);
-                                        clear_message_area(input_window);
+                                        reset_variables(input);
+                                        clear_message_area(input->window);
                                 } else if (c == 127) { //DEL
-                                        delete_message_character(input_window, buffer_message, &i_message);
-                                } else if (i_message == MAXMSG-1) { //max message length reached
+                                        delete_message_character(input);
+                                } else if (input->i == MAXMSG-1) { //max message length reached
                                         //ignore character for now
                                 } else {
-                                        buffer_message[i_message] = c;
-                                        mvwprintw(input_window, 1, INITIAL_MESSAGE_X + i_message, "%c", c);
-                                        increment_indice_message(input_window, &i_message);
+                                        input_char_handling(input, c);
                                 }
                         } else if (events[i].data.fd == sockfd) { //from server
                                 int e = server_message_handling(messages_window, sockfd, ++y);
@@ -131,5 +127,6 @@ clean:
 clean_fd:
         close(sockfd);
 
+        free_input(input);
         return 0;
 }

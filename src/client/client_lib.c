@@ -3,7 +3,7 @@
 #include <string.h>
 #include <curses.h>
 #include <unistd.h>
-#include <signal.h>
+#include <assert.h>
 
 #include "client_lib.h"
 #include "cli.h"
@@ -11,6 +11,24 @@
 #include "../utils/utils.h"
 
 volatile sig_atomic_t exit_wanted = 0;
+
+Input* input_init(void) {
+        Input *input = malloc(sizeof(Input));
+        assert(input != NULL);
+
+        input->window = NULL;
+        input->i = 0;
+        input->buffer = calloc(MAXMSG, sizeof(char));
+
+        assert(input->buffer);
+
+        return input;
+}
+
+void free_input(Input *input) {
+        free(input->buffer);
+        free(input);
+}
 
 int server_message_handling(WINDOW *messages_window, int sockfd, int y) {
         char buffer[MAXMSG] = {0};
@@ -34,28 +52,30 @@ void print_message(WINDOW *messages_window, int y, const char *message) {
         mvwprintw(messages_window, y, 1, message);
 }
 
-void delete_message_character(WINDOW *input_window, char *buffer_message, int *i_message) {
-        buffer_message[*i_message] = '\0';
-        (*i_message)--;
-        if (*i_message < 0) {
-                *i_message = 0;
+void delete_message_character(Input *input) {
+        input->buffer[input->i] = '\0';
+        input->i--;
+        if (input->i < 0) {
+                input->i = 0;
         }
-        wmove(input_window, 1, INITIAL_MESSAGE_X + *i_message);
-        wdelch(input_window);
+        wmove(input->window, 1, INITIAL_MESSAGE_X + input->i);
+        wdelch(input->window);
 }
 
-void increment_indice_message(const WINDOW *input_window, int *i_message) {
-        int max_x = getmaxx(input_window) - INITIAL_MESSAGE_X;
+void increment_indice_message(Input *input) {
+        int max_x = getmaxx(input->window) - INITIAL_MESSAGE_X;
 
-        (*i_message)++;
-        if (*i_message > max_x) {
-                *i_message = max_x;
+        input->i++;
+        if (input->i > max_x) {
+                input->i = max_x;
         }
 }
 
-void reset_variables(char *buffer_message, size_t n, int *i_message) {
-        memset(buffer_message, 0, n);
-        *i_message = 0;
+void reset_variables(Input *input) {
+        assert(input->i > 0);
+
+        memset(input->buffer, 0, (size_t)input->i);
+        input->i = 0;
 }
 
 void int_handler(int sig __attribute__ ((unused))) {
@@ -68,4 +88,14 @@ int execute_command(const char *command) {
                 return 1;
         }
         return 0;
+}
+
+void print_input_char(Input *input, char c) {
+        mvwprintw(input->window, 1, INITIAL_MESSAGE_X + input->i, "%c", c);
+}
+
+void input_char_handling(Input *input, char c) {
+        input->buffer[input->i] = c;
+        print_input_char(input, c);
+        increment_indice_message(input);
 }

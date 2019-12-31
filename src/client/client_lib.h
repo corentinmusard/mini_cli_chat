@@ -2,7 +2,6 @@
 #define CLIENT_LIB_H
 
 #include <curses.h>
-#include <stddef.h>
 #include <signal.h>
 
 /**
@@ -10,6 +9,22 @@
  * If value is not 0 then client is going to exit 
  */
 extern volatile sig_atomic_t exit_wanted;
+
+typedef struct {
+        WINDOW *window; // to type new message
+        int i; // cursor indice
+        char *buffer; // message
+} Input;
+
+/**
+ * Initialize and return an Input
+ */
+Input* input_init(void);
+
+/**
+ * Free input
+ */
+void free_input(Input *input);
 
 /**
  * Print recv message from `sockfd` and print it into `messages_window` on line `y`
@@ -23,21 +38,21 @@ int server_message_handling(WINDOW *messages_window, int sockfd, int y);
 void print_message(WINDOW *messages_window, int y, const char *message);
 
 /**
- * Remove char at indice `i` from `input_window` and `buffer_message`
+ * Remove char at indice `i` from `input_window` and `buffer`
  * Move cursor at indice `i-1`
  * Update value of `i`
  */
-void delete_message_character(WINDOW *input_window, char *buffer_message, int *i_message);
+void delete_message_character(Input *input);
 
 /**
- * Increment `i_message` if not superior of the size of the windows
+ * Increment `i` if not superior of the size of the windows
  */
-void increment_indice_message(const WINDOW *input_window, int *i_message);
+void increment_indice_message(Input *input);
 
 /**
- * Reset variables `buffer_message` and `i_message` to default value
+ * Reset `input` to default value
  */
-void reset_variables(char *buffer_message, size_t n, int *i_message);
+void reset_variables(Input *input);
 
 /**
  * Called when SIGINT is raised
@@ -50,5 +65,16 @@ void int_handler(int sig __attribute__ ((unused)));
  * Return 0 if `command` is unknown
  */
 int execute_command(const char *command);
+
+/**
+ * Print char `c` to input window
+ */
+void print_input_char(Input *input, char c);
+
+/**
+ * Store `c` in `buffer`
+ * Print `c` to input window
+ */
+void input_char_handling(Input *input, char c);
 
 #endif
