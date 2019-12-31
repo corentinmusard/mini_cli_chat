@@ -14,8 +14,7 @@
 int main(void) {
         int epollfd;
         int sockfd;
-        int y = 0;
-        WINDOW *messages_window = NULL; // to display messages received from server
+        Messages *msgs = messages_init();
         Input *input = input_init();
 
         const struct sockaddr_in addr = {
@@ -59,8 +58,8 @@ int main(void) {
                 goto clean_fd;
         }
 
-        init_cli(&messages_window, &input->window);
-        if (messages_window == NULL || input->window == NULL) {
+        init_cli(&msgs->window, &input->window);
+        if (msgs->window == NULL || input->window == NULL) {
                 perror("init_cli");
                 goto clean;
         }
@@ -69,7 +68,7 @@ int main(void) {
                 struct epoll_event events[MAX_EVENTS];
                 int nfds;
 
-                refresh_cli(messages_window, input->window);
+                refresh_cli(msgs->window, input->window);
 
                 nfds = epoll_wait(epollfd, events, MAX_EVENTS, -1);
                 if (nfds == -1) {
@@ -94,7 +93,7 @@ int main(void) {
                                                 //It's a command
                                                 if (!execute_command(input->buffer)) {
                                                         //command unknown
-                                                        print_message(messages_window, ++y, "Command unknown\n");
+                                                        print_message(msgs, "Command unknown\n");
                                                 }
                                         } else if (write(sockfd, input->buffer, (size_t)input->i) == -1) {
                                                 perror("write");
@@ -110,8 +109,7 @@ int main(void) {
                                         input_char_handling(input, c);
                                 }
                         } else if (events[i].data.fd == sockfd) { //from server
-                                int e = server_message_handling(messages_window, sockfd, ++y);
-                                if (e == -1) {
+                                if (server_message_handling(msgs, sockfd) == -1) {
                                         goto clean;
                                 }
                         } else {
@@ -128,5 +126,6 @@ clean_fd:
         close(sockfd);
 
         free_input(input);
+        free_messages(msgs);
         return 0;
 }

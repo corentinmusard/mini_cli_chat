@@ -26,16 +26,31 @@ Input* input_init(void);
  */
 void free_input(Input *input);
 
-/**
- * Print recv message from `sockfd` and print it into `messages_window` on line `y`
- * Return -1 on failure and 0 on succes
- */
-int server_message_handling(WINDOW *messages_window, int sockfd, int y);
+typedef struct {
+        WINDOW *window; // to display messages received from server
+        int y; // last message line
+} Messages;
 
 /**
- * Print `message` to `messages_window` at y=`y`
+ * Initialize and return a Messages
  */
-void print_message(WINDOW *messages_window, int y, const char *message);
+Messages* messages_init(void);
+
+/**
+ * Free messages
+ */
+void free_messages(Messages *messages);
+
+/**
+ * Print recv message from `sockfd` and print it into messages window
+ * Return -1 on failure and 0 on succes
+ */
+int server_message_handling(Messages *msgs, int sockfd);
+
+/**
+ * Print `message` to messages window
+ */
+void print_message(Messages *msgs, const char *message);
 
 /**
  * Remove char at indice `i` from `input_window` and `buffer`

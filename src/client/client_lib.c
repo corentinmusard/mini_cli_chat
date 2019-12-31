@@ -30,7 +30,21 @@ void free_input(Input *input) {
         free(input);
 }
 
-int server_message_handling(WINDOW *messages_window, int sockfd, int y) {
+Messages* messages_init(void) {
+        Messages *m = malloc(sizeof(Messages));
+        assert(m != NULL);
+
+        m->window = NULL;
+        m->y = 0;
+
+        return m;
+}
+
+void free_messages(Messages *messages) {
+        free(messages);
+}
+
+int server_message_handling(Messages *msgs, int sockfd) {
         char buffer[MAXMSG] = {0};
         char *formated_message;
         ssize_t status;
@@ -42,14 +56,15 @@ int server_message_handling(WINDOW *messages_window, int sockfd, int y) {
         }
 
         formated_message = log_format(buffer, sizeof(buffer));
-        print_message(messages_window, y, formated_message);
+        print_message(msgs, formated_message);
 
         free(formated_message);
         return 0;
 }
 
-void print_message(WINDOW *messages_window, int y, const char *message) {
-        mvwprintw(messages_window, y, 1, message);
+void print_message(Messages *msgs, const char *message) {
+        msgs->y++;
+        mvwprintw(msgs->window, msgs->y, 1, message);
 }
 
 void delete_message_character(Input *input) {
