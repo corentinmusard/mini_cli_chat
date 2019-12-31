@@ -12,7 +12,7 @@
 
 volatile sig_atomic_t exit_wanted = 0;
 
-int server_message_handling(WINDOW *messages_window, int sockfd, int j) {
+int server_message_handling(WINDOW *messages_window, int sockfd, int y) {
         char buffer[MAXMSG] = {0};
         char *formated_message;
         ssize_t status;
@@ -24,7 +24,7 @@ int server_message_handling(WINDOW *messages_window, int sockfd, int j) {
         }
 
         formated_message = log_format(buffer, sizeof(buffer));
-        print_message(messages_window, j, formated_message);
+        print_message(messages_window, y, formated_message);
 
         free(formated_message);
         return 0;

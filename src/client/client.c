@@ -14,8 +14,8 @@
 int main(void) {
         int epollfd;
         int sockfd;
-        int j = 0;
         int i_message = 0;
+        int y = 0;
         char buffer_message[MAXMSG] = {0};
         WINDOW *messages_window = NULL; // to display messages received from server
         WINDOW *input_window = NULL; // to type new message
@@ -96,7 +96,7 @@ int main(void) {
                                                 //It's a command
                                                 if (!execute_command(buffer_message)) {
                                                         //command unknown
-                                                        print_message(messages_window, ++j, "Command unknown\n");
+                                                        print_message(messages_window, ++y, "Command unknown\n");
                                                 }
                                         } else if (write(sockfd, buffer_message, sizeof(buffer_message)) == -1) {
                                                 perror("write");
@@ -114,7 +114,7 @@ int main(void) {
                                         increment_indice_message(input_window, &i_message);
                                 }
                         } else if (events[i].data.fd == sockfd) { //from server
-                                int e = server_message_handling(messages_window, sockfd, ++j);
+                                int e = server_message_handling(messages_window, sockfd, ++y);
                                 if (e == -1) {
                                         goto clean;
                                 }

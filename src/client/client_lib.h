@@ -12,10 +12,10 @@
 extern volatile sig_atomic_t exit_wanted;
 
 /**
- * Print recv message from `sockfd` and print it into `messages_window` on line `j`
+ * Print recv message from `sockfd` and print it into `messages_window` on line `y`
  * Return -1 on failure and 0 on succes
  */
-int server_message_handling(WINDOW *messages_window, int sockfd, int j);
+int server_message_handling(WINDOW *messages_window, int sockfd, int y);
 
 /**
  * Print `message` to `messages_window` at y=`y`
