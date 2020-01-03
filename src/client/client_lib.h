@@ -92,4 +92,6 @@ void print_input_char(Input *input, char c);
  */
 void input_char_handling(Input *input, char c);
 
+int stdin_char_handling(Input *input, Messages *msgs, int sockfd);
+
 #endif

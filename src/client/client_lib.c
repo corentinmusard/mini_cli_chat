@@ -114,3 +114,46 @@ void input_char_handling(Input *input, char c) {
         print_input_char(input, c);
         increment_indice_message(input);
 }
+
+int stdin_char_handling(Input *input, Messages *msgs, int sockfd) {
+        char c;
+        if (read(STDIN_FILENO, &c, 1) == -1) {
+                perror("read");
+                return -1;
+        }
+
+        if (c == '\r') { //end of the message, send it
+                if (input->i == 0) { //blank message
+                        //don't send it
+                        return 1;
+                }
+                if (input->buffer[0] == '/') { //start with '/'
+                        //It's a command
+                        if (!execute_command(input->buffer)) {
+                                //command unknown
+                                print_message(msgs, "Command unknown\n");
+                        }
+                        return 1;
+                }
+                if (write(sockfd, input->buffer, (size_t)input->i) == -1) {
+                        perror("write");
+                        return -1;
+                }
+                reset_variables(input);
+                clear_message_area(input->window);
+                return 1;
+        }
+
+        if (c == 127) { //DEL
+                delete_message_character(input);
+                return 1;
+        }
+
+        if (input->i == MAXMSG-1) { //max message length reached
+                //ignore character for now
+                return 1;
+        }
+
+        input_char_handling(input, c);
+        return 1;
+}

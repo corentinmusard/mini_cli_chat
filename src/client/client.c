@@ -78,35 +78,8 @@ int main(void) {
 
                 for (int i = 0; i < nfds; i++) {
                         if (events[i].data.fd == STDIN_FILENO) { //from stdin
-                                char c;
-                                if (read(STDIN_FILENO, &c, 1) == -1) {
-                                        perror("read");
+                                if (stdin_char_handling(input, msgs, sockfd) == -1) {
                                         goto clean;
-                                }
-
-                                if (c == '\r') { //end of the message, send it
-                                        if (input->i == 0) { //blank message
-                                                //don't send it
-                                                continue;
-                                        }
-                                        if (input->buffer[0] == '/') { //start with '/'
-                                                //It's a command
-                                                if (!execute_command(input->buffer)) {
-                                                        //command unknown
-                                                        print_message(msgs, "Command unknown\n");
-                                                }
-                                        } else if (write(sockfd, input->buffer, (size_t)input->i) == -1) {
-                                                perror("write");
-                                                goto clean;
-                                        }
-                                        reset_variables(input);
-                                        clear_message_area(input->window);
-                                } else if (c == 127) { //DEL
-                                        delete_message_character(input);
-                                } else if (input->i == MAXMSG-1) { //max message length reached
-                                        //ignore character for now
-                                } else {
-                                        input_char_handling(input, c);
                                 }
                         } else if (events[i].data.fd == sockfd) { //from server
                                 if (server_message_handling(msgs, sockfd) == -1) {
