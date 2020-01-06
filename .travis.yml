@@ -21,7 +21,6 @@ script:
   - mkdir build
   - cd build
   - cmake ../
-  - make clean
   # Wraps the compilation with the Build Wrapper to generate configuration (used
   # later by the SonarQube Scanner) into the "bw-output" folder
   - build-wrapper-linux-x86-64 --out-dir ../bw-output make all
@@ -29,9 +28,9 @@ script:
   - make test
   # And finally run the SonarQube analysis - read the "sonar-project.properties"
   # file to see the specific configuration
-  #- cd ../
-  - tree ../ -h
-  - sonar-scanner -Dproject.settings=../sonar-project.properties
+  - cd ../
+  - tree -h
+  - sonar-scanner -Dproject.settings=sonar-project.properties
 
 cache:
   directories:
