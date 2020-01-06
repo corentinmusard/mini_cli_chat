@@ -10,7 +10,7 @@ addons:
   apt:
     packages: # Install needed packages
       - gcc-8
-      - clang-6
+      - clang-6.0
 
 # To build 2 times with each compiler
 compiler:
