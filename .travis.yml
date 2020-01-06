@@ -10,7 +10,7 @@ addons:
 
 # command to install dependencies
 install:
-  - sudo apt-get install gcc-8 clang-6.0
+  - sudo apt-get install gcc-8 clang-6.0 tree
 
 compiler:
   - clang-6.0
@@ -20,7 +20,7 @@ compiler:
 script:
   - mkdir build
   - cd build
-  - cmake .
+  - cmake ../
   - make clean
   # Wraps the compilation with the Build Wrapper to generate configuration (used
   # later by the SonarQube Scanner) into the "bw-output" folder
@@ -32,3 +32,6 @@ script:
   - tree -h
   - sonar-scanner -Dproject.settings=../sonar-project.properties
 
+cache:
+  directories:
+    - '$HOME/.sonar/cache'
