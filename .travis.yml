@@ -10,7 +10,7 @@ addons:
 
 # command to install dependencies
 install:
-  - sudo apt-get install gcc-8 clang-6.0 tree
+  - sudo apt-get install gcc-8 clang-6.0
 
 compiler:
   - clang-6.0
@@ -19,7 +19,7 @@ compiler:
 # command to build and run tests
 script:
   # Fix LD_PRELOAD errors
-  # See https://community.sonarsource.com/t/sonarqube-c-ubuntu-build-wrapper-ld-preload-error/300#15
+  # See https://community.sonarsource.com/t/sonarqube-c-ubuntu-build-wrapper-ld-preload-error/300
   - INTERCEPTOR_LIB=`find ${TRAVIS_HOME} -name libinterceptor-x86_64.so`
   - INTERCEPTOR_LINK=`sed "s/x86_64/haswell/g"<<<"$INTERCEPTOR_LIB"`
   - ln -s $INTERCEPTOR_LIB $INTERCEPTOR_LINK
@@ -30,16 +30,13 @@ script:
   - make clean
   # Wraps the compilation with the Build Wrapper to generate configuration (used
   # later by the SonarQube Scanner) into the "bw-output" folder
-  - build-wrapper-linux-x86-64 --out-dir bw-output make all
+  - build-wrapper-linux-x86-64 --out-dir ../bw-output make all
   # Execute some tests
   - make test
   # And finally run the SonarQube analysis - read the "sonar-project.properties"
   # file to see the specific configuration
-  - cat bw-output/build-wrapper-dump.json
-  - tail bw-output/build-wrapper.log
   - cd ../
-  - tree -h
-  - sonar-scanner -Dproject.settings=sonar-project.properties
+  - sonar-scanner
 
 cache:
   directories:
