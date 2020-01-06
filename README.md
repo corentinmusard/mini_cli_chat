@@ -8,6 +8,8 @@ It uses Berkeley sockets, epoll, ncurses, cmake.
 ## Build status
 [![Build Status](https://www.travis-ci.org/corentinmusard/mini_cli_chat.svg?branch=master)](https://www.travis-ci.org/corentinmusard/mini_cli_chat)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=corentinmusard_mini_cli_chat&metric=alert_status)](https://sonarcloud.io/dashboard?id=corentinmusard_mini_cli_chat)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=corentinmusard_mini_cli_chat&metric=coverage)](https://sonarcloud.io/dashboard?id=corentinmusard_mini_cli_chat)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/0a07e19caa974f559eb7f2e901c311bb)](https://www.codacy.com/manual/corentinmusard/mini_cli_chat)
 
 ## Coding Process
 ### Tools used to ensure good code
@@ -24,7 +26,11 @@ mkdir build
 cd build
 cmake ..
 make
-make test # Optionnal, it runs tests
+
+# Optionnal:
+make test #it runs tests
+# or
+./tests/unit_test # same as "make test" but with colors
 ```
 Binaries are built into `bin/` directory.
 
@@ -57,3 +63,4 @@ In no particular order
 - [ ] client: add setting configuration (nickname, server ip/port, log settings)
 - [ ] server: add setting configuration (server port, log settings)
 - [ ] client: add command via adding a slash like /list, /me, /whoami, /whois
+- [ ] use portable code (currently needing POSIX and GNU extentions)
