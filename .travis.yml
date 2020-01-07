@@ -1,5 +1,6 @@
+# https://config.travis-ci.com/explore
+
 language: c
-sudo: false
 dist: bionic
 
 addons:
@@ -11,6 +12,9 @@ addons:
     packages: # Install needed packages
       - gcc-8
       - clang-6.0
+
+os:
+  - linux
 
 # To build 2 times with each compiler
 compiler:
