@@ -107,7 +107,7 @@ int execute_command(const char *command) {
         return 0;
 }
 
-void print_input_char(Input *input, char c) {
+void print_input_char(const Input *input, char c) {
         mvwprintw(input->window, 1, INITIAL_MESSAGE_X + input->i, "%c", c);
 }
 

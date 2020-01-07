@@ -87,7 +87,7 @@ int execute_command(const char *command);
 /**
  * Print char `c` to input window
  */
-void print_input_char(Input *input, char c);
+void print_input_char(const Input *input, char c);
 
 /**
  * Store `c` in `buffer`
