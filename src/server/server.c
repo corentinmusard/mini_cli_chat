@@ -81,7 +81,7 @@ int main(void) {
                 goto clean_server_fd;
         }
 
-        while (!sigintRaised) {
+        while (sigintRaised == 0) {
                 struct epoll_event events[MAX_EVENTS];
                 int nfds;
 

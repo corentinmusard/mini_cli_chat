@@ -129,7 +129,7 @@ int stdin_char_handling(Input *input, Messages *msgs, int sockfd) {
                 }
                 if (input->buffer[0] == '/') { //start with '/'
                         //It's a command
-                        if (!execute_command(input->buffer)) {
+                        if (execute_command(input->buffer) == 0) {
                                 //command unknown
                                 print_message(msgs, "Command unknown\n");
                         }

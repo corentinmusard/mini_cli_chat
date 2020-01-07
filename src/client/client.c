@@ -64,7 +64,7 @@ int main(void) {
                 goto clean;
         }
 
-        while (!exit_wanted) {
+        while (exit_wanted == 0) {
                 struct epoll_event events[MAX_EVENTS];
                 int nfds;
 
@@ -89,7 +89,7 @@ int main(void) {
                                 fprintf(stderr, "unknown fd: %d\n", events[i].data.fd);
                                 goto clean;
                         }
-                }  
+                }
         }
 
 clean:
