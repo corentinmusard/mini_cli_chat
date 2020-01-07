@@ -151,7 +151,7 @@ int stdin_char_handling(Input *input, Messages *msgs, int sockfd) {
                 return 1;
         }
 
-        if (input->i == MAXMSG-1) { //max message length reached
+        if (input->i == (MAXMSG-1)) { //max message length reached
                 //ignore character for now
                 return 1;
         }

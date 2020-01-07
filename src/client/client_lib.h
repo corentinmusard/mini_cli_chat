@@ -9,7 +9,7 @@ extern "C" {
 
 /**
  * Default value is 0
- * If value is not 0 then client is going to exit 
+ * If value is not 0 then client is going to exit
  */
 extern volatile sig_atomic_t exit_wanted;
 

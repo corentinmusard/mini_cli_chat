@@ -12,13 +12,13 @@
  * Print current time to stdout in TIME_FORMAT format
  */
 static void print_time(void) {
-        struct tm *tm_s;
+        struct tm tm_s;
         time_t timep;
 
         timep = time(NULL);
-        tm_s = localtime(&timep);
+        localtime_r(&timep, &tm_s);
 
-        printf(TIME_FORMAT, tm_s->tm_hour, tm_s->tm_min, tm_s->tm_sec);
+        printf(TIME_FORMAT, tm_s.tm_hour, tm_s.tm_min, tm_s.tm_sec);
 }
 
 void info(const char *fmt, ...) {
@@ -34,17 +34,18 @@ void info(const char *fmt, ...) {
 }
 
 char* log_format(const char *buffer, size_t size) {
-        struct tm *tm_s;
+        struct tm tm_s;
         time_t timep;
         char *message;
+        size_t m_size = size + SIZE_TIME + 1;
 
         //+1 for space between time and buffer
-        message = malloc((size + SIZE_TIME + 1) * sizeof(char));
+        message = calloc(m_size, sizeof(char));
 
         timep = time(NULL);
-        tm_s = localtime(&timep);
+        localtime_r(&timep, &tm_s);
 
-        sprintf(message, TIME_FORMAT " %.*s", tm_s->tm_hour, tm_s->tm_min, tm_s->tm_sec, (int)size, buffer);
+        snprintf(message, m_size, TIME_FORMAT " %.*s", tm_s.tm_hour, tm_s.tm_min, tm_s.tm_sec, (int)size, buffer);
 
         return message;
 }

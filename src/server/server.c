@@ -116,10 +116,10 @@ int main(void) {
                                         close(events[i].data.fd);
                                         delete_client(clients_fd, events[i].data.fd);
                                         continue;
+                                } else {
+                                        broadcast_message(clients_fd, buffer, sizeof(buffer));
+                                        info("%.*s\n", MAXMSG, buffer);
                                 }
-                                //else
-                                broadcast_message(clients_fd, buffer, sizeof(buffer));
-                                info("%.*s\n", MAXMSG, buffer);
                         }
                 }
         }

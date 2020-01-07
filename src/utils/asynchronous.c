@@ -1,5 +1,4 @@
 #include <sys/epoll.h>
-#include <stdint.h>
 
 #include "asynchronous.h"
 
