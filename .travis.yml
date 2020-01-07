@@ -41,7 +41,3 @@ script:
   # file to see the specific configuration
   - cd ../
   - sonar-scanner
-
-cache:
-  directories:
-    - '$HOME/.sonar/cache'
