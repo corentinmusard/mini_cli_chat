@@ -10,6 +10,8 @@
 #include "../utils/log.h"
 #include "../utils/utils.h"
 
+#define DEL 127
+
 volatile sig_atomic_t exit_wanted = 0;
 
 Input* input_init(void) {
@@ -144,7 +146,7 @@ int stdin_char_handling(Input *input, Messages *msgs, int sockfd) {
                 return 1;
         }
 
-        if (c == 127) { //DEL
+        if (c == DEL) {
                 delete_message_character(input);
                 return 1;
         }
