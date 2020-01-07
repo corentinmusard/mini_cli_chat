@@ -1,5 +1,8 @@
 #ifndef CLIENT_LIB_H
 #define CLIENT_LIB_H
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #include <curses.h>
 #include <signal.h>
@@ -94,4 +97,7 @@ void input_char_handling(Input *input, char c);
 
 int stdin_char_handling(Input *input, Messages *msgs, int sockfd);
 
+#ifdef __cplusplus
+}
+#endif
 #endif

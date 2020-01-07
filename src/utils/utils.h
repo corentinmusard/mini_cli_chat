@@ -1,5 +1,8 @@
 #ifndef UTILS_H
 #define UTILS_H
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /*********************************** client and server ***********************************/
 
@@ -36,4 +39,7 @@
  */
 #define CHAT_BANNER "Welcome to the basic chat!"
 
+#ifdef __cplusplus
+}
+#endif
 #endif

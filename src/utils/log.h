@@ -1,5 +1,8 @@
 #ifndef LOG_H
 #define LOG_H
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #include <stddef.h>
 
@@ -15,4 +18,7 @@ void info(const char *fmt, ...);
  */
 char* log_format(const char *buffer, size_t size);
 
+#ifdef __cplusplus
+}
+#endif
 #endif

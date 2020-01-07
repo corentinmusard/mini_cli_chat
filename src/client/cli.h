@@ -1,5 +1,8 @@
 #ifndef CLI_H
 #define CLI_H
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #include <curses.h>
 
@@ -29,4 +32,7 @@ void refresh_cli(WINDOW *messages_window, WINDOW *input_window);
  */
 void clear_message_area(WINDOW *input_window);
 
+#ifdef __cplusplus
+}
+#endif
 #endif

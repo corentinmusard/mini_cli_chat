@@ -1,5 +1,8 @@
 #ifndef ASYNCHRONOUS_H
 #define ASYNCHRONOUS_H
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #include <stdint.h>
 
@@ -16,4 +19,7 @@ int async_init(void);
  */
 int register_event(int epollfd, int fd, uint32_t events);
 
+#ifdef __cplusplus
+}
+#endif
 #endif

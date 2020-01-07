@@ -1,5 +1,8 @@
 #ifndef CLIENTS_H
 #define CLIENTS_H
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 typedef struct client_s {
         struct client_s *next; // next client or NULL
@@ -26,4 +29,7 @@ void add_client(clients *l, int fd);
  */
 void delete_client(clients *l, int fd);
 
+#ifdef __cplusplus
+}
+#endif
 #endif
