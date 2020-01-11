@@ -18,6 +18,7 @@ addons:
       - g++-8
       - clang-6.0
       - clang++-6.0
+      - tree
 
 os:
   - linux
@@ -48,6 +49,7 @@ script:
   # Execute gcov for tests coverage
   - gcov-8 $(find ./src/ ./tests/ -regextype posix-egrep -regex ".*\\.(o)")
   - cd ../
+  - tree
 
   # And finally run the SonarQube analysis - read the "sonar-project.properties"
   # file to see the specific configuration
