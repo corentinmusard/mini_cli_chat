@@ -21,6 +21,7 @@ static void print_time(void) {
         printf(TIME_FORMAT, tm_s.tm_hour, tm_s.tm_min, tm_s.tm_sec);
 }
 
+__attribute__((__format__ (__printf__, 1, 2)))
 void info(const char *fmt, ...) {
         va_list args;
 

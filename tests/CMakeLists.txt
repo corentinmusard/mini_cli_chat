@@ -7,6 +7,10 @@ add_executable(unit_test
     ${SOURCES}
 )
 
+target_compile_options(unit_test 
+    PUBLIC "-fPIE"
+)
+
 target_link_libraries(unit_test
     GTest::GTest 
     GTest::Main

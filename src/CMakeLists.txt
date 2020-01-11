@@ -60,7 +60,9 @@ elseif(CMAKE_C_COMPILER_ID MATCHES "Clang")
         -pedantic
         -Wall
         -Wextra
-        #-Weverything
+        -Weverything
+        -Wno-padded
+        -Wno-disabled-macro-expansion
     )
     set(RUNTIME_CHECKS
         -fsanitize=address
