@@ -17,5 +17,5 @@ target_compile_options(server
 )
 target_link_libraries(server
     ${RUNTIME_CHECKS}
-     "--coverage"
+    "--coverage"
 )

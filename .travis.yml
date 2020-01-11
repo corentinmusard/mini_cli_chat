@@ -40,8 +40,7 @@ script:
   - GTEST_COLOR=1 make test
 
   # Execute gcov for tests coverage
-  - cd ../src/
-  - gcov -p $(find . -name '*.[ch]' -print)
+  - gcov $(find ./src/ ./tests/ -regextype posix-egrep -regex ".*\\.(o)")
   - cd ../
 
   # And finally run the SonarQube analysis - read the "sonar-project.properties"

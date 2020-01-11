@@ -16,5 +16,5 @@ target_compile_options(client
 target_link_libraries(client
     ${CURSES_LIBRARIES}
     ${RUNTIME_CHECKS}
-     "--coverage"
+    "--coverage"
 )
