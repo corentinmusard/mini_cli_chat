@@ -3,7 +3,7 @@
 language: c
 dist: bionic
 
-# Use full depth for SonarCLoud
+# Use full depth for SonarCloud
 git:
   depth: false
 
@@ -18,15 +18,15 @@ addons:
       - g++-8
       - clang-6.0
       - clang++-6.0
-      - tree
 
 os:
   - linux
 
-# To build 2 times with each compiler
-env:
-  - CC=gcc-8 CXX=g++-8
-  - CC=clang-6.0 CXX=clang++-6.0
+# To build each config
+jobs:
+  include:
+    - env: CC=gcc-8 CXX=g++-8 GCOV=gcov-8
+    - env: CC=clang-6.0 CXX=clang++-6.0 GCOV='llvm-cov gcov'
 
 # command to build and run tests
 script:
@@ -47,9 +47,8 @@ script:
   - GTEST_COLOR=1 make test
 
   # Execute gcov for tests coverage
-  - gcov-8 $(find ./src/ ./tests/ -regextype posix-egrep -regex ".*\\.(o)")
+  - $GCOV $(find ./src/ ./tests/ -regextype posix-egrep -regex ".*\\.(o)")
   - cd ../
-  - tree
 
   # And finally run the SonarQube analysis - read the "sonar-project.properties"
   # file to see the specific configuration
