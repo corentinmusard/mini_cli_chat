@@ -17,9 +17,9 @@ os:
   - linux
 
 # To build 2 times with each compiler
-compiler:
-  - clang-6.0
-  - gcc-8
+env:
+  - CC=gcc-8 CXX=g++-8
+  - CC=clang-6.0 CXX=clang++-6.0
 
 # command to build and run tests
 script:
