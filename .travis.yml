@@ -36,7 +36,7 @@ script:
   # later by the SonarQube Scanner) into the "bw-output" folder
   - build-wrapper-linux-x86-64 --out-dir ../bw-output make all
   # Execute some tests
-  - make test
+  - GTEST_COLOR=1 make test
   # And finally run the SonarQube analysis - read the "sonar-project.properties"
   # file to see the specific configuration
   - cd ../

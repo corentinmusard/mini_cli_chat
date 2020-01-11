@@ -1,8 +1,17 @@
-add_executable(unit_tests unit_tests.cpp)
+set(SOURCES
+    ../src/utils/log.c
+)
 
-target_link_libraries(unit_tests
+add_executable(unit_test
+    log_test.cpp
+    ${SOURCES}
+)
+
+target_link_libraries(unit_test
     GTest::GTest 
     GTest::Main
 )
 
-add_test(test_all unit_tests)
+add_test(test_all
+    unit_test
+)

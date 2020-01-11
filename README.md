@@ -26,11 +26,7 @@ mkdir build
 cd build
 cmake ..
 make
-
-# Optionnal:
-make test #it runs tests
-# or
-./tests/unit_test # same as "make test" but with colors
+GTEST_COLOR=1 make test # Optionnal, it runs tests
 ```
 Binaries are built into `bin/` directory.
 
