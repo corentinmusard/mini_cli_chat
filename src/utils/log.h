@@ -12,9 +12,8 @@ extern "C" {
 void info(const char *fmt, ...);
 
 /**
- * Add current time in TIME_FORMAT format to `buffer`
  * Return an malloc-ed char*
- * Returned value is current time in TIME_FORMAT format followed by `buffer` of size `size`
+ * Return current time in TIME_FORMAT format followed by a space and `buffer` of size `size`
  */
 char* log_format(const char *buffer, size_t size);
 

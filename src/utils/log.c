@@ -6,17 +6,24 @@
 #include "log.h"
 
 #define TIME_FORMAT "%02d:%02d:%02d"
-#define SIZE_TIME 8
+#define SIZE_TIME (8 + 1)
+
+/**
+ * Store locale time into `tm_s`
+ */
+static void get_localtime(struct tm *tm_s) {
+        time_t timep = time(NULL);
+
+        localtime_r(&timep, tm_s);
+}
 
 /**
  * Print current time to stdout in TIME_FORMAT format
  */
 static void print_time(void) {
         struct tm tm_s;
-        time_t timep;
 
-        timep = time(NULL);
-        localtime_r(&timep, &tm_s);
+        get_localtime(&tm_s);
 
         printf(TIME_FORMAT, tm_s.tm_hour, tm_s.tm_min, tm_s.tm_sec);
 }
@@ -36,17 +43,18 @@ void info(const char *fmt, ...) {
 
 char* log_format(const char *buffer, size_t size) {
         struct tm tm_s;
-        time_t timep;
         char *message;
-        size_t m_size = size + SIZE_TIME + 1;
-
+        size_t m_size = SIZE_TIME + 1 + size;
         //+1 for space between time and buffer
+
         message = calloc(m_size, sizeof(char));
+        get_localtime(&tm_s);
 
-        timep = time(NULL);
-        localtime_r(&timep, &tm_s);
-
-        snprintf(message, m_size, TIME_FORMAT " %.*s", tm_s.tm_hour, tm_s.tm_min, tm_s.tm_sec, (int)size, buffer);
+        if (buffer == NULL) {
+                snprintf(message, m_size, TIME_FORMAT " ", tm_s.tm_hour, tm_s.tm_min, tm_s.tm_sec);
+        } else {
+                snprintf(message, m_size, TIME_FORMAT " %s", tm_s.tm_hour, tm_s.tm_min, tm_s.tm_sec, buffer);
+        }
 
         return message;
 }
