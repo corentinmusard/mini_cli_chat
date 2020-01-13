@@ -13,9 +13,7 @@ target_compile_definitions(server
 target_compile_options(server 
     PUBLIC ${W}
     PUBLIC ${RUNTIME_CHECKS}
-    PUBLIC  "--coverage"
 )
 target_link_libraries(server
     ${RUNTIME_CHECKS}
-    "--coverage"
 )
