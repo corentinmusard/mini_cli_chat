@@ -29,7 +29,6 @@ if (CMAKE_C_COMPILER_ID STREQUAL "GNU")
         -Wswitch-default
         -Wswitch-enum
         -Wundef
-        -Wlogical-op
         -Winline
         -Wformat-security
         -Wformat=2
