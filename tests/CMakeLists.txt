@@ -1,9 +1,15 @@
 set(SOURCES
+    ../src/utils/asynchronous.c
     ../src/utils/log.c
 )
 
-add_executable(unit_test
+set(TESTS
     log_test.cpp
+    asynchronous_test.cpp
+)
+
+add_executable(unit_test
+    ${TESTS}
     ${SOURCES}
 )
 
