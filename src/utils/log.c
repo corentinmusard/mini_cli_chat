@@ -31,12 +31,14 @@ static void print_time(void) {
 __attribute__((__format__ (__printf__, 1, 2)))
 void info(const char *fmt, ...) {
         va_list args;
-
         va_start(args, fmt);
 
         print_time();
         printf(" ");
-        vprintf(fmt, args);
+
+        if (fmt != NULL) {
+                vprintf(fmt, args);
+        }
 
         va_end(args);
 }
