@@ -1,5 +1,4 @@
 #include <gtest/gtest.h>
-#include <unistd.h>
 
 #include "../src/utils/log.h"
 
@@ -28,39 +27,38 @@ protected:
         freopen("/dev/tty", "a", stdout);\
     } while (0)
 
-public:
     char buffer[BUFSIZ] = {0};
 };
 
-TEST_F(InfoTest, info)
+TEST_F(InfoTest, null)
 {
     STDOUT_TO_BUFFER(info(NULL));
 
     ASSERT_STREQ(buffer, "00:00:00 ");
 }
 
-TEST_F(InfoTest, info_empty_string)
+TEST_F(InfoTest, empty_string)
 {
     STDOUT_TO_BUFFER(info(""));
 
     ASSERT_STREQ(buffer, "00:00:00 ");
 }
 
-TEST_F(InfoTest, info_constant_string)
+TEST_F(InfoTest, constant_string)
 {
     STDOUT_TO_BUFFER(info("Hello you!\n"));
 
     ASSERT_STREQ(buffer, "00:00:00 Hello you!\n");
 }
 
-TEST_F(InfoTest, info_complex_string)
+TEST_F(InfoTest, complex_string)
 {
     STDOUT_TO_BUFFER(info("Hello %s 4*5=%d", "Bob", 20));
 
     ASSERT_STREQ(buffer, "00:00:00 Hello Bob 4*5=20");
 }
 
-TEST_F(InfoTest, info_non_null_time_less_than_one_day)
+TEST_F(InfoTest, non_null_time_less_than_one_day)
 {
     set_time(2*3600 + 3*60 + 45);
 
@@ -69,7 +67,7 @@ TEST_F(InfoTest, info_non_null_time_less_than_one_day)
     ASSERT_STREQ(buffer, "02:03:45 Hello you!");
 }
 
-TEST_F(InfoTest, info_non_null_time_greater_than_one_day)
+TEST_F(InfoTest, non_null_time_greater_than_one_day)
 {
     set_time(18*24*3600 + 2*3600 + 3*60 + 45);
 
@@ -90,11 +88,10 @@ protected:
         free(buffer);
     }
 
-public:
     char *buffer = NULL;
 };
 
-TEST_F(LogFormatTest, log_format)
+TEST_F(LogFormatTest, null)
 {
     const char *str = NULL;
     buffer = log_format(str, sizeof(str));
@@ -102,7 +99,7 @@ TEST_F(LogFormatTest, log_format)
     ASSERT_STREQ(buffer, "00:00:00 ");
 }
 
-TEST_F(LogFormatTest, log_format_empty_string)
+TEST_F(LogFormatTest, empty_string)
 {
     const char str[] = "";
     buffer = log_format(str, sizeof(str));
@@ -110,7 +107,7 @@ TEST_F(LogFormatTest, log_format_empty_string)
     ASSERT_STREQ(buffer, "00:00:00 ");
 }
 
-TEST_F(LogFormatTest, log_format_constant_string)
+TEST_F(LogFormatTest, constant_string)
 {
     const char str[] = "Hello you!\n";
     buffer = log_format(str, sizeof(str));
@@ -118,7 +115,7 @@ TEST_F(LogFormatTest, log_format_constant_string)
     ASSERT_STREQ(buffer, "00:00:00 Hello you!\n");
 }
 
-TEST_F(LogFormatTest, log_format_non_null_time_less_than_one_day)
+TEST_F(LogFormatTest, non_null_time_less_than_one_day)
 {
     const char str[] = "Hello you!";
     set_time(2*3600 + 3*60 + 45);
@@ -127,7 +124,7 @@ TEST_F(LogFormatTest, log_format_non_null_time_less_than_one_day)
     ASSERT_STREQ(buffer, "02:03:45 Hello you!");
 }
 
-TEST_F(LogFormatTest, log_format_non_null_time_greater_than_one_day)
+TEST_F(LogFormatTest, non_null_time_greater_than_one_day)
 {
     const char str[] = "Hello you!";
     set_time(18*24*3600 + 2*3600 + 3*60 + 45);
