@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include "../src/utils/log.h"
+#include "log.h"
 
 static time_t t = 0;
 

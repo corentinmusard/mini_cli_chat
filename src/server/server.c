@@ -8,9 +8,9 @@
 #include <stdlib.h>
 
 #include "clients.h"
-#include "../utils/utils.h"
-#include "../utils/log.h"
-#include "../utils/asynchronous.h"
+#include "utils.h"
+#include "log.h"
+#include "asynchronous.h"
 
 static volatile sig_atomic_t sigintRaised = 0;
 

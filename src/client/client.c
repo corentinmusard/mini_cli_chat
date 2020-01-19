@@ -8,8 +8,8 @@
 
 #include "cli.h"
 #include "client_lib.h"
-#include "../utils/asynchronous.h"
-#include "../utils/utils.h"
+#include "asynchronous.h"
+#include "utils.h"
 
 int main(void) {
         int epollfd;

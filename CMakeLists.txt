@@ -17,6 +17,11 @@ set(CMAKE_POSITION_INDEPENDANT_CODE ON)
 find_package(Curses REQUIRED)
 include_directories(${CURSES_INCLUDE_DIR})
 
+# To make #include easier
+include_directories(src)
+include_directories(src/utils)
+
+# Build client and server
 add_subdirectory(src)
 
 # Unit tests

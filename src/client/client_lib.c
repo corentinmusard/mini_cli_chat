@@ -7,8 +7,8 @@
 
 #include "client_lib.h"
 #include "cli.h"
-#include "../utils/log.h"
-#include "../utils/utils.h"
+#include "log.h"
+#include "utils.h"
 
 #define DEL 127
 
