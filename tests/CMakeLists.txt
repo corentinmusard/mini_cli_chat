@@ -1,29 +1,36 @@
-set(SOURCES
-    ../src/utils/asynchronous.c
-    ../src/utils/log.c
+
+set(W
+    -pedantic
+    -Wall
+    -Wextra
+    #-Wmissing-declarations
+    -Wunreachable-code
+    -Wmissing-include-dirs
+    -Wlogical-op
+    -Wfloat-equal
+    -Wwrite-strings
+    -Wpointer-arith
+    -Wcast-qual
+    -Wcast-align
+    -Wshadow
+    -Wredundant-decls
+    -Wdouble-promotion
+    -Winit-self
+    -Wswitch-default
+    -Wswitch-enum
+    -Wundef
+    -Winline
+    -Wformat-security
+    -Wformat=2
+    -Wunused-macros
+    -Wdate-time
+    -Wpacked
+    -Winvalid-pch
+    -Wvla
+    -Wdisabled-optimization
+    -Wconversion
 )
 
-set(TESTS
-    log_test.cpp
-    asynchronous_test.cpp
-)
-
-add_executable(unit_test
-    ${TESTS}
-    ${SOURCES}
-)
-
-target_compile_options(unit_test 
-    PUBLIC "-fPIE"
-    PUBLIC "--coverage"
-)
-
-target_link_libraries(unit_test
-    GTest::GTest 
-    GTest::Main
-    "--coverage"
-)
-
-add_test(test_all
-    unit_test
-)
+add_subdirectory(client)
+add_subdirectory(server)
+add_subdirectory(utils)
