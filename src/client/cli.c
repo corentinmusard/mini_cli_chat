@@ -14,6 +14,8 @@ void init_cli(WINDOW **messages_window, WINDOW **input_window) {
 
         *messages_window = subwin(stdscr, LINES-2, COLS, 0, 0);
         *input_window = subwin(stdscr, 2, COLS, LINES-2, 0);
+        //necessary before refreshing subwindows
+        touchwin(stdscr);
 
         mvwprintw(*input_window, 1, 1, ">> ");
         box(*messages_window, ACS_VLINE, ACS_HLINE);
@@ -22,8 +24,9 @@ void init_cli(WINDOW **messages_window, WINDOW **input_window) {
 }
 
 void refresh_cli(WINDOW *messages_window, WINDOW *input_window) {
-        wrefresh(messages_window);
-        wrefresh(input_window);
+        wnoutrefresh(messages_window);
+        wnoutrefresh(input_window);
+        doupdate();
 }
 
 void clear_message_area(WINDOW *input_window) {
