@@ -1,3 +1,6 @@
+# Editor files
+*.sublime-workspace
+
 # Prerequisites
 *.d
 
