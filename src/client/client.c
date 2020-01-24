@@ -60,7 +60,7 @@ int main(void) {
 
         init_cli(&msgs->window, &input->window);
         if (msgs->window == NULL || input->window == NULL) {
-                perror("init_cli");
+                fprintf(stderr, "init_cli: Failed\n");
                 goto clean;
         }
 

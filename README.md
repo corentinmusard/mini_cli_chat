@@ -60,3 +60,4 @@ In no particular order
 -   [ ] server: add setting configuration (server port, log settings)
 -   [ ] client: add command via adding a slash like /list, /me, /whoami, /whois
 -   [ ] use portable code (currently needing POSIX and GNU extentions)
+-   [ ] make code modular with plugins

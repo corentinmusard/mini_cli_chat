@@ -10,6 +10,9 @@
 #include "log.h"
 #include "utils.h"
 
+/**
+ * ASCII char 0x7f = 127
+ */
 #define DEL 127
 
 volatile sig_atomic_t exit_wanted = 0;
@@ -133,7 +136,7 @@ int stdin_char_handling(Input *input, Messages *msgs, int sockfd) {
                         //It's a command
                         if (execute_command(input->buffer) == 0) {
                                 //command unknown
-                                print_message(msgs, "Command unknown\n");
+                                print_message(msgs, "Command unknown");
                         }
                         return 1;
                 }
