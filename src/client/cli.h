@@ -8,9 +8,14 @@ extern "C" {
 
 /**
  * Initial x coordinate for input window
- * First 3 chars are ">> "
+ * First 3 chars are INPUT_PROMPT
  */
 #define INITIAL_MESSAGE_X 4
+
+/**
+ * Initial y coordinate for input window
+ */
+#define INITIAL_MESSAGE_Y 0
 
 /**
  * Initialize ncurses

@@ -75,7 +75,7 @@ void delete_message_character(Input *input) {
         if (input->i < 0) {
                 input->i = 0;
         }
-        wmove(input->window, 1, INITIAL_MESSAGE_X + input->i);
+        wmove(input->window, INITIAL_MESSAGE_Y, INITIAL_MESSAGE_X + input->i);
         wdelch(input->window);
 }
 
@@ -108,7 +108,7 @@ int execute_command(const char *command) {
 }
 
 void print_input_char(const Input *input, char c) {
-        mvwprintw(input->window, 1, INITIAL_MESSAGE_X + input->i, "%c", c);
+        mvwprintw(input->window, INITIAL_MESSAGE_Y, INITIAL_MESSAGE_X + input->i, "%c", c);
 }
 
 void input_char_handling(Input *input, char c) {
