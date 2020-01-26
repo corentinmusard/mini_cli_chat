@@ -27,7 +27,10 @@ add_subdirectory(src)
 # Unit tests
 add_subdirectory(3rd_party/google-test)
 
-# enable CTest testing
+# To use fff/fff.h
+include_directories(3rd_party)
+
+# Enable CTest testing
 enable_testing()
 
 # Add a testing executable
