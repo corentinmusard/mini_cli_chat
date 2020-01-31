@@ -51,49 +51,9 @@ void free_messages(Messages *messages);
 int server_message_handling(Messages *msgs, int sockfd);
 
 /**
- * Print `message` to messages window
- */
-void print_message(Messages *msgs, const char *message);
-
-/**
- * Remove char at indice `i` from `input_window` and `buffer`
- * Move cursor at indice `i-1`
- * Update value of `i`
- */
-void delete_message_character(Input *input);
-
-/**
- * Increment `i` if not superior of the size of the windows
- */
-void increment_indice_message(Input *input);
-
-/**
- * Reset `input` to default value
- */
-void reset_variables(Input *input);
-
-/**
  * Called when SIGINT is raised
  */
 void int_handler(int sig __attribute__ ((unused)));
-
-/**
- * Execute `command`
- * Return 1 on success
- * Return 0 if `command` is unknown
- */
-int execute_command(const char *command);
-
-/**
- * Print char `c` to input window
- */
-void print_input_char(const Input *input, char c);
-
-/**
- * Store `c` in `buffer`
- * Print `c` to input window
- */
-void input_char_handling(Input *input, char c);
 
 int stdin_char_handling(Input *input, Messages *msgs, int sockfd);
 
