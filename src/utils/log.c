@@ -5,7 +5,15 @@
 
 #include "log.h"
 
+/**
+ * Time format
+ * hour:min:sec
+ */
 #define TIME_FORMAT "%02d:%02d:%02d"
+
+/**
+ * size of TIME_FORMAT + 1 for '\0'
+ */
 #define SIZE_TIME (8 + 1)
 
 /**
@@ -30,17 +38,15 @@ static void print_time(void) {
 
 __attribute__((__format__ (__printf__, 1, 2)))
 void info(const char *fmt, ...) {
-        va_list args;
-        va_start(args, fmt);
-
         print_time();
         printf(" ");
 
         if (fmt != NULL) {
+                va_list args;
+                va_start(args, fmt);
                 vprintf(fmt, args);
+                va_end(args);
         }
-
-        va_end(args);
 }
 
 char* log_format(const char *buffer, size_t size) {
