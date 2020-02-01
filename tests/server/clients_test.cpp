@@ -105,3 +105,17 @@ TEST_F(ClientsTest, delete_client_duplicate)
 
     assert_fds_is(fds, 2);
 }
+
+TEST_F(ClientsTest, delete_client_multiple_clients)
+{
+    int fds[3] = {1, 3, 4};
+
+    add_client(c, 4);
+    add_client(c, 2);
+    add_client(c, 3);
+    add_client(c, 1);
+    delete_client(c, 2);
+
+    assert_fds_is(fds, 3);
+}
+
