@@ -86,11 +86,12 @@ TEST_F(ClientsTest, delete_client_empty)
 
 TEST_F(ClientsTest, delete_client_duplicate)
 {
-    int fds[1] = {2};
+    int fds[2] = {2, 1};
 
+    add_client(c, 1);
     add_client(c, 2);
     add_client(c, 2);
     delete_client(c, 2);
 
-    assert_fds_is(fds, 1);
+    assert_fds_is(fds, 2);
 }

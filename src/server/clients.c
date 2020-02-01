@@ -47,15 +47,15 @@ void delete_client(clients *l, int fd) {
                 return;
         }
 
-        while (c->next != NULL) {
-                if (c->next->fd == fd) {
-                        client *next = c->next->next;
-                        free(c->next);
-                        c->next = next;
-                        l->nb--;
-                        break;
-                }
+        while (c->next != NULL && c->next->fd != fd) {
                 c = c->next;
+        }
+
+        if (c->next->fd == fd) {
+                client *next = c->next->next;
+                free(c->next);
+                c->next = next;
+                l->nb--;
         }
 }
 
