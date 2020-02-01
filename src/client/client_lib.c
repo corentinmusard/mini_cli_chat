@@ -7,6 +7,7 @@
 
 #include "client_lib.h"
 #include "cli.h"
+#include "screen.h"
 #include "log.h"
 #include "utils.h"
 
@@ -97,38 +98,6 @@ static void input_char_handling(Input *input, char c) {
         input->buffer[input->i] = c;
         print_input_char(input, c);
         increment_indice_message(input);
-}
-
-Input* input_init(void) {
-        Input *input = malloc(sizeof(Input));
-        assert(input);
-
-        input->window = NULL;
-        input->i = 0;
-        input->buffer = calloc(MAXMSG, sizeof(char));
-
-        assert(input->buffer);
-
-        return input;
-}
-
-void free_input(Input *input) {
-        free(input->buffer);
-        free(input);
-}
-
-Messages* messages_init(void) {
-        Messages *m = malloc(sizeof(Messages));
-        assert(m);
-
-        m->window = NULL;
-        m->y = 0;
-
-        return m;
-}
-
-void free_messages(Messages *messages) {
-        free(messages);
 }
 
 int server_message_handling(Messages *msgs, int sockfd) {

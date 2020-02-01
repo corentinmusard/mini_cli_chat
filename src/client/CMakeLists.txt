@@ -2,6 +2,7 @@ set(CLIENT_SOURCES
     client.c
     client_lib.c
     cli.c
+    screen.c
     ../utils/asynchronous.c
     ../utils/log.c
 )

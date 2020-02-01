@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include "client/client_lib.h"
+#include "client/screen.h"
 
 class InputTest : public ::testing::Test
 {

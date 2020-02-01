@@ -2,13 +2,13 @@ set(TEST_NAME client_test)
 
 set(SOURCES
     ../../src/client/cli.c
-    ../../src/client/client_lib.c
+    ../../src/client/screen.c
     ../../src/utils/asynchronous.c
     ../../src/utils/log.c
 )
 
 set(TESTS
-    client_lib_test.cpp
+    screen_test.cpp
 )
 
 add_executable(${TEST_NAME}

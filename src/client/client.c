@@ -8,6 +8,7 @@
 
 #include "cli.h"
 #include "client_lib.h"
+#include "screen.h"
 #include "asynchronous.h"
 #include "utils.h"
 
