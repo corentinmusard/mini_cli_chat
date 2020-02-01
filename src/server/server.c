@@ -21,8 +21,8 @@ static void int_handler(int sig __attribute__ ((unused))) {
 /**
  * Send message `buffer` of size `size` to each client in `clients_fd`
  */
-static void broadcast_message(const clients *clients_fd, const char *buffer, size_t size) {
-        const client *c;
+static void broadcast_message(const Clients *clients_fd, const char *buffer, size_t size) {
+        const Client *c;
 
         if (clients_fd == NULL || clients_fd->head == NULL) {
                 return;
@@ -38,7 +38,7 @@ static void broadcast_message(const clients *clients_fd, const char *buffer, siz
 int main(void) {
         int epollfd;
         int server_sock_fd;
-        clients *clients_fd = init_clients();
+        Clients *clients_fd = init_clients();
         const struct sockaddr_in addr = {
                 .sin_family = AF_INET,
                 .sin_port = htons(PORT),

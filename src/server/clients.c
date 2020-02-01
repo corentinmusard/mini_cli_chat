@@ -3,10 +3,10 @@
 
 #include "clients.h"
 
-clients* init_clients(void) {
-        clients *c;
+Clients* init_clients(void) {
+        Clients *c;
 
-        c = malloc(sizeof(clients));
+        c = malloc(sizeof(Clients));
         assert(c);
 
         c->head = NULL;
@@ -15,14 +15,14 @@ clients* init_clients(void) {
         return c;
 }
 
-int add_client(clients *l, int fd) {
-        client *c;
+int add_client(Clients *l, int fd) {
+        Client *c;
 
         if (fd < 0) {
                 return 0;
         }
 
-        c = malloc(sizeof(client));
+        c = malloc(sizeof(Client));
         c->fd = fd;
         c->next = l->head;
 
@@ -31,8 +31,8 @@ int add_client(clients *l, int fd) {
         return 1;
 }
 
-void delete_client(clients *l, int fd) {
-        client *c;
+void delete_client(Clients *l, int fd) {
+        Client *c;
 
         if (l == NULL || l->head == NULL) {
                 return;
@@ -52,15 +52,15 @@ void delete_client(clients *l, int fd) {
         }
 
         if (c->next != NULL && c->next->fd == fd) {
-                client *next = c->next->next;
+                Client *next = c->next->next;
                 free(c->next);
                 c->next = next;
                 l->nb--;
         }
 }
 
-void free_clients(clients *l) {
-        client *c;
+void free_clients(Clients *l) {
+        Client *c;
 
         if (l == NULL) {
                 return;
@@ -68,7 +68,7 @@ void free_clients(clients *l) {
 
         c = l->head;
         while (c != NULL) {
-                client *next = c->next;
+                Client *next = c->next;
                 free(c);
                 c = next;
         }

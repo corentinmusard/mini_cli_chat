@@ -4,37 +4,37 @@
 extern "C" {
 #endif
 
-typedef struct client_s {
-        struct client_s *next; // next client or NULL
+typedef struct Client_s {
+        struct Client_s *next; // next client or NULL
         int fd; // client' socket fd
-} client;
+} Client;
 
 typedef struct {
-        client *head; // first client
+        Client *head; // first client
         int nb; // nb of client
-} clients;
+} Clients;
 
 /**
  * Initialize and return a clients list
  */
-clients* init_clients(void);
+Clients* init_clients(void);
 
 /**
  * Add a client with value `fd` at the beginning of the linked list `l`
  * Fail and return 0 if `fd` is less than 0
  * Otherwise return 1
  */
-int add_client(clients *l, int fd);
+int add_client(Clients *l, int fd);
 
 /**
  * Delete the first client from `l` who has `fd`
  */
-void delete_client(clients *l, int fd);
+void delete_client(Clients *l, int fd);
 
 /**
  * Free all clients
  */
-void free_clients(clients *l);
+void free_clients(Clients *l);
 
 #ifdef __cplusplus
 }

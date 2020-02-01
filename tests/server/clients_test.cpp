@@ -24,7 +24,7 @@ protected:
     }
 
     void assert_fds_is(int *fds, int size) {
-        client *cl = c->head;
+        Client *cl = c->head;
         ASSERT_EQ(c->nb, size);
         for (int i = 0; i < size; i++) {
             ASSERT_EQ(cl->fd, fds[i]);
@@ -33,7 +33,7 @@ protected:
         ASSERT_EQ(cl, NULL);
     }
 
-    clients *c;
+    Clients *c;
 };
 
 TEST_F(ClientsTest, init_clients)
