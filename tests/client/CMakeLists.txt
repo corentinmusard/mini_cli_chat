@@ -1,3 +1,5 @@
+set(TEST_NAME client_test)
+
 set(SOURCES
     ../../src/client/cli.c
     ../../src/client/client_lib.c
@@ -9,22 +11,23 @@ set(TESTS
     client_lib_test.cpp
 )
 
-add_executable(client_test
+add_executable(${TEST_NAME}
     ${SOURCES}
     ${TESTS}
 )
 
-target_compile_options(client_test
+target_compile_options(${TEST_NAME}
     PUBLIC "-fPIE"
     PUBLIC "--coverage"
     PUBLIC ${W}
 )
 
-target_link_libraries(client_test
+target_link_libraries(${TEST_NAME}
     GTest::GTest 
     GTest::Main
     "--coverage"
     ${CURSES_LIBRARIES}
+    #"ncurses_g" # for trace functions
 )
 
-add_test(client_test client_test)
+add_test(${TEST_NAME} ${TEST_NAME})

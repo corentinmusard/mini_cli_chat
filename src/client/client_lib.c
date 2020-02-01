@@ -101,7 +101,7 @@ static void input_char_handling(Input *input, char c) {
 
 Input* input_init(void) {
         Input *input = malloc(sizeof(Input));
-        assert(input != NULL);
+        assert(input);
 
         input->window = NULL;
         input->i = 0;
@@ -119,7 +119,7 @@ void free_input(Input *input) {
 
 Messages* messages_init(void) {
         Messages *m = malloc(sizeof(Messages));
-        assert(m != NULL);
+        assert(m);
 
         m->window = NULL;
         m->y = 0;

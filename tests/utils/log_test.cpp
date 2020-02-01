@@ -1,10 +1,11 @@
+#include <assert.h>
 #include <gtest/gtest.h>
 
 #include "log.h"
 
 static time_t t = 0;
 
-time_t time(time_t *tloc) {
+time_t time(time_t *tloc __attribute__ ((unused))) {
     return t;
 }
 
@@ -21,10 +22,12 @@ protected:
     }
 
     #define STDOUT_TO_BUFFER(f) do {\
-        freopen("/dev/null", "a", stdout);\
+        FILE *e = freopen("/dev/null", "a", stdout);\
+        assert(e);\
         setbuf(stdout, buffer);\
         f;\
-        freopen("/dev/tty", "a", stdout);\
+        e = freopen("/dev/tty", "a", stdout);\
+        assert(e);\
     } while (0)
 
     char buffer[BUFSIZ] = {0};

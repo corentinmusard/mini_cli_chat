@@ -1,5 +1,4 @@
 #include <gtest/gtest.h>
-#include <curses.h>
 
 #include "client/client_lib.h"
 
