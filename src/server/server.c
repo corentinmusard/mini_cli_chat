@@ -125,8 +125,7 @@ int main(void) {
         }
 
 clean_server_fd:
-        free_clients(clients_fd);
         close(server_sock_fd);
-        free(clients_fd);
+        free_clients(clients_fd);
         return 0;
 }
