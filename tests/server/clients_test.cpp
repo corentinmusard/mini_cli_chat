@@ -84,13 +84,23 @@ TEST_F(ClientsTest, delete_client_empty)
     assert_is_empty();
 }
 
+TEST_F(ClientsTest, delete_client_wrong_fd)
+{
+    int fds[1] = {2};
+
+    add_client(c, 2);
+    delete_client(c, 4);
+
+    assert_fds_is(fds, 1);
+}
+
 TEST_F(ClientsTest, delete_client_duplicate)
 {
-    int fds[2] = {2, 1};
+    int fds[2] = {1, 2};
 
+    add_client(c, 2);
+    add_client(c, 2);
     add_client(c, 1);
-    add_client(c, 2);
-    add_client(c, 2);
     delete_client(c, 2);
 
     assert_fds_is(fds, 2);

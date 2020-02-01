@@ -39,7 +39,6 @@ void delete_client(Clients *l, int fd) {
         }
 
         c = l->head;
-
         if (c->fd == fd) {
                 l->head = c->next;
                 l->nb--;
@@ -51,7 +50,8 @@ void delete_client(Clients *l, int fd) {
                 c = c->next;
         }
 
-        if (c->next != NULL && c->next->fd == fd) {
+        if (c->next != NULL) {
+                // c->next->fd == fd
                 Client *next = c->next->next;
                 free(c->next);
                 c->next = next;
@@ -60,13 +60,8 @@ void delete_client(Clients *l, int fd) {
 }
 
 void free_clients(Clients *l) {
-        Client *c;
+        Client *c = l->head;
 
-        if (l == NULL) {
-                return;
-        }
-
-        c = l->head;
         while (c != NULL) {
                 Client *next = c->next;
                 free(c);
