@@ -26,7 +26,7 @@ os:
 jobs:
   include:
     - env: CC=gcc-8 CXX=g++-8 GCOV=gcov-8
-    - env: CC=clang-6.0 CXX=clang++-6.0 GCOV='llvm-cov gcov'
+    - env: CC=clang-6.0 CXX=clang++-6.0
 
 # command to build and run tests
 script:
@@ -47,9 +47,11 @@ script:
   - GTEST_COLOR=1 make test
 
   # Execute gcov for tests coverage
-  - $GCOV $(find ./src/ ./tests/ -regextype posix-egrep -regex ".*\\.(o)")
-  - cd ../
-
   # And finally run the SonarQube analysis - read the "sonar-project.properties"
   # file to see the specific configuration
-  - sonar-scanner
+  - |
+    if [[ $GCOV ]]; then
+      $(find ./src/ ./tests/ -regextype posix-egrep -regex ".*\\.(o)");
+      cd ../;
+      sonar-scanner;
+    fi
