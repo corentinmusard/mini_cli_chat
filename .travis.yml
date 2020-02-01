@@ -25,7 +25,7 @@ os:
 # To build each config
 jobs:
   include:
-    - env: CC=gcc-8 CXX=g++-8 GCOV=gcov-8
+    - env: CC=gcc-8 CXX=g++-8 GCOV=true
     - env: CC=clang-6.0 CXX=clang++-6.0
 
 # command to build and run tests
@@ -51,7 +51,7 @@ script:
   # file to see the specific configuration
   - |
     if [[ $GCOV ]]; then
-      $(find ./src/ ./tests/ -regextype posix-egrep -regex ".*\\.(o)");
+      gcov-8 $(find ./src/ ./tests/ -regextype posix-egrep -regex ".*\\.(o)");
       cd ../;
       sonar-scanner;
     fi
