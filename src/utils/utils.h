@@ -4,7 +4,7 @@
 extern "C" {
 #endif
 
-/*********************************** client and server ***********************************/
+#include <signal.h>
 
 /**
  * server port
@@ -22,22 +22,18 @@ extern "C" {
  */
 #define MAX_EVENTS 10
 
-/************************************** client only **************************************/
-
-//None
-
-/************************************** server only **************************************/
+/**
+ * Default value is 0
+ * If value is not 0 then client is going to exit
+ */
+extern volatile sig_atomic_t exit_wanted;
 
 /**
- * Maximum length to which the queue of pending connections for server_sock_fd may grow.
- * See man listen(2) for more infos
+ * Register signal SIGINT. When called, it changes a value of `exit_wanted`
+ * Return -1 on failure and 0 on succes
+ * errno is set by sigaction(2)
  */
-#define LISTEN_BACKLOG 50
-
-/**
- * Message sent by server to a client after sucessful connection
- */
-#define CHAT_BANNER "Welcome to the basic chat!"
+int register_sigint(void);
 
 #ifdef __cplusplus
 }

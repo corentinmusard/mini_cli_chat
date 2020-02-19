@@ -21,10 +21,6 @@ int main(void) {
                 .sin_port = htons(PORT),
                 .sin_addr.s_addr = INADDR_ANY
         };
-        const struct sigaction act = {
-                .sa_handler = int_handler,
-                .sa_flags = SA_RESTART
-        };
 
         sockfd = socket(AF_INET, SOCK_STREAM, 0);
         if (sockfd == -1) {
@@ -32,8 +28,8 @@ int main(void) {
                 goto clean_fd;
         }
 
-        if (sigaction(SIGINT, &act, NULL) == -1) {
-                perror("sigaction");
+        if (register_sigint() == -1) {
+                perror("register_sigint");
                 goto clean_fd;
         }
 

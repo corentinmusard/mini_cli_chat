@@ -11,12 +11,6 @@
 #include "log.h"
 #include "utils.h"
 
-static volatile sig_atomic_t sigintRaised = 0;
-
-static void int_handler(int sig __attribute__ ((unused))) {
-        sigintRaised = 1;
-}
-
 /**
  * Send message `buffer` of size `size` to each client in `clients_fd`
  */
@@ -43,10 +37,6 @@ int main(void) {
                 .sin_port = htons(PORT),
                 .sin_addr.s_addr = INADDR_ANY
         };
-        const struct sigaction act = {
-                .sa_handler = int_handler,
-                .sa_flags = SA_RESTART
-        };
 
         server_sock_fd = socket(AF_INET, SOCK_STREAM | SOCK_NONBLOCK, 0);
         if (server_sock_fd == -1) {
@@ -54,8 +44,8 @@ int main(void) {
                 goto clean_server_fd;
         }
 
-        if (sigaction(SIGINT, &act, NULL) == -1) {
-                perror("sigaction");
+        if (register_sigint() == -1) {
+                perror("register_sigint");
                 goto clean_server_fd;
         }
 
@@ -80,7 +70,7 @@ int main(void) {
                 goto clean_server_fd;
         }
 
-        while (sigintRaised == 0) {
+        while (exit_wanted == 0) {
                 struct epoll_event events[MAX_EVENTS];
                 int nfds;
 

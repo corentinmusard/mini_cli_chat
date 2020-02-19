@@ -16,8 +16,6 @@
  */
 #define DEL 127
 
-volatile sig_atomic_t exit_wanted = 0;
-
 /**
  * Print `message` to messages window
  */
@@ -116,10 +114,6 @@ int server_message_handling(Messages *msgs, int sockfd) {
 
         free(formated_message);
         return 0;
-}
-
-void int_handler(int sig __attribute__((unused))) {
-        exit_wanted = 1;
 }
 
 int stdin_char_handling(const Screen *screen, int sockfd) {

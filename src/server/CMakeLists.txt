@@ -1,8 +1,9 @@
 set(SERVER_SOURCES
-    server.c
     clients.c
+    server.c
     ../utils/asynchronous.c
     ../utils/log.c
+    ../utils/utils.c
 )
 
 add_executable(server ${SERVER_SOURCES})

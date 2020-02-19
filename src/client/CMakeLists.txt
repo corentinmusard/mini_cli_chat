@@ -5,6 +5,7 @@ set(CLIENT_SOURCES
     screen.c
     ../utils/asynchronous.c
     ../utils/log.c
+    ../utils/utils.c
 )
 
 add_executable(client ${CLIENT_SOURCES})
