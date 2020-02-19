@@ -1,15 +1,14 @@
-#include <sys/socket.h>
-#include <sys/epoll.h>
-#include <netinet/in.h>
-#include <unistd.h>
-#include <stdio.h>
 #include <curses.h>
+#include <netinet/in.h>
 #include <signal.h>
+#include <stdio.h>
+#include <sys/epoll.h>
+#include <sys/socket.h>
+#include <unistd.h>
 
-#include "cli.h"
+#include "asynchronous.h"
 #include "client_lib.h"
 #include "screen.h"
-#include "asynchronous.h"
 #include "utils.h"
 
 int main(void) {
@@ -38,7 +37,7 @@ int main(void) {
                 goto clean_fd;
         }
 
-        if (connect(sockfd, (const struct sockaddr *) &addr, sizeof(addr)) == -1) {
+        if (connect(sockfd, (const struct sockaddr *)&addr, sizeof(addr)) == -1) {
                 perror("connect");
                 goto clean_fd;
         }

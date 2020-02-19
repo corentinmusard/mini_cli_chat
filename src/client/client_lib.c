@@ -1,14 +1,14 @@
+#include <assert.h>
+#include <curses.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <curses.h>
 #include <unistd.h>
-#include <assert.h>
 
 #include "client_lib.h"
 #include "cli.h"
-#include "screen.h"
 #include "log.h"
+#include "screen.h"
 #include "utils.h"
 
 /**
@@ -106,7 +106,7 @@ int server_message_handling(Messages *msgs, int sockfd) {
         ssize_t status;
 
         status = read(sockfd, buffer, sizeof(buffer));
-        if (status == -1 || status == 0) { //error or connection to server closed
+        if (status == -1 || status == 0) {  // error or connection to server closed
                 perror("read");
                 return -1;
         }
@@ -118,7 +118,7 @@ int server_message_handling(Messages *msgs, int sockfd) {
         return 0;
 }
 
-void int_handler(int sig __attribute__ ((unused))) {
+void int_handler(int sig __attribute__((unused))) {
         exit_wanted = 1;
 }
 

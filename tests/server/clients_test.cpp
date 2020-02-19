@@ -23,7 +23,7 @@ protected:
         ASSERT_EQ(c->nb, 0);
     }
 
-    void assert_fds_is(int *fds, int size) {
+    void assert_fds_is(const int *fds, int size) {
         Client *cl = c->head;
         ASSERT_EQ(c->nb, size);
         for (int i = 0; i < size; i++) {

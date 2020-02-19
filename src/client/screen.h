@@ -50,7 +50,7 @@ Screen *screen_init(void);
 /**
  * Free Screen
  */
-void free_screen(Screen *messages);
+void free_screen(Screen *s);
 
 /**
  * Refresh the entire screen i.e. both subwindows

@@ -1,16 +1,15 @@
-#include <sys/socket.h>
-#include <sys/epoll.h>
-#include <netinet/in.h>
-#include <unistd.h>
 #include <errno.h>
-#include <stdio.h>
+#include <netinet/in.h>
 #include <signal.h>
-#include <stdlib.h>
+#include <stdio.h>
+#include <sys/epoll.h>
+#include <sys/socket.h>
+#include <unistd.h>
 
-#include "clients.h"
-#include "utils.h"
-#include "log.h"
 #include "asynchronous.h"
+#include "clients.h"
+#include "log.h"
+#include "utils.h"
 
 static volatile sig_atomic_t sigintRaised = 0;
 
