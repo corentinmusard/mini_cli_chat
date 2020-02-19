@@ -1,6 +1,5 @@
 #include <errno.h>
 #include <netinet/in.h>
-#include <signal.h>
 #include <stdio.h>
 #include <sys/epoll.h>
 #include <sys/socket.h>
@@ -9,24 +8,8 @@
 #include "asynchronous.h"
 #include "clients.h"
 #include "log.h"
+#include "server_lib.h"
 #include "utils.h"
-
-/**
- * Send message `buffer` of size `size` to each client in `clients_fd`
- */
-static void broadcast_message(const Clients *clients_fd, const char *buffer, size_t size) {
-        const Client *c;
-
-        if (clients_fd == NULL || clients_fd->head == NULL) {
-                return;
-        }
-
-        c = clients_fd->head;
-        while (c != NULL) {
-                write(c->fd, buffer, size);
-                c = c->next;
-        }
-}
 
 int main(void) {
         int epollfd;

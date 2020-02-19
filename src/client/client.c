@@ -1,6 +1,5 @@
 #include <curses.h>
 #include <netinet/in.h>
-#include <signal.h>
 #include <stdio.h>
 #include <sys/epoll.h>
 #include <sys/socket.h>
