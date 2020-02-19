@@ -55,7 +55,7 @@ void free_screen(Screen *s);
 /**
  * Refresh the entire screen i.e. both subwindows
  */
-void refresh_screen(Screen *s);
+void refresh_screen(const Screen *s);
 
 #ifdef __cplusplus
 }

@@ -57,6 +57,6 @@ void free_screen(Screen *s) {
         free(s);
 }
 
-void refresh_screen(Screen *s) {
+void refresh_screen(const Screen *s) {
         refresh_cli(s->msgs->window, s->input->window);
 }

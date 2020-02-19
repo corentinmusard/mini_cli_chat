@@ -122,7 +122,7 @@ void int_handler(int sig __attribute__((unused))) {
         exit_wanted = 1;
 }
 
-int stdin_char_handling(Screen *screen, int sockfd) {
+int stdin_char_handling(const Screen *screen, int sockfd) {
         char c;
         if (read(STDIN_FILENO, &c, 1) == -1) {
                 perror("read");

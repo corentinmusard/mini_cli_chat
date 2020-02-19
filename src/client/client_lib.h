@@ -25,7 +25,7 @@ int server_message_handling(Messages *msgs, int sockfd);
  */
 void int_handler(int sig __attribute__ ((unused)));
 
-int stdin_char_handling(Screen *screen, int sockfd);
+int stdin_char_handling(const Screen *screen, int sockfd);
 
 #ifdef __cplusplus
 }
