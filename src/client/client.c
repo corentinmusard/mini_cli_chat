@@ -15,8 +15,7 @@
 int main(void) {
         int epollfd;
         int sockfd;
-        Messages *msgs = messages_init();
-        Input *input = input_init();
+        Screen *screen = screen_init();
 
         const struct sockaddr_in addr = {
                 .sin_family = AF_INET,
@@ -59,17 +58,11 @@ int main(void) {
                 goto clean_fd;
         }
 
-        init_cli(&msgs->window, &input->window);
-        if (msgs->window == NULL || input->window == NULL) {
-                fprintf(stderr, "init_cli: Failed\n");
-                goto clean;
-        }
-
         while (exit_wanted == 0) {
                 struct epoll_event events[MAX_EVENTS];
                 int nfds;
 
-                refresh_cli(msgs->window, input->window);
+                refresh_screen(screen);
 
                 nfds = epoll_wait(epollfd, events, MAX_EVENTS, -1);
                 if (nfds == -1) {
@@ -78,12 +71,12 @@ int main(void) {
                 }
 
                 for (int i = 0; i < nfds; i++) {
-                        if (events[i].data.fd == STDIN_FILENO) { //from stdin
-                                if (stdin_char_handling(input, msgs, sockfd) == -1) {
+                        if (events[i].data.fd == STDIN_FILENO) {  // from stdin
+                                if (stdin_char_handling(screen, sockfd) == -1) {
                                         goto clean;
                                 }
-                        } else if (events[i].data.fd == sockfd) { //from server
-                                if (server_message_handling(msgs, sockfd) == -1) {
+                        } else if (events[i].data.fd == sockfd) {  // from server
+                                if (server_message_handling(screen->msgs, sockfd) == -1) {
                                         goto clean;
                                 }
                         } else {
@@ -98,8 +91,6 @@ clean:
 
 clean_fd:
         close(sockfd);
-
-        free_input(input);
-        free_messages(msgs);
+        free_screen(screen);
         return 0;
 }

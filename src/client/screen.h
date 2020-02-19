@@ -37,6 +37,25 @@ Messages* messages_init(void);
  */
 void free_messages(Messages *messages);
 
+typedef struct {
+  Messages *msgs;
+  Input *input;
+} Screen;
+
+/**
+ * Initialize and return a Screen
+ */
+Screen *screen_init(void);
+
+/**
+ * Free Screen
+ */
+void free_screen(Screen *messages);
+
+/**
+ * Refresh the entire screen i.e. both subwindows
+ */
+void refresh_screen(Screen *s);
 
 #ifdef __cplusplus
 }

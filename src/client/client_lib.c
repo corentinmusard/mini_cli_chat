@@ -122,45 +122,45 @@ void int_handler(int sig __attribute__ ((unused))) {
         exit_wanted = 1;
 }
 
-int stdin_char_handling(Input *input, Messages *msgs, int sockfd) {
+int stdin_char_handling(Screen *screen, int sockfd) {
         char c;
         if (read(STDIN_FILENO, &c, 1) == -1) {
                 perror("read");
                 return -1;
         }
 
-        if (c == '\r') { //end of the message, send it
-                if (input->i == 0) { //blank message
-                        //don't send it
+        if (c == '\r') {  // end of the message, send it
+                if (screen->input->i == 0) {  // blank message
+                        // don't send it
                         return 1;
                 }
-                if (input->buffer[0] == '/') { //start with '/'
-                        //It's a command
-                        if (execute_command(input->buffer) == 0) {
-                                //command unknown
-                                print_message(msgs, "Command unknown");
+                if (screen->input->buffer[0] == '/') {  // start with '/'
+                        // It's a command
+                        if (execute_command(screen->input->buffer) == 0) {
+                                // command unknown
+                                print_message(screen->msgs, "Command unknown");
                         }
                         return 1;
                 }
-                if (write(sockfd, input->buffer, (size_t)input->i) == -1) {
+                if (write(sockfd, screen->input->buffer, (size_t)screen->input->i) == -1) {
                         perror("write");
                         return -1;
                 }
-                reset_variables(input);
-                clear_message_area(input->window);
+                reset_variables(screen->input);
+                clear_message_area(screen->input->window);
                 return 1;
         }
 
         if (c == DEL) {
-                delete_message_character(input);
+                delete_message_character(screen->input);
                 return 1;
         }
 
-        if (input->i == (MAXMSG-1)) { //max message length reached
-                //ignore character for now
+        if (screen->input->i == (MAXMSG - 1)) {  // max message length reached
+                // ignore character for now
                 return 1;
         }
 
-        input_char_handling(input, c);
+        input_char_handling(screen->input, c);
         return 1;
 }

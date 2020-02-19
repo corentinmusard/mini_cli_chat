@@ -41,3 +41,22 @@ TEST_F(MessagesTest, messages_init)
     ASSERT_EQ(messages->y, 0);
 }
 
+class ScreenTest : public ::testing::Test
+{
+protected:
+    void SetUp() override {
+        screen = screen_init();
+    }
+
+    void TearDown() override {
+        free_screen(screen);
+    }
+
+    Screen *screen;
+};
+
+TEST_F(ScreenTest, screen_init)
+{
+    //tested code are in SetUp and TearDown
+    SUCCEED();
+}
