@@ -19,6 +19,11 @@ extern "C" {
  */
 int start_server(in_port_t port);
 
+/**
+ * Close socket
+ */
+void stop_server(int server_sock_fd);
+
 #ifdef __cplusplus
 }
 #endif

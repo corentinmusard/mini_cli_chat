@@ -1,5 +1,6 @@
 #include <assert.h>
 #include <curses.h>
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -17,6 +18,10 @@
  * ASCII char 0x7f = 127
  */
 #define DEL 127
+
+bool exit_not_wanted(int err) {
+        return err != -1 && interrupt == 0;
+}
 
 /**
  * Print `message` to messages window

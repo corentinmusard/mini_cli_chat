@@ -1,4 +1,5 @@
 #include <signal.h>
+#include <stdbool.h>
 #include <stddef.h>
 #include <unistd.h>
 
@@ -21,6 +22,6 @@ int register_sigint(void) {
         return sigaction(SIGINT, &act, NULL);
 }
 
-int is_stdin(int fd) {
+bool is_stdin(int fd) {
         return fd == STDIN_FILENO;
 }

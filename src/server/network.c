@@ -1,4 +1,5 @@
 #include <sys/socket.h>
+#include <unistd.h>
 
 #include "network.h"
 
@@ -27,4 +28,8 @@ int start_server(in_port_t port) {
         }
 
         return server_sock_fd;
+}
+
+void stop_server(int server_sock_fd) {
+        close(server_sock_fd);
 }

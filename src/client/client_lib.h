@@ -4,12 +4,14 @@
 extern "C" {
 #endif
 
+#include <stdbool.h>
+
 #include "screen.h"
 
 /**
  * Returne true if error code means failure or sigint has bean triggered.
  */
-#define exit_not_wanted(err) ((err) != -1 && interrupt == 0)
+bool exit_not_wanted(int err);
 
 /**
  * Print recv message from `sockfd` and print it into messages window

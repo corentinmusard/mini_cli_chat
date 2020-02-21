@@ -82,7 +82,7 @@ int main(void) {
         }
 
 clean_server_fd:
-        close(server_sock_fd);
+        stop_server(server_sock_fd);
         free_clients(clients_fd);
         return 0;
 }

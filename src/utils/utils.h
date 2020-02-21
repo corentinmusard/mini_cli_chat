@@ -5,6 +5,7 @@ extern "C" {
 #endif
 
 #include <signal.h>
+#include <stdbool.h>
 
 /**
  * server port
@@ -30,9 +31,9 @@ extern volatile sig_atomic_t interrupt;
 int register_sigint(void);
 
 /**
- * Return 1 if fd is STDIN_FILENO
+ * Return true if fd is STDIN_FILENO
  */
-int is_stdin(int fd);
+bool is_stdin(int fd);
 
 #ifdef __cplusplus
 }
