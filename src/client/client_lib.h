@@ -14,6 +14,8 @@ int server_message_handling(Messages *msgs, int sockfd);
 
 int stdin_char_handling(const Screen *screen, int sockfd);
 
+int client_async_init(int sockfd);
+
 #ifdef __cplusplus
 }
 #endif

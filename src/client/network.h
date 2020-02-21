@@ -12,7 +12,7 @@ extern "C" {
  * Return the socket fd
  * Return a negative value on failure
  */
-int connect_client(uint32_t ip, in_port_t port);
+int connect_client(const char *ip, in_port_t port);
 
 #ifdef __cplusplus
 }

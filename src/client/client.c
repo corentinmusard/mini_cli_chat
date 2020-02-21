@@ -1,10 +1,8 @@
 #include <curses.h>
-#include <netinet/in.h>
 #include <stdio.h>
 #include <sys/epoll.h>
 #include <unistd.h>
 
-#include "asynchronous.h"
 #include "client_lib.h"
 #include "network.h"
 #include "screen.h"
@@ -15,7 +13,7 @@ int main(void) {
         int sockfd;
         Screen *screen = screen_init();
 
-        sockfd = connect_client(INADDR_ANY, PORT);
+        sockfd = connect_client("127.0.0.1", PORT);
         if (sockfd <= 0) {
                 perror("connect_client");
                 goto clean_fd;
@@ -26,18 +24,9 @@ int main(void) {
                 goto clean_fd;
         }
 
-        epollfd = async_init();
+        epollfd = client_async_init(sockfd);
         if (epollfd == -1) {
-                perror("async_init");
-                goto clean_fd;
-        }
-
-        if (async_add(epollfd, sockfd, EPOLLIN) == -1) {
-                perror("async_add");
-                goto clean_fd;
-        }
-        if (async_add(epollfd, STDIN_FILENO, EPOLLIN) == -1) {
-                perror("async_add");
+                perror("client_async_init");
                 goto clean_fd;
         }
 
@@ -54,17 +43,19 @@ int main(void) {
                 }
 
                 for (int i = 0; i < nfds; i++) {
+                        int err;
                         if (events[i].data.fd == STDIN_FILENO) {  // from stdin
-                                if (stdin_char_handling(screen, sockfd) == -1) {
-                                        goto clean;
-                                }
+                                err = stdin_char_handling(screen, sockfd);
                         } else if (events[i].data.fd == sockfd) {  // from server
-                                if (server_message_handling(screen->msgs, sockfd) == -1) {
-                                        goto clean;
-                                }
+                                err = server_message_handling(screen->msgs, sockfd);
                         } else {
                                 fprintf(stderr, "unknown fd: %d\n", events[i].data.fd);
-                                goto clean;
+                                err = -1;
+                        }
+
+                        if (err == -1) {
+                                exit_wanted = 1;
+                                break;
                         }
                 }
         }

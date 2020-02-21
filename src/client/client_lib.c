@@ -3,10 +3,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/epoll.h>
 #include <unistd.h>
 
-#include "client_lib.h"
+#include "asynchronous.h"
 #include "cli.h"
+#include "client_lib.h"
 #include "log.h"
 #include "screen.h"
 #include "utils.h"
@@ -85,7 +87,10 @@ static int execute_command(const char *command) {
  * Print char `c` to input window
  */
 static void print_input_char(const Input *input, char c) {
-        mvwprintw(input->window, INITIAL_MESSAGE_Y, INITIAL_MESSAGE_X + input->i, "%c", c);
+        mvwprintw(input->window,
+                INITIAL_MESSAGE_Y,
+                INITIAL_MESSAGE_X + input->i,
+                "%c", c);
 }
 
 /**
@@ -157,4 +162,20 @@ int stdin_char_handling(const Screen *screen, int sockfd) {
 
         input_char_handling(screen->input, c);
         return 1;
+}
+
+int client_async_init(int sockfd) {
+        int epollfd = async_init();
+        if (epollfd == -1) {
+                return -1;
+        }
+
+        if (async_add(epollfd, sockfd, EPOLLIN) == -1) {
+                return -1;
+        }
+        if (async_add(epollfd, STDIN_FILENO, EPOLLIN) == -1) {
+                return -1;
+        }
+
+        return epollfd;
 }
