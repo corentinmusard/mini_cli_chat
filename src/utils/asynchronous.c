@@ -6,7 +6,7 @@ int async_init(void) {
         return epoll_create1(0);
 }
 
-int register_event(int epollfd, int fd, uint32_t events) {
+int async_add(int epollfd, int fd, uint32_t events) {
         struct epoll_event ev = {
                 .events = events,
                 .data.fd = fd

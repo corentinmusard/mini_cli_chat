@@ -17,7 +17,7 @@ int async_init(void);
  * Return -1 on failure and errno is set by epoll_ctl
  * See man EPOLL_CTL(2) for more infos
  */
-int register_event(int epollfd, int fd, uint32_t events);
+int async_add(int epollfd, int fd, uint32_t events);
 
 #ifdef __cplusplus
 }

@@ -33,8 +33,8 @@ int main(void) {
                 goto clean_server_fd;
         }
 
-        if (register_event(epollfd, server_sock_fd, EPOLLIN) == -1) {
-                perror("register_event");
+        if (async_add(epollfd, server_sock_fd, EPOLLIN) == -1) {
+                perror("async_add");
                 goto clean_server_fd;
         }
 
@@ -56,7 +56,7 @@ int main(void) {
                                         goto clean_server_fd;
                                 }
                                 add_client(clients_fd, conn_sock);
-                                register_event(epollfd, conn_sock, EPOLLIN | EPOLLET);
+                                async_add(epollfd, conn_sock, EPOLLIN | EPOLLET);
                                 info("Connection open: %d\n", conn_sock);
                                 if (write(conn_sock, CHAT_BANNER, sizeof(CHAT_BANNER)) == -1) {
                                         info("Error sending CHAT_BANNER to %d\n", conn_sock);

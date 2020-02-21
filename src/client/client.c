@@ -32,12 +32,12 @@ int main(void) {
                 goto clean_fd;
         }
 
-        if (register_event(epollfd, sockfd, EPOLLIN) == -1) {
-                perror("register_event");
+        if (async_add(epollfd, sockfd, EPOLLIN) == -1) {
+                perror("async_add");
                 goto clean_fd;
         }
-        if (register_event(epollfd, STDIN_FILENO, EPOLLIN) == -1) {
-                perror("register_event");
+        if (async_add(epollfd, STDIN_FILENO, EPOLLIN) == -1) {
+                perror("async_add");
                 goto clean_fd;
         }
 

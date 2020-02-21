@@ -24,27 +24,27 @@ TEST_F(AsyncTest, async_init)
     ASSERT_GT(epollfd, 0);
 }
 
-TEST_F(AsyncTest, register_event_add_socket)
+TEST_F(AsyncTest, async_add_add_socket)
 {
     int sockfd = socket(AF_INET, SOCK_STREAM, 0);
     ASSERT_NE(sockfd, -1);
 
-    int e = register_event(epollfd, sockfd, 0);
+    int e = async_add(epollfd, sockfd, 0);
     ASSERT_EQ(e, 0);
 }
 
-TEST_F(AsyncTest, register_event_add_invalid_fd)
+TEST_F(AsyncTest, async_add_add_invalid_fd)
 {
-    int e = register_event(epollfd, INT_MAX, 0);
+    int e = async_add(epollfd, INT_MAX, 0);
     ASSERT_EQ(e, -1);
 }
 
-TEST_F(AsyncTest, register_event_epollin)
+TEST_F(AsyncTest, async_add_epollin)
 {
     FAIL();
 }
 
-TEST_F(AsyncTest, register_event_epollin_epollet)
+TEST_F(AsyncTest, async_add_epollin_epollet)
 {
     FAIL();
 }
