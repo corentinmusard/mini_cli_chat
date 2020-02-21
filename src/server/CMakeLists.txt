@@ -1,5 +1,6 @@
 set(SERVER_SOURCES
     clients.c
+    network.c
     server.c
     server_lib.c
     ../utils/asynchronous.c

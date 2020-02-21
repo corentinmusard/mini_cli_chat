@@ -1,5 +1,4 @@
 #include <errno.h>
-#include <netinet/in.h>
 #include <stdio.h>
 #include <sys/epoll.h>
 #include <sys/socket.h>
@@ -8,6 +7,7 @@
 #include "asynchronous.h"
 #include "clients.h"
 #include "log.h"
+#include "network.h"
 #include "server_lib.h"
 #include "utils.h"
 
@@ -15,30 +15,15 @@ int main(void) {
         int epollfd;
         int server_sock_fd;
         Clients *clients_fd = init_clients();
-        const struct sockaddr_in addr = {
-                .sin_family = AF_INET,
-                .sin_port = htons(PORT),
-                .sin_addr.s_addr = INADDR_ANY
-        };
-
-        server_sock_fd = socket(AF_INET, SOCK_STREAM | SOCK_NONBLOCK, 0);
-        if (server_sock_fd == -1) {
-                perror("socket");
+        
+        server_sock_fd = connect_server(PORT);
+        if (server_sock_fd <= 0) {
+                perror("connect_server");
                 goto clean_server_fd;
         }
 
         if (register_sigint() == -1) {
                 perror("register_sigint");
-                goto clean_server_fd;
-        }
-
-        if (bind(server_sock_fd, (const struct sockaddr *) &addr, sizeof(addr)) == -1) {
-                perror("bind");
-                goto clean_server_fd;
-        }
-
-        if (listen(server_sock_fd, LISTEN_BACKLOG) == -1) {
-                perror("listen");
                 goto clean_server_fd;
         }
 
