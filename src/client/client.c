@@ -2,11 +2,11 @@
 #include <netinet/in.h>
 #include <stdio.h>
 #include <sys/epoll.h>
-#include <sys/socket.h>
 #include <unistd.h>
 
 #include "asynchronous.h"
 #include "client_lib.h"
+#include "network.h"
 #include "screen.h"
 #include "utils.h"
 
@@ -15,25 +15,14 @@ int main(void) {
         int sockfd;
         Screen *screen = screen_init();
 
-        const struct sockaddr_in addr = {
-                .sin_family = AF_INET,
-                .sin_port = htons(PORT),
-                .sin_addr.s_addr = INADDR_ANY
-        };
-
-        sockfd = socket(AF_INET, SOCK_STREAM, 0);
-        if (sockfd == -1) {
-                perror("socket");
+        sockfd = connect_client(INADDR_ANY, PORT);
+        if (sockfd <= 0) {
+                perror("connect_client");
                 goto clean_fd;
         }
 
         if (register_sigint() == -1) {
                 perror("register_sigint");
-                goto clean_fd;
-        }
-
-        if (connect(sockfd, (const struct sockaddr *)&addr, sizeof(addr)) == -1) {
-                perror("connect");
                 goto clean_fd;
         }
 
