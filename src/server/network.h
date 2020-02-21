@@ -17,7 +17,7 @@ extern "C" {
  * Return the socket fd
  * Return a negative value on failure
  */
-int connect_server(in_port_t port);
+int start_server(in_port_t port);
 
 #ifdef __cplusplus
 }

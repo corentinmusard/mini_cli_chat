@@ -15,10 +15,10 @@ int main(void) {
         int epollfd;
         int server_sock_fd;
         Clients *clients_fd = init_clients();
-        
-        server_sock_fd = connect_server(PORT);
+
+        server_sock_fd = start_server(PORT);
         if (server_sock_fd <= 0) {
-                perror("connect_server");
+                perror("start_server");
                 goto clean_server_fd;
         }
 

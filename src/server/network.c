@@ -2,7 +2,7 @@
 
 #include "network.h"
 
-int connect_server(in_port_t port) {
+int start_server(in_port_t port) {
         const struct sockaddr_in addr = {
                 .sin_family = AF_INET,
                 .sin_port = htons(port),
@@ -18,12 +18,12 @@ int connect_server(in_port_t port) {
 
         e = bind(server_sock_fd, (const struct sockaddr *) &addr, sizeof(addr));
         if (e == -1) {
-                return -2;
+                return -1;
         }
 
         e = listen(server_sock_fd, LISTEN_BACKLOG);
         if (e == -1) {
-                return -3;
+                return -1;
         }
 
         return server_sock_fd;
