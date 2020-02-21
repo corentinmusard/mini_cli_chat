@@ -51,7 +51,6 @@ void delete_client(Clients *l, int fd) {
         }
 
         if (c->next != NULL) {
-                // c->next->fd == fd
                 Client *next = c->next->next;
                 free(c->next);
                 c->next = next;
