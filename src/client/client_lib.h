@@ -1,5 +1,5 @@
-#ifndef CLIENT_LIB_H
-#define CLIENT_LIB_H
+#ifndef CLIENT_CLIENT_LIB_H
+#define CLIENT_CLIENT_LIB_H
 #ifdef __cplusplus
 extern "C" {
 #endif

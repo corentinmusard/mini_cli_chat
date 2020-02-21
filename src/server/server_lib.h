@@ -1,5 +1,5 @@
-#ifndef SERVER_UTILS_H
-#define SERVER_UTILS_H
+#ifndef SERVER_SERVER_UTILS_H
+#define SERVER_SERVER_UTILS_H
 #ifdef __cplusplus
 extern "C" {
 #endif

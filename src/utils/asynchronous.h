@@ -1,5 +1,5 @@
-#ifndef ASYNCHRONOUS_H
-#define ASYNCHRONOUS_H
+#ifndef UTILS_ASYNCHRONOUS_H
+#define UTILS_ASYNCHRONOUS_H
 #ifdef __cplusplus
 extern "C" {
 #endif

@@ -1,5 +1,5 @@
-#ifndef CLIENTS_H
-#define CLIENTS_H
+#ifndef SERVER_CLIENTS_H
+#define SERVER_CLIENTS_H
 #ifdef __cplusplus
 extern "C" {
 #endif

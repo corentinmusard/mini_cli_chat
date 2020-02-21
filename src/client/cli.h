@@ -1,5 +1,5 @@
-#ifndef CLI_H
-#define CLI_H
+#ifndef CLIENT_CLI_H
+#define CLIENT_CLI_H
 #ifdef __cplusplus
 extern "C" {
 #endif
