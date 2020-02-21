@@ -5,7 +5,6 @@ extern "C" {
 #endif
 
 #include <netinet/in.h>
-#include <stdint.h>
 
 /**
  * Connect the client to ip:port
@@ -13,6 +12,11 @@ extern "C" {
  * Return a negative value on failure
  */
 int connect_client(const char *ip, in_port_t port);
+
+/**
+ * Close socket
+ */
+void disconnect_client(int sockfd);
 
 #ifdef __cplusplus
 }

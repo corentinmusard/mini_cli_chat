@@ -1,70 +1,58 @@
-#include <curses.h>
 #include <stdio.h>
 #include <sys/epoll.h>
-#include <unistd.h>
 
+#include "asynchronous.h"
 #include "client_lib.h"
 #include "network.h"
 #include "screen.h"
 #include "utils.h"
 
 int main(void) {
+        Screen *screen = screen_init();
         int epollfd;
         int sockfd;
-        Screen *screen = screen_init();
+        int err = 0;
 
         sockfd = connect_client("127.0.0.1", PORT);
         if (sockfd <= 0) {
                 perror("connect_client");
-                goto clean_fd;
+                goto clean;
         }
 
         if (register_sigint() == -1) {
                 perror("register_sigint");
-                goto clean_fd;
+                goto clean;
         }
 
         epollfd = client_async_init(sockfd);
         if (epollfd == -1) {
                 perror("client_async_init");
-                goto clean_fd;
+                goto clean;
         }
 
-        while (exit_wanted == 0) {
+        while (exit_not_wanted(err)) {
                 struct epoll_event events[MAX_EVENTS];
                 int nfds;
 
                 refresh_screen(screen);
 
-                nfds = epoll_wait(epollfd, events, MAX_EVENTS, -1);
+                nfds = wait_events(epollfd, events);
                 if (nfds == -1) {
-                        perror("epoll_wait");
-                        goto clean;
+                        perror("wait_event");
+                        err = -1;
                 }
 
-                for (int i = 0; i < nfds; i++) {
-                        int err;
-                        if (events[i].data.fd == STDIN_FILENO) {  // from stdin
+                for (int i = 0; i < nfds && err != -1; i++) {
+                        if (is_stdin(events[i].data.fd)) {
                                 err = stdin_char_handling(screen, sockfd);
-                        } else if (events[i].data.fd == sockfd) {  // from server
-                                err = server_message_handling(screen->msgs, sockfd);
                         } else {
-                                fprintf(stderr, "unknown fd: %d\n", events[i].data.fd);
-                                err = -1;
-                        }
-
-                        if (err == -1) {
-                                exit_wanted = 1;
-                                break;
+                                err = server_message_handling(screen->msgs, sockfd);
                         }
                 }
         }
 
 clean:
-        endwin();
-
-clean_fd:
-        close(sockfd);
+        disconnect_client(sockfd);
         free_screen(screen);
         return 0;
 }

@@ -38,7 +38,7 @@ int main(void) {
                 goto clean_server_fd;
         }
 
-        while (exit_wanted == 0) {
+        while (interrupt == 0) {
                 struct epoll_event events[MAX_EVENTS];
                 int nfds;
 

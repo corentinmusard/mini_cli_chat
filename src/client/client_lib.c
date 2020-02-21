@@ -77,7 +77,7 @@ static void reset_variables(Input *input) {
  */
 static int execute_command(const char *command) {
         if (strcmp("/quit", command) == 0 || strcmp("/q", command) == 0) {
-                exit_wanted = 1;
+                interrupt = 1;
                 return 1;
         }
         return 0;

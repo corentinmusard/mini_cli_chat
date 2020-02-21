@@ -52,6 +52,7 @@ Screen *screen_init(void) {
 }
 
 void free_screen(Screen *s) {
+        endwin();
         free_messages(s->msgs);
         free_input(s->input);
         free(s);

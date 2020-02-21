@@ -17,23 +17,22 @@ extern "C" {
 #define MAXMSG 100
 
 /**
- * Maximum events to be returned by epoll_wait
- * See man epoll_wait(2) for more infos
- */
-#define MAX_EVENTS 10
-
-/**
  * Default value is 0
  * If value is not 0 then client is going to exit
  */
-extern volatile sig_atomic_t exit_wanted;
+extern volatile sig_atomic_t interrupt;
 
 /**
- * Register signal SIGINT. When called, it changes a value of `exit_wanted`
+ * Register signal SIGINT. When called, it changes a value of `interrupt`
  * Return -1 on failure and 0 on succes
  * errno is set by sigaction(2)
  */
 int register_sigint(void);
+
+/**
+ * Return 1 if fd is STDIN_FILENO
+ */
+int is_stdin(int fd);
 
 #ifdef __cplusplus
 }

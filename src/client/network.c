@@ -1,5 +1,6 @@
 #include <arpa/inet.h>
 #include <sys/socket.h>
+#include <unistd.h>
 
 #include "network.h"
 
@@ -23,4 +24,8 @@ int connect_client(const char *ip, in_port_t port) {
         }
 
         return sockfd;
+}
+
+void disconnect_client(int sockfd) {
+        close(sockfd);
 }
