@@ -14,7 +14,7 @@ int main(void) {
         int err = 0;
 
         sockfd = connect_client("127.0.0.1", PORT);
-        if (sockfd <= 0) {
+        if (sockfd == -1) {
                 perror("connect_client");
                 goto clean;
         }

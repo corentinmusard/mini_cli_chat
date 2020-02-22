@@ -25,3 +25,7 @@ int register_sigint(void) {
 bool is_stdin(int fd) {
         return fd == STDIN_FILENO;
 }
+
+bool exit_not_wanted(int err) {
+        return err != -1 && interrupt == 0;
+}

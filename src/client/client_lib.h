@@ -4,14 +4,7 @@
 extern "C" {
 #endif
 
-#include <stdbool.h>
-
 #include "screen.h"
-
-/**
- * Returne true if error code means failure or sigint has bean triggered.
- */
-bool exit_not_wanted(int err);
 
 /**
  * Print recv message from `sockfd` and print it into messages window
@@ -23,6 +16,7 @@ int stdin_char_handling(const Screen *screen, int sockfd);
 
 /**
  * Initialize async. Return fd of the epoll instance.
+ * Return -1 on failure
  */
 int client_async_init(int sockfd);
 

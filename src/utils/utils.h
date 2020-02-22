@@ -35,6 +35,11 @@ int register_sigint(void);
  */
 bool is_stdin(int fd);
 
+/**
+ * Returne true if error code means failure or sigint has bean triggered.
+ */
+bool exit_not_wanted(int err);
+
 #ifdef __cplusplus
 }
 #endif
