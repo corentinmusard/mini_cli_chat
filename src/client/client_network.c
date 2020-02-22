@@ -2,7 +2,7 @@
 #include <sys/socket.h>
 #include <unistd.h>
 
-#include "network.h"
+#include "client_network.h"
 
 int connect_client(const char *ip, in_port_t port) {
         const struct sockaddr_in addr = {

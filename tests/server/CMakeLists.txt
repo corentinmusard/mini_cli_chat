@@ -2,7 +2,7 @@ set(TEST_NAME server_test)
 
 set(SOURCES
     ../../src/server/clients.c
-    ../../src/server/network.c
+    ../../src/server/server_network.c
 )
 
 set(TESTS

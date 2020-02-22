@@ -1,8 +1,8 @@
 set(SERVER_SOURCES
     clients.c
-    network.c
     server.c
     server_lib.c
+    server_network.c
     ../utils/asynchronous.c
     ../utils/log.c
     ../utils/utils.c

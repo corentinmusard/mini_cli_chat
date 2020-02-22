@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 
-#include "client/network.h"
-#include "server/network.h"
+#include "client/client_network.h"
+#include "server/server_network.h"
 #include "utils.h"
 
 class NetworkTest : public ::testing::Test

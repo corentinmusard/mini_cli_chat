@@ -1,5 +1,5 @@
-#ifndef CLIENT_NETWORK_H
-#define CLIENT_NETWORK_H
+#ifndef CLIENT_CLIENT_NETWORK_H
+#define CLIENT_CLIENT_NETWORK_H
 #ifdef __cplusplus
 extern "C" {
 #endif

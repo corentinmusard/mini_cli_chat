@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include "server/network.h"
+#include "server/server_network.h"
 #include "utils.h"
 
 class NetworkTest : public ::testing::Test

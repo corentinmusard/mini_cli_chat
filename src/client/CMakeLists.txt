@@ -1,8 +1,8 @@
 set(CLIENT_SOURCES
     client.c
     client_lib.c
+    client_network.c
     cli.c
-    network.c
     screen.c
     ../utils/asynchronous.c
     ../utils/log.c

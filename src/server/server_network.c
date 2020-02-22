@@ -1,7 +1,7 @@
 #include <sys/socket.h>
 #include <unistd.h>
 
-#include "network.h"
+#include "server_network.h"
 
 int start_server(in_port_t port) {
         const struct sockaddr_in addr = {

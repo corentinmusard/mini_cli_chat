@@ -3,7 +3,7 @@
 
 #include "asynchronous.h"
 #include "client_lib.h"
-#include "network.h"
+#include "client_network.h"
 #include "screen.h"
 #include "utils.h"
 

@@ -5,8 +5,8 @@
 
 #include "asynchronous.h"
 #include "clients.h"
-#include "network.h"
 #include "server_lib.h"
+#include "server_network.h"
 #include "utils.h"
 
 int main(void) {

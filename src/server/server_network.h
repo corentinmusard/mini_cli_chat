@@ -1,5 +1,5 @@
-#ifndef SERVER_NETWORK_H
-#define SERVER_NETWORK_H
+#ifndef SERVER_SERVER_NETWORK_H
+#define SERVER_SERVER_NETWORK_H
 #ifdef __cplusplus
 extern "C" {
 #endif
