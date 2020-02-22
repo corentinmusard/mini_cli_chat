@@ -2,12 +2,15 @@ set(TEST_NAME client_test)
 
 set(SOURCES
     ../../src/client/cli.c
+    ../../src/client/network.c
     ../../src/client/screen.c
+    ../../src/server/network.c
     ../../src/utils/asynchronous.c
     ../../src/utils/log.c
 )
 
 set(TESTS
+    network_test.cpp
     screen_test.cpp
 )
 
