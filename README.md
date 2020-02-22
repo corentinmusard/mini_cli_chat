@@ -3,7 +3,7 @@
 [![HitCount](http://hits.dwyl.io/corentinmusard/mini_cli_chat.svg)](http://hits.dwyl.io/corentinmusard/mini_cli_chat)
 
 A minimal clients/server chat application.
-It uses Berkeley sockets, epoll, ncurses, cmake.
+It uses Berkeley sockets, epoll, ncurses, cmake, google test.
 
 ## Build status
 [![Build Status](https://www.travis-ci.org/corentinmusard/mini_cli_chat.svg?branch=master)](https://www.travis-ci.org/corentinmusard/mini_cli_chat)

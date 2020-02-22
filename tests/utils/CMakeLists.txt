@@ -3,11 +3,13 @@ set(TEST_NAME utils_test)
 set(SOURCES
     ../../src/utils/asynchronous.c
     ../../src/utils/log.c
+    ../../src/utils/utils.c
 )
 
 set(TESTS
     asynchronous_test.cpp
     log_test.cpp
+    utils_test.cpp
 )
 
 add_executable(${TEST_NAME}
