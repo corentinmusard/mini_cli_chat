@@ -16,7 +16,7 @@ int main(void) {
         int err = 0;
 
         server_sock_fd = start_server(PORT);
-        if (server_sock_fd == -1) {
+        if (server_sock_fd < 0) {
                 perror("start_server");
                 goto clean_server_fd;
         }

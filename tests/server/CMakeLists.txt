@@ -2,10 +2,12 @@ set(TEST_NAME server_test)
 
 set(SOURCES
     ../../src/server/clients.c
+    ../../src/server/network.c
 )
 
 set(TESTS
     clients_test.cpp
+    network_test.cpp
 )
 
 add_executable(${TEST_NAME}

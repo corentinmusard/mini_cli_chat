@@ -1,4 +1,3 @@
-#include <array>
 #include <gtest/gtest.h>
 
 #include "server/clients.h"

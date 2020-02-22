@@ -7,6 +7,16 @@ extern "C" {
 #include <netinet/in.h>
 
 /**
+ * socket() call failed
+ */
+#define SOCKET_FAILED (-1)
+
+/**
+ * connect() call failed
+ */
+#define CONNECT_FAILED (-2)
+
+/**
  * Connect the client to ip:port
  * Return the socket fd
  * Return a negative value on failure

@@ -14,17 +14,17 @@ int start_server(in_port_t port) {
 
         server_sock_fd = socket(AF_INET, SOCK_STREAM | SOCK_NONBLOCK, 0);
         if (server_sock_fd == -1) {
-                return -1;
+                return SOCKET_FAILED;
         }
 
         e = bind(server_sock_fd, (const struct sockaddr *) &addr, sizeof(addr));
         if (e == -1) {
-                return -1;
+                return BIND_FAILED;
         }
 
         e = listen(server_sock_fd, LISTEN_BACKLOG);
         if (e == -1) {
-                return -1;
+                return LISTEN_FAILED;
         }
 
         return server_sock_fd;
