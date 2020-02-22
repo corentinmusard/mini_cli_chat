@@ -1,4 +1,6 @@
+#include <stddef.h>
 #include <sys/epoll.h>
+#include <sys/socket.h>
 #include <unistd.h>
 
 #include "asynchronous.h"
@@ -7,7 +9,15 @@
 #include "server_lib.h"
 #include "utils.h"
 
-void broadcast_message(const Clients *clients, const char *buffer, size_t size) {
+/**
+ * Message sent by server to a client after sucessful connection
+ */
+#define CHAT_BANNER "Welcome to the basic chat!"
+
+/**
+ * Send message `buffer` of size `size` to each client in `clients_fd`
+ */
+static void broadcast_message(const Clients *clients, const char *buffer, size_t size) {
         const Client *c;
 
         if (clients == NULL || clients->head == NULL) {
@@ -53,8 +63,13 @@ int client_message_handling(Clients *clients, int fd) {
         return 0;
 }
 
-int accept_client(Clients *clients, int epollfd, int conn_sock) {
+int accept_client(Clients *clients, int epollfd, int server_sock_fd) {
         ssize_t err;
+        int conn_sock = accept4(server_sock_fd, NULL, NULL, SOCK_NONBLOCK);
+        if (conn_sock == -1) {
+                return -1;
+        }
+
         add_client(clients, conn_sock);
         async_add(epollfd, conn_sock, EPOLLIN | EPOLLET);
         info("Connection open: %d\n", conn_sock);

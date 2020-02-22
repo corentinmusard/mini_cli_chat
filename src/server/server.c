@@ -1,7 +1,5 @@
-#include <errno.h>
 #include <stdio.h>
 #include <sys/epoll.h>
-#include <sys/socket.h>
 
 #include "asynchronous.h"
 #include "clients.h"
@@ -37,19 +35,13 @@ int main(void) {
                 int nfds;
 
                 nfds = wait_events(epollfd, events);
-                if (nfds == -1 && errno != EINTR) {
-                        perror("epoll_wait");
-                        goto clean_server_fd;
+                if (nfds == -1) {
+                        err = -1;
                 }
 
                 for (int i = 0; i < nfds && err != 1; i++) {
                         if (events[i].data.fd == server_sock_fd) { //event from server socket
-                                int conn_sock = accept4(server_sock_fd, NULL, NULL, SOCK_NONBLOCK);
-                                if (conn_sock == -1) {
-                                        perror("accept4");
-                                        goto clean_server_fd;
-                                }
-                                err = accept_client(clients, epollfd, conn_sock);
+                                err = accept_client(clients, epollfd, server_sock_fd);
                         } else { //event from client socket
                                 err = client_message_handling(clients, events[i].data.fd);
                         }
