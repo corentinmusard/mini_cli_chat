@@ -12,7 +12,10 @@ extern "C" {
  */
 int server_message_handling(Messages *msgs, int sockfd);
 
-int stdin_char_handling(const Screen *screen, int sockfd);
+/**
+ * Return -1 on failure and 0 on success
+ */
+int stdin_char_handling(const Screen *s, int sockfd);
 
 /**
  * Initialize async. Return fd of the epoll instance.

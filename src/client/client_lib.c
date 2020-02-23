@@ -72,15 +72,15 @@ static void reset_variables(Input *input) {
 
 /**
  * Execute `command`
- * Return 1 on success
- * Return 0 if `command` is unknown
+ * Return 0 on success
+ * Return -1 if `command` is unknown
  */
 static int execute_command(const char *command) {
         if (strcmp("/quit", command) == 0 || strcmp("/q", command) == 0) {
                 interrupt = 1;
-                return 1;
+                return 0;
         }
-        return 0;
+        return -1;
 }
 
 /**
@@ -121,52 +121,55 @@ int server_message_handling(Messages *msgs, int sockfd) {
         return 0;
 }
 
-int stdin_char_handling(const Screen *screen, int sockfd) {
+/**
+ * If message is blank, do nothing
+ * If message start with '/', execute command
+ * Else send message to server
+ */
+static int evaluate_complete_message(const Screen *s, int sockfd) {
+        if (s->input->i == 0) {  // blank message
+                // don't send it
+                return 0;
+        }
+        if (s->input->buffer[0] == '/') {  // start with '/'
+                // It's a command
+                if (execute_command(s->input->buffer) == -1) {
+                        // command unknown
+                        print_message(s->msgs, "Command unknown");
+                }
+                return 0;
+        }
+        if (write(sockfd, s->input->buffer, (size_t)s->input->i) == -1) {
+                perror("write");
+                return -1;
+        }
+        reset_variables(s->input);
+        clear_message_area(s->input->window);
+        return 0;
+}
+
+int stdin_char_handling(const Screen *s, int sockfd) {
         char c;
         if (read(STDIN_FILENO, &c, 1) == -1) {
                 perror("read");
                 return -1;
         }
 
-        if (c == '\r') {  // end of the message, send it
-                if (screen->input->i == 0) {  // blank message
-                        // don't send it
-                        return 1;
-                }
-                if (screen->input->buffer[0] == '/') {  // start with '/'
-                        // It's a command
-                        if (execute_command(screen->input->buffer) == 0) {
-                                // command unknown
-                                print_message(screen->msgs, "Command unknown");
+        switch (c) {
+                case '\r':
+                        return evaluate_complete_message(s, sockfd);
+                case '\t':
+                        break; // ignore tab for now
+                case DEL:
+                        delete_message_character(s->input);
+                        break;
+                default:
+                        if (s->input->i == (MAXMSG - 1)) {  // max message length reached
+                                break; // ignore character for now
                         }
-                        return 1;
-                }
-                if (write(sockfd, screen->input->buffer, (size_t)screen->input->i) == -1) {
-                        perror("write");
-                        return -1;
-                }
-                reset_variables(screen->input);
-                clear_message_area(screen->input->window);
-                return 1;
+                        input_char_handling(s->input, c);
         }
-
-        if (c == '\t') {
-                // ignore tab for now
-                return 1;
-        }
-
-        if (c == DEL) {
-                delete_message_character(screen->input);
-                return 1;
-        }
-
-        if (screen->input->i == (MAXMSG - 1)) {  // max message length reached
-                // ignore character for now
-                return 1;
-        }
-
-        input_char_handling(screen->input, c);
-        return 1;
+        return 0;
 }
 
 int client_async_init(int sockfd) {
