@@ -6,7 +6,7 @@ set(W
     #-Wmissing-declarations
     -Wunreachable-code
     -Wmissing-include-dirs
-    -Wlogical-op
+    #-Wlogical-op
     -Wfloat-equal
     -Wwrite-strings
     -Wpointer-arith
