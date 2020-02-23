@@ -10,11 +10,11 @@ extern "C" {
  * Initialize async. Return fd of the epoll instance.
  * Return -1 on failure
  */
-int server_async_init(int server_sock_fd);
+int server_async_init(int server_fd);
 
 int client_message_handling(Clients *clients, int fd);
 
-int accept_client(Clients *clients, int epollfd, int server_sock_fd);
+int accept_client(Clients *clients, int epollfd, int server_fd);
 
 #ifdef __cplusplus
 }

@@ -15,7 +15,7 @@
 #define CHAT_BANNER "Welcome to the basic chat!"
 
 /**
- * Send message `buffer` of size `size` to each client in `clients_fd`
+ * Send message `buffer` of size `size` to each client in `clients`
  */
 static void broadcast_message(const Clients *clients, const char *buffer, size_t size) {
         const Client *c;
@@ -31,13 +31,13 @@ static void broadcast_message(const Clients *clients, const char *buffer, size_t
         }
 }
 
-int server_async_init(int server_sock_fd) {
+int server_async_init(int server_fd) {
         int epollfd = async_init();
         if (epollfd == -1) {
                 return -1;
         }
 
-        if (async_add(epollfd, server_sock_fd, EPOLLIN) == -1) {
+        if (async_add(epollfd, server_fd, EPOLLIN) == -1) {
                 return -1;
         }
 
@@ -63,20 +63,20 @@ int client_message_handling(Clients *clients, int fd) {
         return 0;
 }
 
-int accept_client(Clients *clients, int epollfd, int server_sock_fd) {
+int accept_client(Clients *clients, int epollfd, int server_fd) {
         ssize_t err;
-        int conn_sock = accept4(server_sock_fd, NULL, NULL, SOCK_NONBLOCK);
-        if (conn_sock == -1) {
+        int client_fd = accept4(server_fd, NULL, NULL, SOCK_NONBLOCK);
+        if (client_fd == -1) {
                 return -1;
         }
 
-        add_client(clients, conn_sock);
-        async_add(epollfd, conn_sock, EPOLLIN | EPOLLET);
-        info("Connection open: %d\n", conn_sock);
+        add_client(clients, client_fd);
+        async_add(epollfd, client_fd, EPOLLIN | EPOLLET);
+        info("Connection open: %d\n", client_fd);
 
-        err = write(conn_sock, CHAT_BANNER, sizeof(CHAT_BANNER));
+        err = write(client_fd, CHAT_BANNER, sizeof(CHAT_BANNER));
         if (err == -1) {
-                info("Error sending CHAT_BANNER to %d\n", conn_sock);
+                info("Error sending CHAT_BANNER to %d\n", client_fd);
         }
 
         return 0;

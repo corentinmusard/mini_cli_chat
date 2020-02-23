@@ -41,7 +41,7 @@ In no particular order
 -   [x] client: epoll: asynchrone gestion of output(new messages from server) and input(new messages from keyboard)
 -   [x] client: display with ncurses
 -   [x] add date to message
--   [x] server: forward messages received by a client to every clients connected to the server
+-   [x] server: forward messages received from a client to each clients connected to the server
 -   [x] write function docstring
 -   [ ] make tests
 -   [ ] add nicknames support
