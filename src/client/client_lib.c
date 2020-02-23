@@ -150,6 +150,11 @@ int stdin_char_handling(const Screen *screen, int sockfd) {
                 return 1;
         }
 
+        if (c == '\t') {
+                // ignore tab for now
+                return 1;
+        }
+
         if (c == DEL) {
                 delete_message_character(screen->input);
                 return 1;
