@@ -38,12 +38,6 @@ jobs:
 
 # command to build and run tests
 script:
-  # Fix LD_PRELOAD errors
-  # See https://community.sonarsource.com/t/sonarqube-c-ubuntu-build-wrapper-ld-preload-error/300
-  - INTERCEPTOR_LIB=$(find ${TRAVIS_HOME} -name libinterceptor-x86_64.so)
-  - INTERCEPTOR_LINK=$(sed "s/x86_64/haswell/g"<<<"$INTERCEPTOR_LIB")
-  - ln -s $INTERCEPTOR_LIB $INTERCEPTOR_LINK
-
   - mkdir build
   - cd build
   - cmake ../
