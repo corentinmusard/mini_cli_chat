@@ -20,13 +20,13 @@ It uses Berkeley sockets, epoll, ncurses, cmake, google test.
 -   [fsanitize](//clang.llvm.org/docs/AddressSanitizer.html) runtime checks instead of `valgrind`
 
 ## Getting Started
-To build both client and server binary:
+To build both client and server binaries:
 ```sh
 mkdir build
 cd build
 cmake ..
 make
-GTEST_COLOR=1 make test # Optionnal, it runs tests
+GTEST_COLOR=1 ctest # Optional, it runs tests
 ```
 Binaries are built into `bin/` directory.
 

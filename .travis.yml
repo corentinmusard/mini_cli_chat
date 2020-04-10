@@ -25,15 +25,23 @@ os:
 # To build each config
 jobs:
   include:
-    - env: CC=gcc-8 CXX=g++-8 GCOV=true
-    - env: CC=clang-6.0 CXX=clang++-6.0
+    - name: "Linux gcc, gcov"
+      env:
+        - CC=gcc-8
+        - CXX=g++-8
+        - GCOV=true
+
+    - name: "Linux clang"
+      env:
+        - CC=clang-6.0
+        - CXX=clang++-6.0
 
 # command to build and run tests
 script:
   # Fix LD_PRELOAD errors
   # See https://community.sonarsource.com/t/sonarqube-c-ubuntu-build-wrapper-ld-preload-error/300
-  - INTERCEPTOR_LIB=`find ${TRAVIS_HOME} -name libinterceptor-x86_64.so`
-  - INTERCEPTOR_LINK=`sed "s/x86_64/haswell/g"<<<"$INTERCEPTOR_LIB"`
+  - INTERCEPTOR_LIB=$(find ${TRAVIS_HOME} -name libinterceptor-x86_64.so)
+  - INTERCEPTOR_LINK=$(sed "s/x86_64/haswell/g"<<<"$INTERCEPTOR_LIB")
   - ln -s $INTERCEPTOR_LIB $INTERCEPTOR_LINK
 
   - mkdir build
@@ -44,7 +52,7 @@ script:
   - build-wrapper-linux-x86-64 --out-dir ../bw-output make all
 
   # Execute some tests
-  - GTEST_COLOR=1 make test
+  - GTEST_COLOR=1 ctest
 
   # Execute gcov for tests coverage
   # And finally run the SonarQube analysis - read the "sonar-project.properties"
