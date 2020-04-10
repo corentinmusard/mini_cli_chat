@@ -1,4 +1,4 @@
-set(CLIENT_SOURCES
+add_executable(client
     client.c
     client_lib.c
     client_network.c
@@ -8,8 +8,6 @@ set(CLIENT_SOURCES
     ../utils/log.c
     ../utils/utils.c
 )
-
-add_executable(client ${CLIENT_SOURCES})
 
 target_compile_options(client 
     PUBLIC ${W}

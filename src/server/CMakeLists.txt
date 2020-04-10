@@ -1,4 +1,4 @@
-set(SERVER_SOURCES
+add_executable(server
     clients.c
     server.c
     server_lib.c
@@ -7,8 +7,6 @@ set(SERVER_SOURCES
     ../utils/log.c
     ../utils/utils.c
 )
-
-add_executable(server ${SERVER_SOURCES})
 
 target_compile_definitions(server 
     PUBLIC "_GNU_SOURCE"

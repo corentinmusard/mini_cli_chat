@@ -1,12 +1,10 @@
-
 set(W
     -pedantic
     -Wall
     -Wextra
-    #-Wmissing-declarations
+
     -Wunreachable-code
     -Wmissing-include-dirs
-    #-Wlogical-op
     -Wfloat-equal
     -Wwrite-strings
     -Wpointer-arith
