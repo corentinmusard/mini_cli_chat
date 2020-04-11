@@ -11,7 +11,7 @@ int main(void) {
         Clients *clients = init_clients();
         int epollfd;
         int server_fd;
-        int err = 0;
+        int nfds = 0;
 
         server_fd = start_server(PORT);
         if (server_fd < 0) {
@@ -30,20 +30,15 @@ int main(void) {
                 goto clean;
         }
 
-        while (exit_not_wanted(err)) {
+        while (exit_not_wanted(nfds)) {
                 struct epoll_event events[MAX_EVENTS];
-                int nfds;
-
                 nfds = wait_events(epollfd, events);
-                if (nfds == -1) {
-                        err = -1;
-                }
 
-                for (int i = 0; i < nfds && err != 1; i++) {
+                for (int i = 0; i < nfds && nfds != -1; i++) {
                         if (events[i].data.fd == server_fd) { //event from server socket
-                                err = accept_client(clients, epollfd, server_fd);
+                                accept_client(clients, epollfd, server_fd);
                         } else { //event from client socket
-                                err = client_message_handling(clients, events[i].data.fd);
+                                client_message_handling(clients, events[i].data.fd);
                         }
                 }
         }

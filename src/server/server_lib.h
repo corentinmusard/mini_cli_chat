@@ -12,9 +12,9 @@ extern "C" {
  */
 int server_async_init(int server_fd);
 
-int client_message_handling(Clients *clients, int fd);
+void client_message_handling(Clients *clients, int fd);
 
-int accept_client(Clients *clients, int epollfd, int server_fd);
+void accept_client(Clients *clients, int epollfd, int server_fd);
 
 #ifdef __cplusplus
 }
