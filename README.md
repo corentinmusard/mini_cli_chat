@@ -34,30 +34,32 @@ Binaries are built into `bin/` directory.
 None for now because it's not really usable.
 
 ## TODO LIST
-In no particular order
+### Features (ordered)
+-   [x] add date to message
+-   [x] server: forward messages received from a client to each clients connected to the server
+-   [ ] add nicknames support
+-   [ ] server: notify clients when someone leave server
+-   [ ] add privates messages support
+-   [ ] add a way to login into a specific nickname with a password
+-   [ ] server: protect a nickname when it has been registred
+-   [ ] add channels support
+-   [ ] add moderation support
+-   [ ] add roles (modo/admin/muted) support
 
+### Settings (in no particular order)
+-   [ ] client: ncurses: add colors to nicknames, channels and more
+-   [ ] client: add command via adding a slash like /list, /me, /whoami, /whois
+-   [ ] client: add setting configuration (nickname, server ip/port, log settings)
+-   [ ] server: add setting configuration (server port, log settings)
+
+### Technical things (in no particular order)
 -   [x] server: allow clients to connect
 -   [x] server: epoll: asynchrone connections 
 -   [x] client: epoll: asynchrone gestion of output(new messages from server) and input(new messages from keyboard)
 -   [x] client: display with ncurses
--   [x] add date to message
--   [x] server: forward messages received from a client to each clients connected to the server
 -   [x] write function docstring
 -   [ ] make tests
--   [ ] add nicknames support
--   [ ] server: notify clients when someone leave server
--   [ ] add channels support
--   [ ] add privates messages support
--   [ ] add a way to login into a specific nickname with a password
--   [ ] server: protect a nickname when it has been registred
--   [ ] add roles (modo/admin/muted) support
--   [ ] add moderation support
--   [ ] client: ncurses: add colors to nicknames, channels and more
--   [ ] add logs options for clients and server
--   [ ] connection to server with ssl
--   [ ] add IPv6 support
--   [ ] client: add setting configuration (nickname, server ip/port, log settings)
--   [ ] server: add setting configuration (server port, log settings)
--   [ ] client: add command via adding a slash like /list, /me, /whoami, /whois
--   [ ] use portable code (currently needing POSIX and GNU extentions)
 -   [ ] make code modular with plugins
+-   [ ] use portable code (currently needing POSIX and GNU extentions)
+-   [ ] add IPv6 support
+-   [ ] connection to server with ssl
