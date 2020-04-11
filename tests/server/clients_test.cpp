@@ -6,6 +6,9 @@
 #undef NULL
 #define NULL ((void*)0)
 
+#define FAILURE (-1)
+#define SUCCESS 0
+
 class ClientsTest : public ::testing::Test
 {
 protected:
@@ -44,14 +47,14 @@ TEST_F(ClientsTest, add_client)
 {
     int fds[1] = {2};
 
-    ASSERT_EQ(add_client(c, 2), 1);
+    ASSERT_EQ(add_client(c, 2), SUCCESS);
 
     assert_fds_is(fds, 1);
 }
 
 TEST_F(ClientsTest, add_client_bad_fd)
 {
-    ASSERT_EQ(add_client(c, -1), 0);
+    ASSERT_EQ(add_client(c, -1), FAILURE);
 
     assert_is_empty();
 }
@@ -60,10 +63,10 @@ TEST_F(ClientsTest, add_clients)
 {
     int fds[4] = {3, 2, 4, 2};
 
-    ASSERT_EQ(add_client(c, 2), 1);
-    ASSERT_EQ(add_client(c, 4), 1);
-    ASSERT_EQ(add_client(c, 2), 1);
-    ASSERT_EQ(add_client(c, 3), 1);
+    ASSERT_EQ(add_client(c, 2), SUCCESS);
+    ASSERT_EQ(add_client(c, 4), SUCCESS);
+    ASSERT_EQ(add_client(c, 2), SUCCESS);
+    ASSERT_EQ(add_client(c, 3), SUCCESS);
 
     assert_fds_is(fds, 4);
 }

@@ -19,7 +19,7 @@ int add_client(Clients *l, int fd) {
         Client *c;
 
         if (fd < 0) {
-                return 0;
+                return -1;
         }
 
         c = malloc(sizeof(Client));
@@ -28,7 +28,7 @@ int add_client(Clients *l, int fd) {
 
         l->head = c;
         l->nb++;
-        return 1;
+        return 0;
 }
 
 void delete_client(Clients *l, int fd) {
