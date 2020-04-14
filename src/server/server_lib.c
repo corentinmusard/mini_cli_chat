@@ -63,7 +63,12 @@ void client_message_handling(Clients *clients, int fd) {
         }
 
         if (status == 0) { //connection closed
+                char msg[MAXMSG] = {0};
+                snprintf(msg, MAXMSG, "%d: leave the server\n", fd);
+
                 disconnect_client(clients, fd);
+                broadcast_message(clients, msg, sizeof(msg));
+                info(msg);
         } else {
                 broadcast_message(clients, buffer, sizeof(buffer));
                 info("%d: %.*s\n", fd, MAXMSG, buffer);
@@ -94,6 +99,7 @@ static int connect_client(Clients *clients, int fd, int epollfd) {
 }
 
 void accept_client(Clients *clients, int epollfd, int server_fd) {
+        char msg[MAXMSG] = {0};
         ssize_t err;
         int fd = accept4(server_fd, NULL, NULL, SOCK_NONBLOCK);
         if (fd == -1) {
@@ -111,4 +117,8 @@ void accept_client(Clients *clients, int epollfd, int server_fd) {
                 info("%d: error sending CHAT_BANNER\n", fd);
                 return;
         }
+
+        snprintf(msg, MAXMSG, "%d: join the server\n", fd);
+        broadcast_message(clients, msg, sizeof(msg));
+        info(msg);
 }

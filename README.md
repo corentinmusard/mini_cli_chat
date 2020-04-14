@@ -37,8 +37,9 @@ None for now because it's not really usable.
 ### Features (ordered)
 -   [x] add date to message
 -   [x] server: forward messages received from a client to each clients connected to the server
+-   [x] server: notify clients when someone join/leave server
 -   [ ] add nicknames support
--   [ ] server: notify clients when someone leave server
+-   [ ] client: when screen is full, scroll messsages and display new messages
 -   [ ] add privates messages support
 -   [ ] add a way to login into a specific nickname with a password
 -   [ ] server: protect a nickname when it has been registred
