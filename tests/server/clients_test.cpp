@@ -25,7 +25,7 @@ protected:
         ASSERT_EQ(c->nb, 0);
     }
 
-    void assert_fds_is(const int *fds, int size) {
+    void assert_fds_are(const int *fds, int size) {
         Client *cl = c->head;
         ASSERT_EQ(c->nb, size);
         for (int i = 0; i < size; i++) {
@@ -49,7 +49,7 @@ TEST_F(ClientsTest, add_client)
 
     ASSERT_EQ(add_client(c, 2), SUCCESS);
 
-    assert_fds_is(fds, 1);
+    assert_fds_are(fds, 1);
 }
 
 TEST_F(ClientsTest, add_client_bad_fd)
@@ -68,7 +68,7 @@ TEST_F(ClientsTest, add_clients)
     ASSERT_EQ(add_client(c, 2), SUCCESS);
     ASSERT_EQ(add_client(c, 3), SUCCESS);
 
-    assert_fds_is(fds, 4);
+    assert_fds_are(fds, 4);
 }
 
 TEST_F(ClientsTest, delete_client)
@@ -93,7 +93,7 @@ TEST_F(ClientsTest, delete_client_wrong_fd)
     add_client(c, 2);
     delete_client(c, 4);
 
-    assert_fds_is(fds, 1);
+    assert_fds_are(fds, 1);
 }
 
 TEST_F(ClientsTest, delete_client_duplicate)
@@ -105,7 +105,7 @@ TEST_F(ClientsTest, delete_client_duplicate)
     add_client(c, 1);
     delete_client(c, 2);
 
-    assert_fds_is(fds, 2);
+    assert_fds_are(fds, 2);
 }
 
 TEST_F(ClientsTest, delete_client_multiple_clients)
@@ -118,6 +118,6 @@ TEST_F(ClientsTest, delete_client_multiple_clients)
     add_client(c, 1);
     delete_client(c, 2);
 
-    assert_fds_is(fds, 3);
+    assert_fds_are(fds, 3);
 }
 
