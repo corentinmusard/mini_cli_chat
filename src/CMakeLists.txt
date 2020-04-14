@@ -8,6 +8,7 @@ if (CMAKE_C_COMPILER_ID STREQUAL "GNU")
     endif()
 
     set(W
+        -g
         -pedantic
         -Wall
         -Wextra

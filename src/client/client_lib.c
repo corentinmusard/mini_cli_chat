@@ -116,6 +116,7 @@ static void display_message(Messages *msgs, const char *buffer, size_t size) {
 int server_message_handling(Messages *msgs, int sockfd) {
         char buffer[MAXMSG] = {0};
         char msg[MAXMSG] = {0};
+        int msg_len = 0;
         ssize_t status;
 
         status = read(sockfd, buffer, sizeof(buffer));
@@ -124,7 +125,7 @@ int server_message_handling(Messages *msgs, int sockfd) {
                 return -1;
         }
 
-        for (int i = 0, msg_len = 0; i < status; i++) {
+        for (int i = 0; i < status; i++) {
                 if (buffer[i] != '\0') {
                         msg[msg_len] = buffer[i];
                         msg_len++;
