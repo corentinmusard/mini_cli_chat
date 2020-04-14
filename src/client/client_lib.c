@@ -103,9 +103,19 @@ static void input_char_handling(Input *input, char c) {
         increment_indice_message(input);
 }
 
+/**
+ * Append date to `buffer`, display it on the screen
+ */
+static void display_message(Messages *msgs, const char *buffer, size_t size) {
+        char *formated_message = log_format(buffer, size);
+        print_message(msgs, formated_message);
+
+        free(formated_message);
+}
+
 int server_message_handling(Messages *msgs, int sockfd) {
         char buffer[MAXMSG] = {0};
-        char *formated_message;
+        char msg[MAXMSG] = {0};
         ssize_t status;
 
         status = read(sockfd, buffer, sizeof(buffer));
@@ -114,10 +124,21 @@ int server_message_handling(Messages *msgs, int sockfd) {
                 return -1;
         }
 
-        formated_message = log_format(buffer, sizeof(buffer));
-        print_message(msgs, formated_message);
+        for (int i = 0, msg_len = 0; i < status; i++) {
+                if (buffer[i] != '\0') {
+                        msg[msg_len] = buffer[i];
+                        msg_len++;
+                } else { // end of string
+                        if (msg_len == 0) {  // no more message
+                                return 0;
+                        }
+                        display_message(msgs, msg, sizeof(msg));
+                        // reset variables
+                        memset(msg, 0, sizeof(msg));
+                        msg_len = 0;
+                }
+        }
 
-        free(formated_message);
         return 0;
 }
 
