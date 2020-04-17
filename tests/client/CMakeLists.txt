@@ -7,9 +7,11 @@ set(SOURCES
     ../../src/server/server_network.c
     ../../src/utils/asynchronous.c
     ../../src/utils/log.c
+    ../../src/utils/utils.c
 )
 
 set(TESTS
+    client_lib_test.cpp
     network_test.cpp
     screen_test.cpp
 )

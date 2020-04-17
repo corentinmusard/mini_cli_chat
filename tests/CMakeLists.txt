@@ -1,4 +1,5 @@
 set(W
+    -g
     -pedantic
     -Wall
     -Wextra

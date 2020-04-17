@@ -64,8 +64,9 @@ static void increment_indice_message(Input *input) {
  * Reset `input` to default value
  */
 static void reset_variables(Input *input) {
-        assert(input->i > 0);
-
+        if (input->i == 0) {
+                return;
+        }
         memset(input->buffer, 0, (size_t)input->i);
         input->i = 0;
 }
