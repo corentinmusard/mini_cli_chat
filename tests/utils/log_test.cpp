@@ -33,13 +33,6 @@ protected:
     char buffer[BUFSIZ] = {0};
 };
 
-TEST_F(InfoTest, null)
-{
-    STDOUT_TO_BUFFER(info(NULL));
-
-    ASSERT_STREQ(buffer, "00:00:00 ");
-}
-
 TEST_F(InfoTest, empty_string)
 {
     STDOUT_TO_BUFFER(info(""));
@@ -93,14 +86,6 @@ protected:
 
     char *buffer = NULL;
 };
-
-TEST_F(LogFormatTest, null)
-{
-    const char *str = NULL;
-    buffer = log_format(str, sizeof(str));
-
-    ASSERT_STREQ(buffer, "00:00:00 ");
-}
 
 TEST_F(LogFormatTest, empty_string)
 {

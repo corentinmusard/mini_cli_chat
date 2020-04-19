@@ -1,3 +1,4 @@
+#include <assert.h>
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -20,8 +21,11 @@
  * Store locale time into `tm_s`
  */
 static void get_localtime(struct tm *tm_s) {
-        time_t timep = time(NULL);
+        time_t timep;
 
+        assert(tm_s && "should not be NULL");
+
+        timep = time(NULL);
         localtime_r(&timep, tm_s);
 }
 
@@ -38,31 +42,32 @@ static void print_time(void) {
 
 __attribute__((__format__ (__printf__, 1, 2)))
 void info(const char *fmt, ...) {
+        va_list args;
+
+        assert(fmt && "should not be NULL");
+
         print_time();
         printf(" ");
 
-        if (fmt != NULL) {
-                va_list args;
-                va_start(args, fmt);
-                vprintf(fmt, args);
-                va_end(args);
-        }
+        va_start(args, fmt);
+        vprintf(fmt, args);
+        va_end(args);
 }
 
 char* log_format(const char *buffer, size_t size) {
         struct tm tm_s;
         char *message;
-        size_t m_size = SIZE_TIME + 1 + size;
-        //+1 for space between time and buffer
+        size_t m_size;
+
+        assert(buffer && "should not be NULL");
+        assert(size > 0 && "should not be 0");
+
+        m_size = SIZE_TIME + 1 + size; //+1 for space between time and buffer
 
         message = calloc(m_size, sizeof(char));
         get_localtime(&tm_s);
 
-        if (buffer == NULL) {
-                snprintf(message, m_size, TIME_FORMAT " ", tm_s.tm_hour, tm_s.tm_min, tm_s.tm_sec);
-        } else {
-                snprintf(message, m_size, TIME_FORMAT " %s", tm_s.tm_hour, tm_s.tm_min, tm_s.tm_sec, buffer);
-        }
+        snprintf(message, m_size, TIME_FORMAT " %s", tm_s.tm_hour, tm_s.tm_min, tm_s.tm_sec, buffer);
 
         return message;
 }

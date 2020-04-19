@@ -6,9 +6,6 @@
 #undef NULL
 #define NULL ((void*)0)
 
-#define FAILURE (-1)
-#define SUCCESS 0
-
 class ClientsTest : public ::testing::Test
 {
 protected:
@@ -47,26 +44,19 @@ TEST_F(ClientsTest, add_client)
 {
     int fds[1] = {2};
 
-    ASSERT_EQ(add_client(c, 2), SUCCESS);
+    add_client(c, 2);
 
     assert_fds_are(fds, 1);
-}
-
-TEST_F(ClientsTest, add_client_bad_fd)
-{
-    ASSERT_EQ(add_client(c, -1), FAILURE);
-
-    assert_is_empty();
 }
 
 TEST_F(ClientsTest, add_clients)
 {
     int fds[4] = {3, 2, 4, 2};
 
-    ASSERT_EQ(add_client(c, 2), SUCCESS);
-    ASSERT_EQ(add_client(c, 4), SUCCESS);
-    ASSERT_EQ(add_client(c, 2), SUCCESS);
-    ASSERT_EQ(add_client(c, 3), SUCCESS);
+    add_client(c, 2);
+    add_client(c, 4);
+    add_client(c, 2);
+    add_client(c, 3);
 
     assert_fds_are(fds, 4);
 }
@@ -77,23 +67,6 @@ TEST_F(ClientsTest, delete_client)
     delete_client(c, 2);
 
     assert_is_empty();
-}
-
-TEST_F(ClientsTest, delete_client_empty)
-{
-    delete_client(c, 2);
-
-    assert_is_empty();
-}
-
-TEST_F(ClientsTest, delete_client_wrong_fd)
-{
-    int fds[1] = {2};
-
-    add_client(c, 2);
-    delete_client(c, 4);
-
-    assert_fds_are(fds, 1);
 }
 
 TEST_F(ClientsTest, delete_client_duplicate)

@@ -21,13 +21,12 @@ Clients* init_clients(void);
 
 /**
  * Add a client with value `fd` at the beginning of the linked list `l`
- * Fail and return -1 if `fd` is less than 0
- * Otherwise return 0
  */
-int add_client(Clients *l, int fd);
+void add_client(Clients *l, int fd);
 
 /**
  * Delete the first client from `l` who has `fd`
+ * `fd` should be in `l`
  */
 void delete_client(Clients *l, int fd);
 

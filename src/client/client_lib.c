@@ -22,6 +22,9 @@
  * Print `message` to messages window
  */
 static void print_message(Messages *msgs, const char *message) {
+        assert(msgs && "should not be NULL");
+        assert(message && "should not be NULL");
+
         msgs->y++;
         mvwprintw(msgs->window, msgs->y, 1, message);
 }
@@ -32,6 +35,8 @@ static void print_message(Messages *msgs, const char *message) {
  * Update value of `i`
  */
 static void delete_message_character(Input *input) {
+        assert(input && "should not be NULL");
+
         input->buffer[input->i] = '\0';
         input->i--;
         if (input->i < 0) {
@@ -49,6 +54,8 @@ static void increment_indice_message(Input *input) {
         int x;
         int max_x;
 
+        assert(input && "should not be NULL");
+
         getmaxyx(input->window, y, x);
         assert(x >= 0);
 
@@ -64,9 +71,9 @@ static void increment_indice_message(Input *input) {
  * Reset `input` to default value
  */
 static void reset_variables(Input *input) {
-        if (input->i == 0) {
-                return;
-        }
+        assert(input && "should not be NULL");
+        assert(input->i > 0 && "should not be 0");
+
         memset(input->buffer, 0, (size_t)input->i);
         input->i = 0;
 }
@@ -77,6 +84,8 @@ static void reset_variables(Input *input) {
  * Return -1 if `command` is unknown
  */
 static int execute_command(const char *command) {
+        assert(command && "should not be NULL");
+
         if (strcmp("/quit", command) == 0 || strcmp("/q", command) == 0) {
                 interrupt = 1;
                 return 0;
@@ -88,6 +97,8 @@ static int execute_command(const char *command) {
  * Print char `c` to input window
  */
 static void print_input_char(const Input *input, char c) {
+        assert(input && "should not be NULL");
+
         mvwprintw(input->window,
                 INITIAL_MESSAGE_Y,
                 INITIAL_MESSAGE_X + input->i,
@@ -99,6 +110,8 @@ static void print_input_char(const Input *input, char c) {
  * Print `c` to input window
  */
 static void input_char_handling(Input *input, char c) {
+        assert(input && "should not be NULL");
+
         input->buffer[input->i] = c;
         print_input_char(input, c);
         increment_indice_message(input);
@@ -108,7 +121,13 @@ static void input_char_handling(Input *input, char c) {
  * Append date to `buffer`, display it on the screen
  */
 static void display_message(Messages *msgs, const char *buffer, size_t size) {
-        char *formated_message = log_format(buffer, size);
+        char *formated_message;
+
+        assert(msgs && "should not be NULL");
+        assert(buffer && "should not be NULL");
+        assert(size > 0 && "should not be 0");
+
+        formated_message = log_format(buffer, size);
         print_message(msgs, formated_message);
 
         free(formated_message);
@@ -119,6 +138,9 @@ int server_message_handling(Messages *msgs, int sockfd) {
         char msg[MAXMSG] = {0};
         int msg_len = 0;
         ssize_t status;
+
+        assert(msgs && "should not be NULL");
+        assert(sockfd >= 0 && "should be a valid file descriptor");
 
         status = read(sockfd, buffer, sizeof(buffer));
         if (status == -1 || status == 0) {  // error or connection to server closed
@@ -150,6 +172,9 @@ int server_message_handling(Messages *msgs, int sockfd) {
  * Else send message to server
  */
 static int evaluate_complete_message(const Screen *s, int sockfd) {
+        assert(s && "should not be NULL");
+        assert(sockfd >= 0 && "should be a valid file descriptor");
+
         if (s->input->i == 0) {  // blank message
                 // don't send it
                 return 0;
@@ -173,6 +198,10 @@ static int evaluate_complete_message(const Screen *s, int sockfd) {
 
 int stdin_char_handling(const Screen *s, int sockfd) {
         char c;
+
+        assert(s && "should not be NULL");
+        assert(sockfd >= 0 && "should be a valid file descriptor");
+
         if (read(STDIN_FILENO, &c, 1) == -1) {
                 perror("read");
                 return -1;
@@ -196,7 +225,11 @@ int stdin_char_handling(const Screen *s, int sockfd) {
 }
 
 int client_async_init(int sockfd) {
-        int epollfd = async_init();
+        int epollfd;
+
+        assert(sockfd >= 0 && "should be a valid file descriptor");
+
+        epollfd = async_init();
         if (epollfd == -1) {
                 return -1;
         }

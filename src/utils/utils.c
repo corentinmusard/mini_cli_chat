@@ -1,3 +1,4 @@
+#include <assert.h>
 #include <signal.h>
 #include <stdbool.h>
 #include <stddef.h>
@@ -23,6 +24,7 @@ int register_sigint(void) {
 }
 
 bool is_stdin(int fd) {
+        assert(fd >= 0 && "should be a valid file descriptor");
         return fd == STDIN_FILENO;
 }
 

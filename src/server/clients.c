@@ -15,28 +15,27 @@ Clients* init_clients(void) {
         return c;
 }
 
-int add_client(Clients *l, int fd) {
+void add_client(Clients *l, int fd) {
         Client *c;
 
-        if (fd < 0) {
-                return -1;
-        }
+        assert(l && "should not be NULL");
+        assert(fd >= 0 && "should be a valid file descriptor");
 
         c = malloc(sizeof(Client));
+        assert(c);
         c->fd = fd;
         c->next = l->head;
 
         l->head = c;
         l->nb++;
-        return 0;
 }
 
 void delete_client(Clients *l, int fd) {
         Client *c;
 
-        if (l == NULL || l->head == NULL) {
-                return;
-        }
+        assert(l && "should not be NULL");
+        assert(l->head && "should not be NULL");
+        assert(fd >= 0 && "should be a valid file descriptor");
 
         c = l->head;
         if (c->fd == fd) {
@@ -55,12 +54,17 @@ void delete_client(Clients *l, int fd) {
                 free(c->next);
                 c->next = next;
                 l->nb--;
+        } else {
+                assert(0 && "fd should be in l");
         }
 }
 
 void free_clients(Clients *l) {
-        Client *c = l->head;
+        Client *c;
 
+        assert(l && "should not be NULL");
+
+        c = l->head;
         while (c != NULL) {
                 Client *next = c->next;
                 free(c);

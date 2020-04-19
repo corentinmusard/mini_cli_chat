@@ -1,3 +1,4 @@
+#include <assert.h>
 #include <sys/socket.h>
 #include <unistd.h>
 
@@ -31,5 +32,6 @@ int start_server(in_port_t port) {
 }
 
 void stop_server(int server_sock_fd) {
+        assert(server_sock_fd >= 0 && "should be a valid file descriptor");
         close(server_sock_fd);
 }

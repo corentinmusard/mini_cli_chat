@@ -68,14 +68,6 @@ TEST_F(ClientLibTest, increment_indice_message_superior_max)
 
 TEST_F(ClientLibTest, reset_variables)
 {
-    reset_variables(input);
-
-    ASSERT_EQ(strlen(input->buffer), 0);
-    ASSERT_EQ(input->i, 0);
-}
-
-TEST_F(ClientLibTest, reset_variables_i_non_null)
-{
     input->buffer[0] = 'a';
     input->buffer[1] = 'b';
     input->buffer[2] = 'c';

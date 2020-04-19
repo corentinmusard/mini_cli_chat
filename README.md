@@ -12,6 +12,11 @@ It uses Berkeley sockets, epoll, ncurses, cmake, google test.
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/0a07e19caa974f559eb7f2e901c311bb)](https://www.codacy.com/manual/corentinmusard/mini_cli_chat)
 
 ## Coding Process
+
+### Using [Design by contract](//barrgroup.com/embedded-systems/how-to/design-by-contract-for-embedded-software)
+ (DbC).
+Preconditions are checked with `assert`s, postconditions are checked within tests.
+
 ### Tools used to ensure good code
 -   [scan-build](//clang-analyzer.llvm.org/scan-build.html)
 -   [clang-tidy](//clang.llvm.org/extra/clang-tidy/)
