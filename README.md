@@ -13,8 +13,7 @@ It uses Berkeley sockets, epoll, ncurses, cmake, google test.
 
 ## Coding Process
 
-### Using [Design by contract](//barrgroup.com/embedded-systems/how-to/design-by-contract-for-embedded-software)
- (DbC).
+### Using [Design by contract](//barrgroup.com/embedded-systems/how-to/design-by-contract-for-embedded-software) (DbC).
 Preconditions are checked with `assert`s, postconditions are checked within tests.
 
 ### Tools used to ensure good code
