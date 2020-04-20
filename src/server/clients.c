@@ -15,7 +15,10 @@ Clients* init_clients(void) {
         return c;
 }
 
-void add_client(Clients *l, int fd) {
+/**
+ * Initialize and return a client
+ */
+static Client* init_client(Clients *l, int fd) {
         Client *c;
 
         assert(l && "should not be NULL");
@@ -23,14 +26,36 @@ void add_client(Clients *l, int fd) {
 
         c = malloc(sizeof(Client));
         assert(c);
+
+        c->list = l;
+        c->next = NULL;
+
+        c->username = NULL;
         c->fd = fd;
+
+        return c;
+}
+
+void add_client(Clients *l, int fd) {
+        Client *c;
+
+        assert(l && "should not be NULL");
+        assert(fd >= 0 && "should be a valid file descriptor");
+
+        c = init_client(l, fd);
         c->next = l->head;
 
         l->head = c;
         l->nb++;
 }
 
-void delete_client(Clients *l, int fd) {
+void delete_client(Client *c) {
+        assert(c && "should not be NULL");
+
+        delete_client_fd(c->list, c->fd);
+}
+
+void delete_client_fd(Clients *l, int fd) {
         Client *c;
 
         assert(l && "should not be NULL");
@@ -54,6 +79,29 @@ void delete_client(Clients *l, int fd) {
                 free(c->next);
                 c->next = next;
                 l->nb--;
+        } else {
+                assert(0 && "fd should be in l");
+        }
+}
+
+Client* get_client(const Clients *l, int fd) {
+        Client *c;
+
+        assert(l && "should not be NULL");
+        assert(l->head && "should not be NULL");
+        assert(fd >= 0 && "should be a valid file descriptor");
+
+        c = l->head;
+        if (c->fd == fd) {
+                return c;
+        }
+
+        while (c->next != NULL && c->next->fd != fd) {
+                c = c->next;
+        }
+
+        if (c->next != NULL) {
+                return c->next;
         } else {
                 assert(0 && "fd should be in l");
         }

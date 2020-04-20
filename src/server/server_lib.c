@@ -53,38 +53,39 @@ int server_async_init(int server_fd) {
 /**
  * Remove client from clients' list and close client's fd
  */
-static void disconnect_client(Clients *clients, int fd) {
-        assert(clients && "should not be NULL");
-        assert(fd >= 0 && "should be a valid file descriptor");
+static void disconnect_client(Client *c) {
+        assert(c && "should not be NULL");
+        assert(c->list && "should not be NULL");
+        assert(c->fd && "should not be NULL");
 
-        delete_client(clients, fd);
-        close(fd);
-        info("%d: connection closed\n", fd);
+        info("%d: connection closed\n", c->fd);
+        close(c->fd);
+        delete_client(c);
 }
 
-void client_message_handling(Clients *clients, int fd) {
+void client_message_handling(Client *c) {
         char buffer[MAXMSG] = {0};
         ssize_t status;
 
-        assert(clients && "should not be NULL");
-        assert(fd >= 0 && "should be a valid file descriptor");
+        assert(c && "should not be NULL");
 
-        status = read(fd, buffer, sizeof(buffer));
+        status = read(c->fd, buffer, sizeof(buffer));
         if (status == -1) { //error
                 return;
         }
 
         if (status == 0) { //connection closed
                 char msg[MAXMSG] = {0};
-                snprintf(msg, MAXMSG, "%d: leave the server\n", fd);
+                snprintf(msg, MAXMSG, "%d: leave the server\n", c->fd);
 
-                disconnect_client(clients, fd);
-                broadcast_message(clients, msg, sizeof(msg));
+                broadcast_message(c->list, msg, sizeof(msg));
                 info(msg);
-        } else {
-                broadcast_message(clients, buffer, sizeof(buffer));
-                info("%d: %.*s\n", fd, MAXMSG, buffer);
+                disconnect_client(c);
+                return;
         }
+
+        broadcast_message(c->list, buffer, sizeof(buffer));
+        info("%d: %.*s\n", c->fd, MAXMSG, buffer);
 }
 
 /**
@@ -97,15 +98,13 @@ static int connect_client(Clients *clients, int fd, int epollfd) {
         assert(fd >= 0 && "should be a valid file descriptor");
         assert(epollfd >= 0 && "should be a valid file descriptor");
 
-        add_client(clients, fd);
-
         err = async_add(epollfd, fd, EPOLLIN | EPOLLET);
         if (err == -1) {
-                delete_client(clients, fd);
                 info("%d: async_add failed\n", fd);
                 return -1;
         }
 
+        add_client(clients, fd);
         info("%d: connection opened\n", fd);
         return 0;
 }

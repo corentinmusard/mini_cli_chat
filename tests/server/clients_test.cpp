@@ -10,29 +10,29 @@ class ClientsTest : public ::testing::Test
 {
 protected:
     void SetUp() override {
-        c = init_clients();
+        clients = init_clients();
     }
 
     void TearDown() override {
-        free_clients(c);
+        free_clients(clients);
     }
 
     void assert_is_empty() {
-        ASSERT_EQ(c->head, NULL);
-        ASSERT_EQ(c->nb, 0);
+        ASSERT_EQ(clients->head, NULL);
+        ASSERT_EQ(clients->nb, 0);
     }
 
     void assert_fds_are(const int *fds, int size) {
-        Client *cl = c->head;
-        ASSERT_EQ(c->nb, size);
+        Client *c = clients->head;
+        ASSERT_EQ(clients->nb, size);
         for (int i = 0; i < size; i++) {
-            ASSERT_EQ(cl->fd, fds[i]);
-            cl = cl->next;
+            ASSERT_EQ(c->fd, fds[i]);
+            c = c->next;
         }
-        ASSERT_EQ(cl, NULL);
+        ASSERT_EQ(c, NULL);
     }
 
-    Clients *c;
+    Clients *clients;
 };
 
 TEST_F(ClientsTest, init_clients)
@@ -44,7 +44,7 @@ TEST_F(ClientsTest, add_client)
 {
     int fds[1] = {2};
 
-    add_client(c, 2);
+    add_client(clients, 2);
 
     assert_fds_are(fds, 1);
 }
@@ -53,18 +53,80 @@ TEST_F(ClientsTest, add_clients)
 {
     int fds[4] = {3, 2, 4, 2};
 
-    add_client(c, 2);
-    add_client(c, 4);
-    add_client(c, 2);
-    add_client(c, 3);
+    add_client(clients, 2);
+    add_client(clients, 4);
+    add_client(clients, 2);
+    add_client(clients, 3);
 
     assert_fds_are(fds, 4);
 }
 
+TEST_F(ClientsTest, delete_client_fd)
+{
+    add_client(clients, 2);
+    delete_client_fd(clients, 2);
+
+    assert_is_empty();
+}
+
+TEST_F(ClientsTest, delete_client_fd_duplicate)
+{
+    int fds[2] = {1, 2};
+
+    add_client(clients, 2);
+    add_client(clients, 2);
+    add_client(clients, 1);
+    delete_client_fd(clients, 2);
+
+    assert_fds_are(fds, 2);
+}
+
+TEST_F(ClientsTest, delete_client_fd_multiple_clients)
+{
+    int fds[3] = {1, 3, 4};
+
+    add_client(clients, 4);
+    add_client(clients, 2);
+    add_client(clients, 3);
+    add_client(clients, 1);
+    delete_client_fd(clients, 2);
+
+    assert_fds_are(fds, 3);
+}
+
+TEST_F(ClientsTest, get_client)
+{
+    add_client(clients, 2);
+    Client *client = get_client(clients, 2);
+
+    ASSERT_EQ(client->fd, 2);
+}
+
+TEST_F(ClientsTest, get_client_middle)
+{
+    add_client(clients, 3);
+    add_client(clients, 2);
+    add_client(clients, 1);
+    Client *client = get_client(clients, 2);
+
+    ASSERT_EQ(client->fd, 2);
+}
+
+TEST_F(ClientsTest, get_client_last)
+{
+    add_client(clients, 3);
+    add_client(clients, 2);
+    add_client(clients, 1);
+    Client *client = get_client(clients, 3);
+
+    ASSERT_EQ(client->fd, 3);
+}
+
 TEST_F(ClientsTest, delete_client)
 {
-    add_client(c, 2);
-    delete_client(c, 2);
+    add_client(clients, 2);
+    Client *c = get_client(clients, 2);
+    delete_client(c);
 
     assert_is_empty();
 }
@@ -73,10 +135,12 @@ TEST_F(ClientsTest, delete_client_duplicate)
 {
     int fds[2] = {1, 2};
 
-    add_client(c, 2);
-    add_client(c, 2);
-    add_client(c, 1);
-    delete_client(c, 2);
+    add_client(clients, 2);
+    add_client(clients, 2);
+    add_client(clients, 1);
+
+    Client *c = get_client(clients, 2);
+    delete_client(c);
 
     assert_fds_are(fds, 2);
 }
@@ -85,12 +149,13 @@ TEST_F(ClientsTest, delete_client_multiple_clients)
 {
     int fds[3] = {1, 3, 4};
 
-    add_client(c, 4);
-    add_client(c, 2);
-    add_client(c, 3);
-    add_client(c, 1);
-    delete_client(c, 2);
+    add_client(clients, 4);
+    add_client(clients, 2);
+    add_client(clients, 3);
+    add_client(clients, 1);
+
+    Client *c = get_client(clients, 2);
+    delete_client(c);
 
     assert_fds_are(fds, 3);
 }
-

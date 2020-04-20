@@ -38,7 +38,8 @@ int main(void) {
                         if (events[i].data.fd == server_fd) { //event from server socket
                                 accept_client(clients, epollfd, server_fd);
                         } else { //event from client socket
-                                client_message_handling(clients, events[i].data.fd);
+                                Client *c = get_client(clients, events[i].data.fd);
+                                client_message_handling(c);
                         }
                 }
         }

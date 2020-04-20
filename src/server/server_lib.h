@@ -12,7 +12,7 @@ extern "C" {
  */
 int server_async_init(int server_fd);
 
-void client_message_handling(Clients *clients, int fd);
+void client_message_handling(Client *c);
 
 void accept_client(Clients *clients, int epollfd, int server_fd);
 
