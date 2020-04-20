@@ -18,7 +18,6 @@ if (CMAKE_C_COMPILER_ID STREQUAL "GNU")
         -Wcast-qual
         -Wconversion
         -Wdate-time
-        -Wdeclaration-after-statement
         -Wdisabled-optimization
         -Wdouble-promotion
         -Wfloat-equal

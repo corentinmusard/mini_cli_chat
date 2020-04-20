@@ -8,7 +8,7 @@ project(mini_cli_chat VERSION 0.1
                 DESCRIPTION "description of mini_cli_chat"
                 LANGUAGES C CXX)
 
-set(CMAKE_C_STANDARD 11)
+set(CMAKE_C_STANDARD 99) # or newer
 set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_C_EXTENSIONS ON)
 set(CMAKE_CXX_STANDARD 11)

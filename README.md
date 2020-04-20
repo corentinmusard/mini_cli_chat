@@ -13,8 +13,10 @@ It uses Berkeley sockets, epoll, ncurses, cmake, google test.
 
 ## Coding Process
 
+Project is conforming to C99 and newer. It requires POSIX and GNU extentions.
+
 ### Using [Design by contract](//barrgroup.com/embedded-systems/how-to/design-by-contract-for-embedded-software) (DbC)
-Preconditions are checked with `assert`s, postconditions are checked within tests.
+Preconditions are checked with `assert`, postconditions are checked within tests.
 
 ### Tools used to ensure good code
 -   [scan-build](//clang-analyzer.llvm.org/scan-build.html)
@@ -65,6 +67,6 @@ None for now because it's not really usable.
 -   [x] write function docstring
 -   [ ] make tests
 -   [ ] make code modular with plugins
--   [ ] use portable code (currently needing POSIX and GNU extentions)
+-   [ ] use portable code
 -   [ ] add IPv6 support
 -   [ ] connection to server with ssl

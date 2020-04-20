@@ -16,19 +16,19 @@ typedef struct Clients_s Clients;
  * A client
  */
 struct Client_s {
-        Clients *list; // list of client containing this client
-        Client *next; // next client or NULL
+    Clients *list; // list of client containing this client
+    Client *next; // next client or NULL
 
-        char username[MAX_USERNAME_LENGTH]; // client's username
-        int fd; // client' socket fd
+    char username[MAX_USERNAME_LENGTH]; // client's username
+    int fd; // client' socket fd
 };
 
 /**
  * A list of client
  */
 struct Clients_s {
-        Client *head; // first client
-        int nb; // number of client
+    Client *head; // first client
+    int nb; // number of client
 };
 
 /**

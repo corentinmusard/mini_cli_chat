@@ -7,9 +7,9 @@ extern "C" {
 #include <curses.h>
 
 typedef struct {
-        WINDOW *window; // to type new message
-        int i; // cursor indice
-        char *buffer; // message
+    WINDOW *window; // to type new message
+    int i; // cursor indice
+    char *buffer; // message
 } Input;
 
 /**
@@ -23,8 +23,8 @@ Input* input_init(void);
 void free_input(Input *input);
 
 typedef struct {
-        WINDOW *window; // to display messages received from server
-        int y; // last message line
+    WINDOW *window; // to display messages received from server
+    int y; // last message line
 } Messages;
 
 /**
@@ -38,8 +38,8 @@ Messages* messages_init(void);
 void free_messages(Messages *messages);
 
 typedef struct {
-  Messages *msgs;
-  Input *input;
+    Messages *msgs;
+    Input *input;
 } Screen;
 
 /**
