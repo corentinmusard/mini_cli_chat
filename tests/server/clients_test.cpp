@@ -49,7 +49,7 @@ TEST_F(ClientsTest, add_client)
     assert_fds_are(fds, 1);
 }
 
-TEST_F(ClientsTest, add_clients)
+TEST_F(ClientsTest, add_client_multiple)
 {
     int fds[4] = {3, 2, 4, 2};
 
@@ -59,6 +59,12 @@ TEST_F(ClientsTest, add_clients)
     add_client(clients, 3);
 
     assert_fds_are(fds, 4);
+}
+
+TEST_F(ClientsTest, add_client_return)
+{
+    Client *c = add_client(clients, 2);
+    ASSERT_EQ(c->fd, 2);
 }
 
 TEST_F(ClientsTest, delete_client_fd)

@@ -13,9 +13,14 @@ extern "C" {
 #define PORT 5000
 
 /**
- * Maximum length of a message
+ * Maximum message length sent by a client
  */
-#define MAXMSG 100
+#define MAXMSG_CLI 100
+
+/**
+ * Maximum message length sent by the server
+ */
+#define MAXMSG_SERV 150
 
 /**
  * Default value is 0

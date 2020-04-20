@@ -1,6 +1,7 @@
 #include <assert.h>
 #include <stddef.h>
 #include <stdio.h>
+#include <string.h>
 #include <sys/epoll.h>
 #include <sys/socket.h>
 #include <unistd.h>
@@ -58,13 +59,42 @@ static void disconnect_client(Client *c) {
         assert(c->list && "should not be NULL");
         assert(c->fd && "should not be NULL");
 
-        info("%d: connection closed\n", c->fd);
+        info("%s: connection closed\n", c->username);
         close(c->fd);
         delete_client(c);
 }
 
+/**
+ * Execute special command starting with '/'
+ */
+static void special_command_handling(Client *c, char *buffer) {
+        char *token;
+
+        assert(c && "should not be NULL");
+        assert(buffer && "should not be NULL");
+
+        token = strtok(buffer, " ");
+        if (token == NULL) {
+                return;
+        }
+
+        if (strcmp("/NICK", token) == 0) {
+                char *username = strtok(NULL, " ");
+                if (username == NULL) {
+                        return;
+                }
+                // update username
+                memset(c->username, 0, MAX_USERNAME_LENGTH);
+                strncpy(c->username, username, MAX_USERNAME_LENGTH);
+                c->username[MAX_USERNAME_LENGTH] = '\0';
+        } else { //command unknown
+
+        }
+}
+
 void client_message_handling(Client *c) {
-        char buffer[MAXMSG] = {0};
+        char msg[MAXMSG_SERV] = {0};
+        char buffer[MAXMSG_CLI] = {0};
         ssize_t status;
 
         assert(c && "should not be NULL");
@@ -75,8 +105,7 @@ void client_message_handling(Client *c) {
         }
 
         if (status == 0) { //connection closed
-                char msg[MAXMSG] = {0};
-                snprintf(msg, MAXMSG, "%d: leave the server\n", c->fd);
+                snprintf(msg, MAXMSG_SERV, "%s: leave the server\n", c->username);
 
                 broadcast_message(c->list, msg, sizeof(msg));
                 info(msg);
@@ -84,14 +113,23 @@ void client_message_handling(Client *c) {
                 return;
         }
 
-        broadcast_message(c->list, buffer, sizeof(buffer));
-        info("%d: %.*s\n", c->fd, MAXMSG, buffer);
+        if (buffer[0] == '/') { // special command
+                special_command_handling(c, buffer);
+                return;
+        }
+
+        snprintf(msg, MAXMSG_SERV, "%s: %s\n", c->username, buffer);
+        broadcast_message(c->list, msg, sizeof(msg));
+        info(msg);
 }
 
 /**
  * Add client to clients' list and store client's fd
+ * Return NULL on failure
+ * Return client on success
  */
-static int connect_client(Clients *clients, int fd, int epollfd) {
+static Client* connect_client(Clients *clients, int fd, int epollfd) {
+        Client *c;
         int err;
 
         assert(clients && "should not be NULL");
@@ -101,17 +139,18 @@ static int connect_client(Clients *clients, int fd, int epollfd) {
         err = async_add(epollfd, fd, EPOLLIN | EPOLLET);
         if (err == -1) {
                 info("%d: async_add failed\n", fd);
-                return -1;
+                return NULL;
         }
 
-        add_client(clients, fd);
-        info("%d: connection opened\n", fd);
-        return 0;
+        c = add_client(clients, fd);
+        info("%s: connection opened\n", c->username);
+        return c;
 }
 
 void accept_client(Clients *clients, int epollfd, int server_fd) {
-        char msg[MAXMSG] = {0};
+        char msg[MAXMSG_SERV] = {0};
         ssize_t err;
+        Client *c;
         int fd;
 
         assert(clients && "should not be NULL");
@@ -124,18 +163,18 @@ void accept_client(Clients *clients, int epollfd, int server_fd) {
                 return;
         }
 
-        err = connect_client(clients, fd, epollfd);
-        if (err == -1) {
+        c = connect_client(clients, fd, epollfd);
+        if (c == NULL) {
                 return;
         }
 
-        err = write(fd, CHAT_BANNER, sizeof(CHAT_BANNER));
+        err = write(c->fd, CHAT_BANNER, sizeof(CHAT_BANNER));
         if (err == -1) {
-                info("%d: error sending CHAT_BANNER\n", fd);
+                info("%s: error sending CHAT_BANNER\n", c->username);
                 return;
         }
 
-        snprintf(msg, MAXMSG, "%d: join the server\n", fd);
-        broadcast_message(clients, msg, sizeof(msg));
+        snprintf(msg, MAXMSG_SERV, "%s: join the server\n", c->username);
+        broadcast_message(c->list, msg, sizeof(msg));
         info(msg);
 }

@@ -134,8 +134,8 @@ static void display_message(Messages *msgs, const char *buffer, size_t size) {
 }
 
 int server_message_handling(Messages *msgs, int sockfd) {
-        char buffer[MAXMSG] = {0};
-        char msg[MAXMSG] = {0};
+        char buffer[MAXMSG_SERV] = {0};
+        char msg[MAXMSG_SERV] = {0};
         int msg_len = 0;
         ssize_t status;
 
@@ -216,7 +216,7 @@ int stdin_char_handling(const Screen *s, int sockfd) {
                         delete_message_character(s->input);
                         break;
                 default:
-                        if (s->input->i == (MAXMSG - 1)) {  // max message length reached
+                        if (s->input->i == (MAXMSG_CLI - 1)) {  // max message length reached
                                 break; // ignore character for now
                         }
                         input_char_handling(s->input, c);

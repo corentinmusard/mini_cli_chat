@@ -4,6 +4,11 @@
 extern "C" {
 #endif
 
+/**
+ * Max username length
+ */
+#define MAX_USERNAME_LENGTH 20
+
 typedef struct Client_s Client;
 typedef struct Clients_s Clients;
 
@@ -14,7 +19,7 @@ struct Client_s {
         Clients *list; // list of client containing this client
         Client *next; // next client or NULL
 
-        char *username; // client's username
+        char username[MAX_USERNAME_LENGTH]; // client's username
         int fd; // client' socket fd
 };
 
@@ -23,7 +28,7 @@ struct Client_s {
  */
 struct Clients_s {
         Client *head; // first client
-        int nb; // nb of client
+        int nb; // number of client
 };
 
 /**
@@ -33,8 +38,9 @@ Clients* init_clients(void);
 
 /**
  * Add a client with value `fd` at the beginning of the linked list `l`
+ * Return this client
  */
-void add_client(Clients *l, int fd);
+Client* add_client(Clients *l, int fd);
 
 /**
  * Delete client `c` from its list

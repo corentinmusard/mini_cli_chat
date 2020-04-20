@@ -11,7 +11,7 @@ Input* input_init(void) {
 
         input->window = NULL;
         input->i = 0;
-        input->buffer = calloc(MAXMSG, sizeof(char));
+        input->buffer = calloc(MAXMSG_CLI, sizeof(char));
 
         assert(input->buffer);
 

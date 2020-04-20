@@ -1,5 +1,7 @@
 #include <assert.h>
+#include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "clients.h"
 
@@ -20,6 +22,7 @@ Clients* init_clients(void) {
  */
 static Client* init_client(Clients *l, int fd) {
         Client *c;
+        char username[MAX_USERNAME_LENGTH] = {0};
 
         assert(l && "should not be NULL");
         assert(fd >= 0 && "should be a valid file descriptor");
@@ -30,13 +33,15 @@ static Client* init_client(Clients *l, int fd) {
         c->list = l;
         c->next = NULL;
 
-        c->username = NULL;
+        snprintf(username, MAX_USERNAME_LENGTH, "user%d", fd);
+        strncpy(c->username, username, MAX_USERNAME_LENGTH);
+
         c->fd = fd;
 
         return c;
 }
 
-void add_client(Clients *l, int fd) {
+Client* add_client(Clients *l, int fd) {
         Client *c;
 
         assert(l && "should not be NULL");
@@ -47,6 +52,8 @@ void add_client(Clients *l, int fd) {
 
         l->head = c;
         l->nb++;
+
+        return c;
 }
 
 void delete_client(Client *c) {
