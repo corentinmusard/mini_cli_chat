@@ -4,6 +4,8 @@
 extern "C" {
 #endif
 
+#include <stdbool.h>
+
 /**
  * Max username length
  */
@@ -44,8 +46,9 @@ Client* add_client(Clients *l, int fd);
 
 /**
  * Delete client `c` from its list
+ * c is freed, don't use it afterwards
  */
-void delete_client(Client *c);
+void delete_client(const Client *c);
 
 /**
  * Delete the first client from `l` who has `fd`
@@ -63,6 +66,11 @@ Client* get_client(const Clients *l, int fd);
  * Free all clients
  */
 void free_clients(Clients *l);
+
+/**
+ * Return true if username isn't used by any clients, return false otherwise
+ */
+bool is_available_username(const Clients *l, const char *username);
 
 #ifdef __cplusplus
 }

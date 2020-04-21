@@ -90,7 +90,14 @@ static int execute_command(const char *command, int sockfd) {
     if (strcmp("/quit", command) == 0 || strcmp("/q", command) == 0) {
         interrupt = 1;
         return 0;
-    } else if (strncmp("/send ", command, 6) == 0) {
+    }
+    if (strncmp("/nick ", command, 6) == 0) {
+        if (write(sockfd, command, strlen(command)) == -1) {
+            perror("write");
+            return -1;
+        }
+    }
+    if (strncmp("/send ", command, 6) == 0) {
         const char *buffer = command + 6;
         size_t len = strlen(buffer);
         if (len == 0) { // command is just "/send "

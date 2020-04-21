@@ -1,4 +1,5 @@
 #include <assert.h>
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -29,7 +30,12 @@ static Client* init_client(Clients *l, int fd) {
     c->next = NULL;
 
     char username[MAX_USERNAME_LENGTH] = {0};
-    snprintf(username, MAX_USERNAME_LENGTH, "user%d", fd);
+    int i = 0;
+    do {
+        memset(username, 0, MAX_USERNAME_LENGTH);
+        snprintf(username, MAX_USERNAME_LENGTH, "user%d", fd+i);
+        i++;
+    } while (!is_available_username(l, username));
     strncpy(c->username, username, MAX_USERNAME_LENGTH);
 
     c->fd = fd;
@@ -50,7 +56,7 @@ Client* add_client(Clients *l, int fd) {
     return c;
 }
 
-void delete_client(Client *c) {
+void delete_client(const Client *c) {
     assert(c && "should not be NULL");
 
     delete_client_fd(c->list, c->fd);
@@ -114,4 +120,28 @@ void free_clients(Clients *l) {
     }
 
     free(l);
+}
+
+bool is_available_username(const Clients *l, const char *username) {
+    assert(l && "should not be NULL");
+    assert(username && "should not be NULL");
+
+    if (l->head == NULL) {
+        return true;
+    }
+
+    Client *c = l->head;
+    if (strcmp(c->username, username) == 0) {
+        return false;
+    }
+
+    while (c->next != NULL && strcmp(c->username, username) != 0) {
+        c = c->next;
+    }
+
+    if (c->next != NULL) {
+        return false;
+    }
+
+    return true;
 }

@@ -165,3 +165,32 @@ TEST_F(ClientsTest, delete_client_multiple_clients)
 
     assert_fds_are(fds, 3);
 }
+
+TEST_F(ClientsTest, is_available_username_false_first)
+{
+    Client *c = add_client(clients, 2);
+    ASSERT_FALSE(is_available_username(clients, c->username));
+}
+
+TEST_F(ClientsTest, is_available_username_false_multiple)
+{
+    add_client(clients, 3);
+    Client *c = add_client(clients, 2);
+    add_client(clients, 1);
+
+    ASSERT_FALSE(is_available_username(clients, c->username));
+}
+
+TEST_F(ClientsTest, is_available_username_true_empty)
+{
+    ASSERT_TRUE(is_available_username(clients, "__random_name__"));
+}
+
+TEST_F(ClientsTest, is_available_username_true_multiple)
+{
+    add_client(clients, 3);
+    add_client(clients, 2);
+    add_client(clients, 1);
+
+    ASSERT_TRUE(is_available_username(clients, "__random_name__"));
+}

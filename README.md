@@ -44,7 +44,7 @@ None for now because it's not really usable.
 -   [x] add date to message
 -   [x] server: forward messages received from a client to each clients connected to the server
 -   [x] server: notify clients when someone join/leave server
--   [ ] add nicknames support
+-   [x] add nicknames support (default name, renaming and uniques nicknames)
 -   [ ] client: when screen is full, scroll messsages and display new messages
 -   [ ] add privates messages support
 -   [ ] add a way to login into a specific nickname with a password
@@ -53,13 +53,20 @@ None for now because it's not really usable.
 -   [ ] add moderation support
 -   [ ] add roles (modo/admin/muted) support
 
-### Settings (in no particular order)
+### Optionnal features
+-   [ ] client: add command starting with a slash like /list, /me, /whoami, /whois
 -   [ ] client: ncurses: add colors to nicknames, channels and more
--   [ ] client: add command via adding a slash like /list, /me, /whoami, /whois
+
+### Settings
 -   [ ] client: add setting configuration (nickname, server ip/port, log settings)
 -   [ ] server: add setting configuration (server port, log settings)
 
-### Technical things (in no particular order)
+### Log system
+-   [x] server: pseudo log system (print to stdout)
+-   [ ] create or append to a file client.log/server.log
+-   [ ] write every messages and errors to that file
+
+### Technical things
 -   [x] server: allow clients to connect
 -   [x] server: epoll: asynchrone connections 
 -   [x] client: epoll: asynchrone gestion of output(new messages from server) and input(new messages from keyboard)

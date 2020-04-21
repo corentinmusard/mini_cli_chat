@@ -67,22 +67,46 @@ static void special_command_handling(Client *c, char *buffer) {
     assert(c && "should not be NULL");
     assert(buffer && "should not be NULL");
 
-    char *token = strtok(buffer, " ");
+    char msg[MAXMSG_SERV] = {0};
+    snprintf(msg, MAXMSG_SERV, "%s: %s\n", c->username, buffer);
+    info(msg);
+
+    char *saveptr = NULL;
+    const char *token = strtok_r(buffer, " ", &saveptr);
     if (token == NULL) {
         return;
     }
 
-    if (strcmp("/NICK", token) == 0) {
-        char *username = strtok(NULL, " ");
+    if (strcmp("/nick", token) == 0) {
+        const char *username = strtok_r(NULL, " ", &saveptr);
         if (username == NULL) {
+            char reply[MAXMSG_SERV] = "/nick <nickname>\n";
+            write(c->fd, reply, sizeof(reply));
+            info(reply);
             return;
         }
+        //check availability
+        if (!is_available_username(c->list, username)) {
+            char reply[MAXMSG_SERV] = "Nickname not available\n";
+            write(c->fd, reply, sizeof(reply));
+            info(reply);
+            return;
+        }
+
+        // notify each clients
+        char reply[MAXMSG_SERV] = {0};
+        snprintf(reply, MAXMSG_SERV, "%s is now known as %s\n", c->username, username);
+        broadcast_message(c->list, reply, sizeof(reply));
+        info(reply);
+
         // update username
         memset(c->username, 0, MAX_USERNAME_LENGTH);
         strncpy(c->username, username, MAX_USERNAME_LENGTH);
-        c->username[MAX_USERNAME_LENGTH] = '\0';
-    } else { //command unknown
-        //todo
+        c->username[MAX_USERNAME_LENGTH - 1] = '\0';
+    } else { //unknown command
+        char reply[MAXMSG_SERV] = "Unknown command\n";
+        write(c->fd, reply, sizeof(reply));
+        info(reply);
     }
 }
 
