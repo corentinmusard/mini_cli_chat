@@ -130,7 +130,7 @@ bool is_available_username(const Clients *l, const char *username) {
         return true;
     }
 
-    Client *c = l->head;
+    const Client *c = l->head;
     if (strcmp(c->username, username) == 0) {
         return false;
     }

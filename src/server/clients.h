@@ -68,7 +68,8 @@ Client* get_client(const Clients *l, int fd);
 void free_clients(Clients *l);
 
 /**
- * Return true if username isn't used by any clients, return false otherwise
+ * Return true if username isn't used by any clients
+ * Return false otherwise
  */
 bool is_available_username(const Clients *l, const char *username);
 

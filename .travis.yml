@@ -25,13 +25,13 @@ os:
 # To build each config
 jobs:
   include:
-    - name: "Linux gcc, gcov"
+    - name: "Linux gcc8, gcov8"
       env:
         - CC=gcc-8
         - CXX=g++-8
         - GCOV=true
 
-    - name: "Linux clang"
+    - name: "Linux clang6"
       env:
         - CC=clang-6.0
         - CXX=clang++-6.0

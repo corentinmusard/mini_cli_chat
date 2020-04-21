@@ -36,7 +36,7 @@ static void print_message(Messages *msgs, const char *message) {
  */
 static void delete_message_character(Input *input) {
     assert(input && "should not be NULL");
-    assert(input->i >= 0 && "should be positive");    
+    assert(input->i >= 0 && "should be positive");
 
     input->buffer[input->i] = '\0';
     input->i--;
@@ -78,10 +78,15 @@ static void reset_variables(Input *input) {
 }
 
 /**
+ * Command is not in the whitelisted command
+ */
+#define UNKNOWN_COMMAND (-2)
+
+/**
  * Execute `command`
  * Return 0 on success
  * Return -1 on failure
- * Return -2 if `command` is unknown
+ * Return UNKNOWN_COMMAND if `command` is unknown
  */
 static int execute_command(const char *command, int sockfd) {
     assert(command && "should not be NULL");
@@ -110,7 +115,7 @@ static int execute_command(const char *command, int sockfd) {
         }
         return 0;
     }
-    return -2;
+    return UNKNOWN_COMMAND;
 }
 
 /**
@@ -196,10 +201,11 @@ static int evaluate_complete_message(const Screen *s, int sockfd) {
     }
     if (s->input->buffer[0] == '/') { // It's a command
         int e = execute_command(s->input->buffer, sockfd);
-        if (e == -2) {
-            print_message(s->msgs, "Command unknown");
-        } else if (e == -1) {
+        if (e == -1) {
             return -1;
+        }
+        if (e == UNKNOWN_COMMAND) {
+            print_message(s->msgs, "Command unknown");
         }
         return 0;
     }
