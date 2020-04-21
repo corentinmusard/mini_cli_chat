@@ -36,6 +36,7 @@ static void print_message(Messages *msgs, const char *message) {
  */
 static void delete_message_character(Input *input) {
     assert(input && "should not be NULL");
+    assert(input->i >= 0 && "should be positive");    
 
     input->buffer[input->i] = '\0';
     input->i--;
@@ -79,16 +80,30 @@ static void reset_variables(Input *input) {
 /**
  * Execute `command`
  * Return 0 on success
- * Return -1 if `command` is unknown
+ * Return -1 on failure
+ * Return -2 if `command` is unknown
  */
-static int execute_command(const char *command) {
+static int execute_command(const char *command, int sockfd) {
     assert(command && "should not be NULL");
+    assert(sockfd >= 0 && "should be a valid file descriptor");
 
     if (strcmp("/quit", command) == 0 || strcmp("/q", command) == 0) {
         interrupt = 1;
         return 0;
+    } else if (strncmp("/send ", command, 6) == 0) {
+        const char *buffer = command + 6;
+        size_t len = strlen(buffer);
+        if (len == 0) { // command is just "/send "
+            return 0;
+        }
+
+        if (write(sockfd, buffer, len) == -1) {
+            perror("write");
+            return -1;
+        }
+        return 0;
     }
-    return -1;
+    return -2;
 }
 
 /**
@@ -169,15 +184,15 @@ static int evaluate_complete_message(const Screen *s, int sockfd) {
     assert(s && "should not be NULL");
     assert(sockfd >= 0 && "should be a valid file descriptor");
 
-    if (s->input->i == 0) {  // blank message
-        // don't send it
-        return 0;
+    if (s->input->i == 0) { // blank message
+        return 0; // don't send it
     }
-    if (s->input->buffer[0] == '/') {  // start with '/'
-        // It's a command
-        if (execute_command(s->input->buffer) == -1) {
-            // command unknown
+    if (s->input->buffer[0] == '/') { // It's a command
+        int e = execute_command(s->input->buffer, sockfd);
+        if (e == -2) {
             print_message(s->msgs, "Command unknown");
+        } else if (e == -1) {
+            return -1;
         }
         return 0;
     }

@@ -78,9 +78,9 @@ void delete_client_fd(Clients *l, int fd) {
         free(c->next);
         c->next = next;
         l->nb--;
-    } else {
-        assert(0 && "fd should be in l");
+        return;
     }
+    assert(0 && "fd should be in l");
 }
 
 Client* get_client(const Clients *l, int fd) {
@@ -99,9 +99,8 @@ Client* get_client(const Clients *l, int fd) {
 
     if (c->next != NULL) {
         return c->next;
-    } else {
-        assert(0 && "fd should be in l");
     }
+    assert(0 && "fd should be in l");
 }
 
 void free_clients(Clients *l) {
