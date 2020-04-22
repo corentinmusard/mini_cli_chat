@@ -60,6 +60,11 @@ char* log_format(const char *buffer, size_t size) {
     struct tm tm_s;
     get_localtime(&tm_s);
 
-    snprintf(message, m_size, TIME_FORMAT " %s", tm_s.tm_hour, tm_s.tm_min, tm_s.tm_sec, buffer);
+    int len = snprintf(message, m_size, TIME_FORMAT " %s", tm_s.tm_hour, tm_s.tm_min, tm_s.tm_sec, buffer);
+    assert(len > 0 && "snprintf return a positive number");
+    if ((size_t)len >= m_size) {
+        info("%s: truncated output: len=%d, m_size=%zu\n", __func__, len, m_size);
+    }
+
     return message;
 }

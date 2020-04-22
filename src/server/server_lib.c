@@ -73,8 +73,12 @@ static void send_fd(int fd, const char *fmt, ...) {
     char msg[MAXMSG_SERV] = {0};
     va_list args;
     va_start(args, fmt);
-    vsnprintf(msg, MAXMSG_SERV, fmt, args);
+    int len = vsnprintf(msg, MAXMSG_SERV, fmt, args);
     va_end(args);
+
+    if (len >= MAXMSG_SERV) {
+        info("%s: truncated output: len=%d, MAXMSG_SERV=%d\n", __func__, len, MAXMSG_SERV);
+    }
 
     info(msg);
     write(fd, msg, sizeof(msg));
@@ -92,8 +96,12 @@ static void send_everyone(const Clients *clients, const char *fmt, ...) {
     char msg[MAXMSG_SERV] = {0};
     va_list args;
     va_start(args, fmt);
-    vsnprintf(msg, MAXMSG_SERV, fmt, args);
+    int len = vsnprintf(msg, MAXMSG_SERV, fmt, args);
     va_end(args);
+
+    if (len >= MAXMSG_SERV) {
+        info("%s: truncated output: len=%d, MAXMSG_SERV=%d\n", __func__, len, MAXMSG_SERV);
+    }
 
     info(msg);
     broadcast_message(clients, msg, sizeof(msg));
