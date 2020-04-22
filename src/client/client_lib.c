@@ -93,7 +93,7 @@ static int execute_command(const char *command, int sockfd) {
     assert(sockfd >= 0 && "should be a valid file descriptor");
 
     if (strcmp("/quit", command) == 0 || strcmp("/q", command) == 0) {
-        interrupt = 1;
+        want_to_exit();
         return 0;
     }
     if (strncmp("/nick ", command, 6) == 0) {

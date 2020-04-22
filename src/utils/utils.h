@@ -24,26 +24,31 @@ extern "C" {
 
 /**
  * Default value is 0
- * If value is not 0 then client is going to exit
+ * If value is not 0 then client or server is going to exit
  */
 extern volatile sig_atomic_t interrupt;
 
 /**
- * Register signal SIGINT. When called, it changes a value of `interrupt`
+ * Register signal SIGINT. When called, it changes the value of `interrupt`
  * Return -1 on failure and 0 on succes
  * errno is set by sigaction(2)
  */
 int register_sigint(void);
 
 /**
- * Return true if fd is STDIN_FILENO
+ * client or server is going to exit
  */
-bool is_stdin(int fd);
+void want_to_exit(void);
 
 /**
  * Returne true if error code means failure or sigint has bean triggered.
  */
 bool exit_not_wanted(int err);
+
+/**
+ * Return true if fd is STDIN_FILENO
+ */
+bool is_stdin(int fd);
 
 #ifdef __cplusplus
 }
