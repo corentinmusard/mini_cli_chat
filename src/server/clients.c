@@ -75,18 +75,16 @@ void delete_client_fd(Clients *l, int fd) {
         return;
     }
 
-    while (c->next != NULL && c->next->fd != fd) {
+    assert(c->next != NULL && "fd should be in l");
+    while (c->next->fd != fd) {
         c = c->next;
+        assert(c->next != NULL && "fd should be in l");
     }
 
-    if (c->next != NULL) {
-        Client *next = c->next->next;
-        free(c->next);
-        c->next = next;
-        l->nb--;
-        return;
-    }
-    assert(0 && "fd should be in l");
+    Client *next = c->next->next;
+    free(c->next);
+    c->next = next;
+    l->nb--;
 }
 
 Client* get_client(const Clients *l, int fd) {
@@ -99,14 +97,13 @@ Client* get_client(const Clients *l, int fd) {
         return c;
     }
 
-    while (c->next != NULL && c->next->fd != fd) {
+    assert(c->next != NULL && "fd should be in l");
+    while (c->next->fd != fd) {
         c = c->next;
+        assert(c->next != NULL && "fd should be in l");
     }
-
-    if (c->next != NULL) {
-        return c->next;
-    }
-    assert(0 && "fd should be in l");
+    
+    return c->next;
 }
 
 void free_clients(Clients *l) {

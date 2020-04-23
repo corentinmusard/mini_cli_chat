@@ -53,7 +53,7 @@ script:
   # file to see the specific configuration
   - |
     if [[ $GCOV ]]; then
-      gcov-8 $(find ./src/ ./tests/ -regextype posix-egrep -regex ".*\\.(o)");
+      gcov-8 -b $(find ./tests/ -name "*.o");
       cd ../;
       sonar-scanner;
     fi
