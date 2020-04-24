@@ -3,14 +3,16 @@
 
 #include "log.h"
 
+/**
+ * define setter to modify the return value of the fake time function
+ */
 static time_t t = 0;
+static void set_time(time_t new_t) {
+    t = new_t;
+}
 
 time_t time(time_t *tloc __attribute__ ((unused))) {
     return t;
-}
-
-void set_time(time_t new_t) {
-    t = new_t;
 }
 
 class InfoTest : public ::testing::Test

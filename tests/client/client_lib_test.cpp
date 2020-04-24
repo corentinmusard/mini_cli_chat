@@ -1,13 +1,14 @@
 #include <curses.h>
 #include <gtest/gtest.h>
 
+/**
+ * define getter/setter to modify the return value of the fake getmaxyx macro
+ */
 static int _max_x;
-
-void set_max_x(int new_x) {
+static void set_max_x(int new_x) {
     _max_x = new_x;
 }
-
-int get_max_x(void) {
+static int get_max_x(void) {
     return _max_x;
 }
 

@@ -3,11 +3,14 @@ set(TEST_NAME server_test)
 set(SOURCES
     ../../src/server/clients.c
     ../../src/server/server_network.c
+    ../../src/utils/asynchronous.c
+    ../../src/utils/log.c
 )
 
 set(TESTS
     clients_test.cpp
     network_test.cpp
+    server_lib_test.cpp
 )
 
 add_executable(${TEST_NAME}

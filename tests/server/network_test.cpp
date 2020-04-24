@@ -17,8 +17,9 @@ TEST_F(NetworkTest, start_server)
 
 TEST_F(NetworkTest, start_server_bind_failed)
 {
-    int fd = start_server(PORT+1);
-    int fd2 = start_server(PORT+1);
+    int fd = start_server(PORT+2);
+    ASSERT_GT(fd, 0);
+    int fd2 = start_server(PORT+2);
     ASSERT_EQ(fd2, BIND_FAILED);
     stop_server(fd);
 }

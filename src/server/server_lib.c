@@ -25,6 +25,7 @@ static void broadcast_message(const Clients *clients, const char *buffer, size_t
     assert(clients && "should not be NULL");
     assert(buffer && "should not be NULL");
     assert(size > 0 && "should not be 0");
+    assert(size <= MAXMSG_SERV && "message is too long");
 
     const Client *c = clients->head;
     while (c != NULL) {
