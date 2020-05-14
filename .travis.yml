@@ -46,7 +46,7 @@ script:
   - build-wrapper-linux-x86-64 --out-dir ../bw-output make all
 
   # Execute some tests
-  - GTEST_COLOR=1 ctest
+  - GTEST_COLOR=1 ctest --verbose
 
   # Execute gcov for tests coverage
   # And finally run the SonarQube analysis - read the "sonar-project.properties"
