@@ -4,18 +4,7 @@
 #include <unistd.h>
 
 #include "server/server_lib.c"
-
-/**
- * Create a temporay file, return its file descriptor
- */
-static int get_fake_fd(void) {
-    FILE *f = tmpfile();
-    if (f == NULL) {
-        perror("tmpfile");
-        exit(EXIT_FAILURE);
-    }
-    return fileno(f);
-}
+#include "tests/utils.hpp"
 
 class ServerLibTest : public ::testing::Test
 {
@@ -39,13 +28,7 @@ protected:
     void assert_broadcast_message_equal(const char *buffer) {
         Client *c = clients->head;
         for (int i = 0; i < clients->nb; i++) {
-            char out[MAXMSG_SERV] = {0};
-            off_t off = lseek(c->fd, 0, SEEK_SET);
-            assert(off != -1);
-
-            read(c->fd, out, MAXMSG_SERV);
-            ASSERT_EQ(memcmp(buffer, out, MAXMSG_SERV), 0);
-
+            read_equal(c->fd, buffer);
             c = c->next;
         }
     }

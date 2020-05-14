@@ -19,6 +19,7 @@ find_package(Curses REQUIRED)
 include_directories(${CURSES_INCLUDE_DIR})
 
 # To make #include easier
+include_directories(.)
 include_directories(src)
 include_directories(src/utils)
 
@@ -28,11 +29,11 @@ add_subdirectory(src)
 # Unit tests
 add_subdirectory(3rd_party/google-test)
 
-# To use fff/fff.h
+# To include fff/fff.h
 include_directories(3rd_party)
 
 # Enable CTest testing
 enable_testing()
 
-# Add a testing executable
+# Add testing executables
 add_subdirectory(tests)

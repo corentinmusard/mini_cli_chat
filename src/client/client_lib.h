@@ -19,7 +19,6 @@ int stdin_char_handling(const Screen *s, int sockfd);
 
 /**
  * Initialize async. Return fd of the epoll instance.
- * Return -1 on failure
  */
 int client_async_init(int sockfd);
 

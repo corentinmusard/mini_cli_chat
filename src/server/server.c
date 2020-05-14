@@ -21,12 +21,6 @@ int main(void) {
     }
 
     int epollfd = server_async_init(server_fd);
-    if (epollfd == -1) {
-        perror("server_async_init");
-        stop_server(server_fd);
-        return EXIT_FAILURE;
-    }
-
     Clients *clients = init_clients();
 
     int nfds = 0;

@@ -1,6 +1,7 @@
 set(TEST_NAME server_test)
 
 set(SOURCES
+    ../utils.cpp
     ../../src/server/clients.c
     ../../src/server/server_network.c
     ../../src/utils/asynchronous.c

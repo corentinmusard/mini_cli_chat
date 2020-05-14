@@ -1,6 +1,7 @@
 set(TEST_NAME client_test)
 
 set(SOURCES
+    ../utils.cpp
     ../../src/client/cli.c
     ../../src/client/client_network.c
     ../../src/client/screen.c

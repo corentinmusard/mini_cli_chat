@@ -92,7 +92,7 @@ static int execute_command(const char *command, int sockfd) {
     assert(command && "should not be NULL");
     assert(sockfd >= 0 && "should be a valid file descriptor");
 
-    if (strcmp("/quit", command) == 0 || strcmp("/q", command) == 0) {
+    if (strncmp("/quit", command, 5) == 0 || strncmp("/q", command, 2) == 0) {
         want_to_exit();
         return 0;
     }
@@ -101,6 +101,7 @@ static int execute_command(const char *command, int sockfd) {
             perror("write");
             return -1;
         }
+        return 0;
     }
     if (strncmp("/send ", command, 6) == 0) {
         const char *buffer = command + 6;
@@ -133,6 +134,7 @@ static void print_input_char(const Input *input, char c) {
 /**
  * Store `c` in `buffer`
  * Print `c` to input window
+ * Update input->i
  */
 static void input_char_handling(Input *input, char c) {
     assert(input && "should not be NULL");
@@ -190,7 +192,7 @@ int server_message_handling(Messages *msgs, int sockfd) {
 /**
  * If message is blank, do nothing
  * If message start with '/', execute command
- * Else send message to server
+ * Else send message to server and reset message area
  */
 static int evaluate_complete_message(const Screen *s, int sockfd) {
     assert(s && "should not be NULL");
@@ -249,16 +251,7 @@ int client_async_init(int sockfd) {
     assert(sockfd >= 0 && "should be a valid file descriptor");
 
     int epollfd = async_init();
-    if (epollfd == -1) {
-        return -1;
-    }
-
-    if (async_add(epollfd, sockfd, EPOLLIN) == -1) {
-        return -1;
-    }
-    if (async_add(epollfd, STDIN_FILENO, EPOLLIN) == -1) {
-        return -1;
-    }
-
+    async_add(epollfd, sockfd, EPOLLIN);
+    async_add(epollfd, STDIN_FILENO, EPOLLIN);
     return epollfd;
 }

@@ -38,14 +38,7 @@ int server_async_init(int server_fd) {
     assert(server_fd >= 0 && "should be a valid file descriptor");
 
     int epollfd = async_init();
-    if (epollfd == -1) {
-        return -1;
-    }
-
-    if (async_add(epollfd, server_fd, EPOLLIN) == -1) {
-        return -1;
-    }
-
+    async_add(epollfd, server_fd, EPOLLIN);
     return epollfd;
 }
 
@@ -180,11 +173,7 @@ static Client* connect_client(Clients *clients, int fd, int epollfd) {
     assert(fd >= 0 && "should be a valid file descriptor");
     assert(epollfd >= 0 && "should be a valid file descriptor");
 
-    int err = async_add(epollfd, fd, EPOLLIN | EPOLLET);
-    if (err == -1) {
-        info("%d: async_add failed\n", fd);
-        return NULL;
-    }
+    async_add(epollfd, fd, EPOLLIN | EPOLLET);
 
     Client *c = add_client(clients, fd);
     info("%s: connection opened\n", c->username);

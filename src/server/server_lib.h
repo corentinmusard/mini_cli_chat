@@ -8,7 +8,6 @@ extern "C" {
 
 /**
  * Initialize async. Return fd of the epoll instance.
- * Return -1 on failure
  */
 int server_async_init(int server_fd);
 

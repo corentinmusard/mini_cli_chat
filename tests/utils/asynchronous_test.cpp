@@ -5,6 +5,7 @@
 #include <limits.h>
 
 #include "asynchronous.h"
+#include "tests/utils.hpp"
 
 class AsyncTest : public ::testing::Test
 {
@@ -18,11 +19,8 @@ protected:
     }
 
     void add_socket() {
-        int sockfd = socket(AF_INET, SOCK_STREAM, 0);
-        ASSERT_NE(sockfd, -1);
-
-        int e = async_add(epollfd, sockfd, 0);
-        ASSERT_EQ(e, 0);
+        int sockfd = get_socket();
+        async_add(epollfd, sockfd, 0);
     }
 
     int epollfd;
@@ -30,18 +28,12 @@ protected:
 
 TEST_F(AsyncTest, async_init)
 {
-    ASSERT_GT(epollfd, 0);
+    SUCCEED(); // already tested in SetUp
 }
 
 TEST_F(AsyncTest, async_add_add_socket)
 {
     add_socket();
-}
-
-TEST_F(AsyncTest, async_add_add_invalid_fd)
-{
-    int e = async_add(epollfd, INT_MAX, 0);
-    ASSERT_EQ(e, -1);
 }
 
 TEST_F(AsyncTest, DISABLED_async_add_epollin)

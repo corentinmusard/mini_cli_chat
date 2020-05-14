@@ -1,6 +1,7 @@
 set(TEST_NAME utils_test)
 
 set(SOURCES
+    ../utils.cpp
     ../../src/utils/asynchronous.c
     ../../src/utils/log.c
     ../../src/utils/utils.c

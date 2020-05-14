@@ -21,12 +21,6 @@ int main(void) {
     }
 
     int epollfd = client_async_init(sockfd);
-    if (epollfd == -1) {
-        perror("client_async_init");
-        disconnect_client(sockfd);
-        return EXIT_FAILURE;
-    }
-
     Screen *screen = screen_init();
 
     int err = 0;
@@ -35,10 +29,6 @@ int main(void) {
 
         struct epoll_event events[MAX_EVENTS];
         int nfds = wait_events(epollfd, events);
-        if (nfds == -1) {
-            perror("wait_event");
-            err = -1;
-        }
 
         for (int i = 0; i < nfds && err != -1; i++) {
             if (is_stdin(events[i].data.fd)) {

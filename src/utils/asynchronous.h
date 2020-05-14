@@ -21,16 +21,12 @@ int async_init(void);
 
 /**
  * Register `fd` on the epoll instance `epollfd` and associate it with `events`
- * Return 0 on succes
- * Return -1 on failure and errno is set by epoll_ctl
- * See man EPOLL_CTL(2) for more infos
  */
-int async_add(int epollfd, int fd, uint32_t events);
+void async_add(int epollfd, int fd, uint32_t events);
 
 /**
  * Wait until one or more event is received by epollfd
  * Return how many events are found
- * Return -1 on failure
  */
 int wait_events(int epollfd, struct epoll_event *events);
 
