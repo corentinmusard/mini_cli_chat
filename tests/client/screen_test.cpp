@@ -1,5 +1,7 @@
 #include <gtest/gtest.h>
 
+#include "tests/fake_curses.hpp"
+
 #include "client/screen.h"
 
 class InputTest : public ::testing::Test
@@ -46,6 +48,12 @@ class ScreenTest : public ::testing::Test
 protected:
     void SetUp() override {
         screen = screen_init();
+
+        // resets fake functions
+        RESET_FAKE(doupdate)
+        RESET_FAKE(wnoutrefresh)
+        // reset common FFF internal structures
+        FFF_RESET_HISTORY()
     }
 
     void TearDown() override {
@@ -59,4 +67,11 @@ TEST_F(ScreenTest, screen_init)
 {
     //tested code are in SetUp and TearDown
     SUCCEED();
+}
+
+TEST_F(ScreenTest, refresh_screen)
+{
+    refresh_screen(screen);
+    ASSERT_EQ(wnoutrefresh_fake.call_count, 2);
+    ASSERT_EQ(doupdate_fake.call_count, 1);
 }
