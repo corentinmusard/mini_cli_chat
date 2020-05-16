@@ -54,6 +54,7 @@ script:
   - |
     if [[ $GCOV ]]; then
       gcov-8 -b $(find ./tests/ -name "*.o");
+      bash <(curl -s https://codecov.io/bash);
       cd ../;
       sonar-scanner;
     fi
