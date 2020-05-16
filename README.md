@@ -8,7 +8,7 @@ It uses Berkeley sockets, epoll, ncurses, cmake, google test.
 ## Build status
 [![Build Status](https://www.travis-ci.org/corentinmusard/mini_cli_chat.svg?branch=master)](https://www.travis-ci.org/corentinmusard/mini_cli_chat)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=corentinmusard_mini_cli_chat&metric=alert_status)](https://sonarcloud.io/dashboard?id=corentinmusard_mini_cli_chat)
-[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=corentinmusard_mini_cli_chat&metric=coverage)](https://sonarcloud.io/dashboard?id=corentinmusard_mini_cli_chat)
+[![codecov](https://codecov.io/gh/corentinmusard/mini_cli_chat/branch/master/graph/badge.svg)](https://codecov.io/gh/corentinmusard/mini_cli_chat)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/0a07e19caa974f559eb7f2e901c311bb)](https://www.codacy.com/manual/corentinmusard/mini_cli_chat)
 
 ## Coding Process
