@@ -1,14 +1,7 @@
-#include <curses.h>
-#include <fff/fff.h>
 #include <gtest/gtest.h>
 
+#include "tests/fake_curses.hpp"
 #include "tests/utils.hpp"
-
-//create fake functions
-DEFINE_FFF_GLOBALS
-FAKE_VALUE_FUNC_VARARG(int, mvwprintw, WINDOW *, int, int, const char *, ...)
-FAKE_VALUE_FUNC(int, wmove, WINDOW *, int, int)
-FAKE_VALUE_FUNC(int, wdelch, WINDOW *)
 
 /**
  * define getter/setter to modify the return value of the fake getmaxyx macro
@@ -41,11 +34,11 @@ protected:
         interrupt = 0;
 
         // resets fake functions
-        RESET_FAKE(mvwprintw);
-        RESET_FAKE(wdelch);
-        RESET_FAKE(wmove);
+        RESET_FAKE(mvwprintw)
+        RESET_FAKE(wdelch)
+        RESET_FAKE(wmove)
         // reset common FFF internal structures
-        FFF_RESET_HISTORY();
+        FFF_RESET_HISTORY()
     }
 
     void TearDown() override {

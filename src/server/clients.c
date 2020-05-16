@@ -102,7 +102,7 @@ Client* get_client(const Clients *l, int fd) {
         c = c->next;
         assert(c->next != NULL && "fd should be in l");
     }
-    
+
     return c->next;
 }
 

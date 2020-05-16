@@ -1,8 +1,8 @@
 set(TEST_NAME client_test)
 
 set(SOURCES
+    ../fake_curses.cpp
     ../utils.cpp
-    ../../src/client/cli.c
     ../../src/client/client_network.c
     ../../src/client/screen.c
     ../../src/server/server_network.c
@@ -12,6 +12,7 @@ set(SOURCES
 )
 
 set(TESTS
+    cli_test.cpp
     client_lib_test.cpp
     network_test.cpp
     screen_test.cpp
