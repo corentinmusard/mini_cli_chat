@@ -13,7 +13,7 @@ It uses Berkeley sockets, epoll, ncurses, cmake, google test.
 
 ## Coding Process
 
-Project is conforming to C99 and newer. It requires POSIX, Linux and GNU extentions.
+Project is conforming to C99 and newer. It requires POSIX and Linux (for epoll).
 
 ### Using [Design by contract](//barrgroup.com/embedded-systems/how-to/design-by-contract-for-embedded-software) (DbC)
 Preconditions are checked with `assert`, postconditions are checked within tests.

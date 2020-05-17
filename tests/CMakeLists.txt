@@ -12,7 +12,7 @@ set(W
     -Wcast-qual
     -Wcast-align
     -Wshadow
-    -Wredundant-decls
+    #-Wredundant-decls
     -Wdouble-promotion
     -Winit-self
     -Wswitch-default

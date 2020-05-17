@@ -53,11 +53,13 @@ void fake_stdin(const char *buffer) {
     fprintf(f, "%s", buffer);
     fclose(f);
 
-    freopen(s, "r", stdin);
+    FILE *e = freopen(s, "r", stdin);
+    assert(e);
     assert(fileno(stdin) == STDIN_FILENO);
 }
 
 void restore_stdin(void) {
-    freopen("/dev/stdin", "r", stdin);
+    FILE *e = freopen("/dev/stdin", "r", stdin);
+    assert(e);
     assert(fileno(stdin) == STDIN_FILENO);
 }

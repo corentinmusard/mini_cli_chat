@@ -30,6 +30,11 @@ void async_add(int epollfd, int fd, uint32_t events);
  */
 int wait_events(int epollfd, struct epoll_event *events);
 
+/**
+ * Make `fd` non blocking
+ */
+void make_fd_non_blocking(int fd);
+
 #ifdef __cplusplus
 }
 #endif

@@ -1,3 +1,4 @@
+#include <fcntl.h>
 #include <gtest/gtest.h>
 #include <sys/epoll.h>
 #include <sys/socket.h>
@@ -34,6 +35,7 @@ TEST_F(AsyncTest, async_init)
 TEST_F(AsyncTest, async_add_add_socket)
 {
     add_socket();
+    SUCCEED(); // asynch_add succed or exit()
 }
 
 TEST_F(AsyncTest, DISABLED_async_add_epollin)
@@ -62,4 +64,16 @@ TEST_F(AsyncTest, wait_events_multiple)
     struct epoll_event events[MAX_EVENTS];
     int e = wait_events(epollfd, events);
     ASSERT_EQ(e, 3);
+}
+
+TEST_F(AsyncTest, make_fd_non_blocking)
+{
+    int fd = get_socket();
+    int flags = fcntl(fd, F_GETFL, 0);
+    ASSERT_EQ(flags & O_NONBLOCK, 0);
+
+    make_fd_non_blocking(fd);
+
+    flags = fcntl(fd, F_GETFL, 0);
+    ASSERT_NE(flags & O_NONBLOCK, 0);
 }

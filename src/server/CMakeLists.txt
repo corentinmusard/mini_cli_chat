@@ -8,9 +8,6 @@ add_executable(server
     ../utils/utils.c
 )
 
-target_compile_definitions(server 
-    PUBLIC "_GNU_SOURCE"
-)
 target_compile_options(server 
     PUBLIC ${W}
     PUBLIC ${RUNTIME_CHECKS}

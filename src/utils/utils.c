@@ -17,8 +17,7 @@ static void int_handler(int sig __attribute__((unused))) {
 
 int register_sigint(void) {
     const struct sigaction act = {
-        .sa_handler = int_handler,
-        .sa_flags = SA_RESTART
+        .sa_handler = int_handler
     };
     return sigaction(SIGINT, &act, NULL);
 }

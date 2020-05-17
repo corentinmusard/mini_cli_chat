@@ -185,11 +185,12 @@ void accept_client(Clients *clients, int epollfd, int server_fd) {
     assert(epollfd >= 0 && "should be a valid file descriptor");
     assert(server_fd >= 0 && "should be a valid file descriptor");
 
-    int fd = accept4(server_fd, NULL, NULL, SOCK_NONBLOCK);
+    int fd = accept(server_fd, NULL, NULL);
     if (fd == -1) {
         perror("accept4");
         return;
     }
+    make_fd_non_blocking(fd);
 
     Client *c = connect_client(clients, fd, epollfd);
     if (c == NULL) {
