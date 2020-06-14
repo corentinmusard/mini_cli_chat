@@ -11,6 +11,11 @@ extern "C" {
  */
 int server_async_init(int server_fd);
 
+/**
+ * Disconnect client if connection is closed
+ * Execute special command
+ * Broadcast messages
+ */
 void client_message_handling(Client *c);
 
 void accept_client(Clients *clients, int epollfd, int server_fd);

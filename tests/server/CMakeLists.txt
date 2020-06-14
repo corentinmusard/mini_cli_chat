@@ -1,34 +1,18 @@
-set(TEST_NAME server_test)
+package_add_test(clients
+    clients_test.cpp
+    ../../src/server/clients.c
+    ../utils.cpp
+)
 
-set(SOURCES
+package_add_test(server_network
+    network_test.cpp
+    ../../src/server/server_network.c
+)
+
+package_add_test(server_lib
+    server_lib_test.cpp
+    ../fake_functions.cpp
     ../utils.cpp
     ../../src/server/clients.c
-    ../../src/server/server_network.c
     ../../src/utils/asynchronous.c
-    ../../src/utils/log.c
 )
-
-set(TESTS
-    clients_test.cpp
-    network_test.cpp
-    server_lib_test.cpp
-)
-
-add_executable(${TEST_NAME}
-    ${SOURCES}
-    ${TESTS}
-)
-
-target_compile_options(${TEST_NAME}
-    PUBLIC "-fPIE"
-    PUBLIC "--coverage"
-    PUBLIC ${W}
-)
-
-target_link_libraries(${TEST_NAME}
-    GTest::GTest 
-    GTest::Main
-    "--coverage"
-)
-
-add_test(${TEST_NAME} ${TEST_NAME})

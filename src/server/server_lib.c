@@ -102,41 +102,52 @@ static void send_everyone(const Clients *clients, const char *fmt, ...) {
 }
 
 /**
+ * Used by special_command_handling() to change nickname of a client `c`
+ */
+static void command_nick(Client *c, char *saveptr) {
+    assert(c && "should not be NULL");
+    assert(saveptr && "should not be NULL");
+
+    const char *username = strtok_r(NULL, " ", &saveptr);
+    if (username == NULL) {
+        send_fd(c->fd, "/nick <nickname>\n");
+        return;
+    }
+    // check availability
+    if (!is_available_username(c->list, username)) {
+        send_fd(c->fd, "Nickname not available\n");
+        return;
+    }
+
+    // notify each clients
+    send_everyone(c->list, "%s is now known as %s\n", c->username, username);
+
+    // update username
+    memset(c->username, 0, MAX_USERNAME_LENGTH + 1);
+    strncpy(c->username, username, MAX_USERNAME_LENGTH);
+}
+
+/**
  * Execute special command starting with '/'
  */
 static void special_command_handling(Client *c, char *buffer) {
     assert(c && "should not be NULL");
     assert(buffer && "should not be NULL");
+    assert(buffer[0] && "should be '/'");
 
     info("%s: %s\n", c->username, buffer);
 
     char *saveptr = NULL;
     const char *token = strtok_r(buffer, " ", &saveptr);
     if (token == NULL) {
+        info("%s: token is NULL\n", __func__);
         return;
     }
 
     if (strcmp("/nick", token) == 0) {
-        const char *username = strtok_r(NULL, " ", &saveptr);
-        if (username == NULL) {
-            send_fd(c->fd, "/nick <nickname>\n");
-            return;
-        }
-        //check availability
-        if (!is_available_username(c->list, username)) {
-            send_fd(c->fd, "Nickname not available\n");
-            return;
-        }
-
-        // notify each clients
-        send_everyone(c->list, "%s is now known as %s\n", c->username, username);
-
-        // update username
-        memset(c->username, 0, MAX_USERNAME_LENGTH);
-        strncpy(c->username, username, MAX_USERNAME_LENGTH);
-        c->username[MAX_USERNAME_LENGTH - 1] = '\0';
+        command_nick(c, saveptr);
     } else { //unknown command
-        send_fd(c->fd, "Unknown command\n");
+        send_fd(c->fd, "Unknown command %s\n", buffer);
     }
 }
 

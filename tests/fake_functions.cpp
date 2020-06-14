@@ -1,9 +1,9 @@
-#include "fake_curses.hpp"
+#include "fake_functions.hpp"
 
 //needed by FFF, it's a macro
 DEFINE_FFF_GLOBALS
 
-//define fake functions
+//define fake curses functions
 DEFINE_FAKE_VALUE_FUNC(int, doupdate)
 DEFINE_FAKE_VALUE_FUNC_VARARG(int, mvwprintw, WINDOW *, int, int, const char *, ...)
 DEFINE_FAKE_VALUE_FUNC(int, wclrtoeol,WINDOW *)

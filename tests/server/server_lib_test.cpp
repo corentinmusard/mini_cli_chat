@@ -4,25 +4,38 @@
 #include <unistd.h>
 
 #include "server/server_lib.c"
+#include "tests/fake_functions.hpp"
 #include "tests/utils.hpp"
+
+//define fake code functions
+extern "C" {
+FAKE_VOID_FUNC_VARARG(info, const char *, ...)
+}
+
 
 class ServerLibTest : public ::testing::Test
 {
 protected:
     void SetUp() override {
         clients = init_clients();
+
+        // resets fake functions
+        RESET_FAKE(info)
+        // reset common FFF internal structures
+        FFF_RESET_HISTORY()
     }
 
     void TearDown() override {
         free_clients(clients);
     }
 
-    void add_fake_client(void) {
+    Client* add_fake_client(void) {
         static int i = 0;
         i++;
 
         Client *c = add_client(clients, i);
         c->fd = get_fake_fd();
+        return c;
     }
 
     void assert_broadcast_message_equal(const char *buffer) {
@@ -34,7 +47,6 @@ protected:
     }
 
     Clients *clients;
-    void *shmem;
 };
 
 TEST_F(ServerLibTest, broadcast_message_no_client)
@@ -65,4 +77,277 @@ TEST_F(ServerLibTest, broadcast_message_multiple_clients)
 
     broadcast_message(clients, buffer, MAXMSG_SERV);
     assert_broadcast_message_equal(buffer);
+}
+
+TEST_F(ServerLibTest, /*DISABLED_*/server_async_init)
+{
+    int epollfd = server_async_init(get_socket());
+    EXPECT_GE(epollfd, 0);
+}
+
+TEST_F(ServerLibTest, disconnect_client)
+{
+    Client *c = add_client(clients, 2);
+    disconnect_client(c);
+
+    assert_is_empty(clients);
+}
+
+TEST_F(ServerLibTest, disconnect_client_info)
+{
+    Client *c = add_client(clients, 2);
+    disconnect_client(c);
+    ASSERT_EQ(info_fake.call_count, 1);
+}
+
+TEST_F(ServerLibTest, disconnect_client_duplicate)
+{
+    int fds[2] = {1, 2};
+
+    Client *c = add_client(clients, 2);
+    add_client(clients, 2);
+    add_client(clients, 1);
+    disconnect_client(c);
+
+    assert_fds_are(clients, fds, 2);
+}
+
+TEST_F(ServerLibTest, disconnect_client_multiple_clients)
+{
+    int fds[3] = {1, 3, 4};
+
+    add_client(clients, 4);
+    Client *c = add_client(clients, 2);
+    add_client(clients, 3);
+    add_client(clients, 1);
+    disconnect_client(c);
+
+    assert_fds_are(clients, fds, 3);
+}
+
+TEST_F(ServerLibTest, send_fd)
+{
+    char buffer[MAXMSG_SERV] = "Hello world!";
+
+    Client *c = add_fake_client();
+    send_fd(c->fd, "%s", buffer);
+
+    read_equal(c->fd, buffer);
+}
+
+TEST_F(ServerLibTest, send_fd_info)
+{
+    char buffer[MAXMSG_SERV] = "Hello world!";
+
+    Client *c = add_fake_client();
+    send_fd(c->fd, "%s", buffer);
+
+    ASSERT_EQ(info_fake.call_count, 1);
+}
+
+TEST_F(ServerLibTest, send_fd_truncate)
+{
+    char buffer[MAXMSG_SERV+100] = {0};
+    memset(buffer, 0x41, MAXMSG_SERV+100);
+
+    Client *c = add_fake_client();
+    send_fd(c->fd, "%s", buffer);
+
+    read_not_equal(c->fd, buffer);
+    ASSERT_EQ(info_fake.call_count, 2);
+}
+
+TEST_F(ServerLibTest, send_everyone_one_client)
+{
+    char buffer[MAXMSG_SERV] = "Hello world!";
+
+    add_fake_client();
+    send_everyone(clients, "%s", buffer);
+
+    assert_broadcast_message_equal(buffer);
+}
+
+TEST_F(ServerLibTest, send_everyone_multiple_clients)
+{
+    char buffer[MAXMSG_SERV] = "Hello world!";
+
+    add_fake_client();
+    add_fake_client();
+    add_fake_client();
+    send_everyone(clients, "%s", buffer);
+
+    assert_broadcast_message_equal(buffer);
+    ASSERT_EQ(info_fake.call_count, 1);
+}
+
+TEST_F(ServerLibTest, send_everyone_info)
+{
+    char buffer[MAXMSG_SERV] = "Hello world!";
+
+    add_fake_client();
+    send_everyone(clients, "%s", buffer);
+
+    ASSERT_EQ(info_fake.call_count, 1);
+}
+
+TEST_F(ServerLibTest, send_everyone_info_truncate)
+{
+    char buffer[MAXMSG_SERV+100] = {0};
+    memset(buffer, 0x41, MAXMSG_SERV+100);
+
+    add_fake_client();
+    send_everyone(clients, "%s", buffer);
+
+    ASSERT_EQ(info_fake.call_count, 2);
+}
+
+TEST_F(ServerLibTest, command_nick_null)
+{
+    char buffer[MAXMSG_CLI] = "/nick ";
+    char *saveptr = NULL;
+    const char *token = strtok_r(buffer, " ", &saveptr);
+    assert(token != NULL);
+
+    Client *c = add_fake_client();
+    strncpy(c->username, "default_nick", MAX_USERNAME_LENGTH);
+
+    command_nick(c, saveptr);
+
+    ASSERT_STREQ(c->username, "default_nick");
+    read_equal(c->fd, "/nick <nickname>\n");
+}
+
+TEST_F(ServerLibTest, command_nick_not_available)
+{
+    char buffer[MAXMSG_CLI] = "/nick used";
+    char *saveptr = NULL;
+    const char *token = strtok_r(buffer, " ", &saveptr);
+    assert(token != NULL);
+
+    Client *c = add_fake_client();
+    strncpy(c->username, "used", MAX_USERNAME_LENGTH);
+
+    command_nick(c, saveptr);
+
+    ASSERT_STREQ(c->username, "used");
+    read_equal(c->fd, "Nickname not available\n");
+}
+
+TEST_F(ServerLibTest, command_nick_available)
+{
+    char buffer[MAXMSG_CLI] = "/nick new_name";
+    char *saveptr = NULL;
+    const char *token = strtok_r(buffer, " ", &saveptr);
+    assert(token != NULL);
+
+    Client *c = add_fake_client();
+    strncpy(c->username, "old_name", MAX_USERNAME_LENGTH);
+
+    command_nick(c, saveptr);
+
+    ASSERT_STREQ(c->username, "new_name");
+    read_equal(c->fd, "old_name is now known as new_name\n");
+}
+
+TEST_F(ServerLibTest, command_nick_available_broadcast)
+{
+    char buffer[MAXMSG_CLI] = "/nick new_name";
+    char *saveptr = NULL;
+    const char *token = strtok_r(buffer, " ", &saveptr);
+    assert(token != NULL);
+
+    add_fake_client();
+    add_fake_client();
+    Client *c = add_fake_client();
+    strncpy(c->username, "old_name", MAX_USERNAME_LENGTH);
+
+    command_nick(c, saveptr);
+
+    assert_broadcast_message_equal("old_name is now known as new_name\n");
+}
+
+TEST_F(ServerLibTest, special_command_handling_info)
+{
+    char buffer[MAXMSG_CLI] = "/nick";
+    Client *c = add_fake_client();
+
+    special_command_handling(c, buffer);
+
+    ASSERT_GT(info_fake.call_count, 1);
+    ASSERT_STREQ(info_fake.arg0_history[0], "%s: %s\n");
+}
+
+TEST_F(ServerLibTest, special_command_handling_unknown_command)
+{
+    char buffer[MAXMSG_CLI] = "/my,custom~command";
+    Client *c = add_fake_client();
+
+    special_command_handling(c, buffer);
+
+    read_equal(c->fd, "Unknown command /my,custom~command\n");
+    ASSERT_EQ(info_fake.call_count, 2);
+}
+
+TEST_F(ServerLibTest, special_command_handling_nick)
+{
+    char buffer[MAXMSG_CLI] = "/nick new_name";
+    Client *c = add_fake_client();
+    strncpy(c->username, "old_name", MAX_USERNAME_LENGTH);
+
+    special_command_handling(c, buffer);
+
+    ASSERT_STREQ(c->username, "new_name");
+    read_equal(c->fd, "old_name is now known as new_name\n");
+}
+
+TEST_F(ServerLibTest, client_message_handling)
+{
+    const char buffer[MAXMSG_CLI] = "Hello world!";
+    Client *c = add_fake_client();
+    strncpy(c->username, "default_nick", MAX_USERNAME_LENGTH);
+    Client *c2 = add_fake_client();
+
+    fill_fake_fd(c->fd, buffer, sizeof(buffer));
+    client_message_handling(c);
+
+    ASSERT_GT(info_fake.call_count, 0);
+    read_equal(c2->fd, "default_nick: Hello world!\n");
+}
+
+TEST_F(ServerLibTest, client_message_handling_bad_fd)
+{
+    Client *c = add_fake_client();
+    c->fd = BAD_FD;
+    Client *c2 = add_fake_client();
+
+    client_message_handling(c);
+
+    ASSERT_EQ(info_fake.call_count, 0);
+    read_equal(c2->fd, "");
+}
+
+TEST_F(ServerLibTest, client_message_handling_leave)
+{
+    Client *c = add_fake_client();
+    strncpy(c->username, "default_nick", MAX_USERNAME_LENGTH);
+    Client *c2 = add_fake_client();
+
+    client_message_handling(c);
+
+    ASSERT_GT(info_fake.call_count, 0);
+    read_equal(c2->fd, "default_nick: leave the server\n");
+}
+
+TEST_F(ServerLibTest, client_message_handling_command)
+{
+    const char buffer[MAXMSG_CLI] = "/nick new_name";
+    Client *c = add_fake_client();
+    strncpy(c->username, "default_nick", MAX_USERNAME_LENGTH);
+    Client *c2 = add_fake_client();
+
+    fill_fake_fd(c->fd, buffer, sizeof(buffer));
+    client_message_handling(c);
+
+    ASSERT_GT(info_fake.call_count, 0);
+    read_equal(c2->fd, "default_nick is now known as new_name\n");
 }

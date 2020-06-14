@@ -30,6 +30,7 @@ add_subdirectory(src)
 
 # Unit tests
 add_subdirectory(3rd_party/google-test)
+find_package(GTest REQUIRED)
 
 # To include fff/fff.h
 include_directories(3rd_party)

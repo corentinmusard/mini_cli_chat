@@ -6,6 +6,7 @@
 #include <sys/socket.h>
 #include <unistd.h>
 
+#include "server/clients.h"
 #include "utils/utils.h"
 #include "utils.hpp"
 
@@ -36,6 +37,15 @@ void read_equal(int fd, const char *buffer) {
     ASSERT_STREQ(buffer, out);
 }
 
+void read_not_equal(int fd, const char *buffer) {
+    char out[MAXMSG_SERV] = {0};
+    off_t off = lseek(fd, 0, SEEK_SET);
+    assert(off != -1);
+
+    read(fd, out, MAXMSG_SERV);
+    ASSERT_STRNE(buffer, out);
+}
+
 void fill_fake_fd(int fd, const char * buffer, size_t size) {
     ssize_t n = write(fd, buffer, size);
     assert(n == (ssize_t)size);
@@ -62,4 +72,23 @@ void restore_stdin(void) {
     FILE *e = freopen("/dev/stdin", "r", stdin);
     assert(e);
     assert(fileno(stdin) == STDIN_FILENO);
+}
+
+// redefine NULL to remove a c++ error
+#undef NULL
+#define NULL ((void*)0)
+
+void assert_is_empty(const Clients *clients) {
+    ASSERT_EQ(clients->head, NULL);
+    ASSERT_EQ(clients->nb, 0);
+}
+
+void assert_fds_are(const Clients *clients, const int *fds, int size) {
+    Client *c = clients->head;
+    ASSERT_EQ(clients->nb, size);
+    for (int i = 0; i < size; i++) {
+        ASSERT_EQ(c->fd, fds[i]);
+        c = c->next;
+    }
+    ASSERT_EQ(c, NULL);
 }

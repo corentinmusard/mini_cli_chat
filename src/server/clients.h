@@ -21,7 +21,7 @@ struct Client_s {
     Clients *list; // list of client containing this client
     Client *next; // next client or NULL
 
-    char username[MAX_USERNAME_LENGTH]; // client's username
+    char username[MAX_USERNAME_LENGTH + 1]; // client's username
     int fd; // client' socket fd
 };
 

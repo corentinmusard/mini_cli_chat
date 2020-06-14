@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include "tests/fake_curses.hpp"
+#include "tests/fake_functions.hpp"
 
 #include "client/cli.c"
 

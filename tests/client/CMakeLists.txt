@@ -1,40 +1,28 @@
-set(TEST_NAME client_test)
+package_add_test(cli
+    cli_test.cpp
+    ../fake_functions.cpp
+)
 
-set(SOURCES
-    ../fake_curses.cpp
+package_add_test(client_lib
+    client_lib_test.cpp
+    ../fake_functions.cpp
     ../utils.cpp
-    ../../src/client/client_network.c
+    ../../src/client/cli.c
     ../../src/client/screen.c
-    ../../src/server/server_network.c
     ../../src/utils/asynchronous.c
     ../../src/utils/log.c
     ../../src/utils/utils.c
 )
 
-set(TESTS
-    cli_test.cpp
-    client_lib_test.cpp
+package_add_test(client_network
     network_test.cpp
+    ../../src/client/client_network.c
+    ../../src/server/server_network.c
+)
+
+package_add_test(screen
     screen_test.cpp
+    ../fake_functions.cpp
+    ../../src/client/cli.c
+    ../../src/client/screen.c
 )
-
-add_executable(${TEST_NAME}
-    ${SOURCES}
-    ${TESTS}
-)
-
-target_compile_options(${TEST_NAME}
-    PUBLIC "-fPIE"
-    PUBLIC "--coverage"
-    PUBLIC ${W}
-)
-
-target_link_libraries(${TEST_NAME}
-    GTest::GTest 
-    GTest::Main
-    "--coverage"
-    ${CURSES_LIBRARIES}
-    #"ncurses_g" # for trace functions
-)
-
-add_test(${TEST_NAME} ${TEST_NAME})
