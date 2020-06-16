@@ -30,21 +30,34 @@ set(W
     -Wconversion
 )
 
+set(RUNTIME_CHECKS
+    -fsanitize=address
+    -fsanitize=float-cast-overflow
+    -fsanitize=float-divide-by-zero
+    -fsanitize=leak
+    -fsanitize=undefined
+    -fno-omit-frame-pointer
+    -fno-optimize-sibling-calls
+)
+
 macro(package_add_test TESTNAME)
     # https://cliutils.gitlab.io/modern-cmake/chapters/testing/googletest.html
     add_executable(${TESTNAME} ${ARGN})
 
     target_link_libraries(${TESTNAME}
+        cjson
         gtest
         gtest_main
         "--coverage"
         ${CURSES_LIBRARIES}
+        ${RUNTIME_CHECKS}
     )
 
     target_compile_options(${TESTNAME}
         PUBLIC "-fPIE"
         PUBLIC "--coverage"
         PUBLIC ${W}
+        PUBLIC ${RUNTIME_CHECKS}
     )
     # gtest_discover_tests replaces gtest_add_tests,
     # see https://cmake.org/cmake/help/v3.10/module/GoogleTest.html for more options to pass to it

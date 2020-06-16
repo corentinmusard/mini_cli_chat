@@ -25,6 +25,12 @@ include_directories(.)
 include_directories(src)
 include_directories(src/utils)
 
+# To build cJSON
+add_subdirectory(3rd_party/cJSON)
+
+# To include fff/fff.h and cJSON/cJSON.h
+include_directories(3rd_party)
+
 # Build client and server
 add_subdirectory(src)
 
@@ -32,8 +38,6 @@ add_subdirectory(src)
 add_subdirectory(3rd_party/google-test)
 find_package(GTest REQUIRED)
 
-# To include fff/fff.h
-include_directories(3rd_party)
 
 # Enable CTest testing
 enable_testing()

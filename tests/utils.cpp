@@ -28,25 +28,62 @@ int get_socket(void) {
     return sockfd;
 }
 
-void read_equal(int fd, const char *buffer) {
+char* fill_tmp_file(const char *buffer) {
+    assert(buffer && "should not be NULL");
+
+    char *s = tmpnam(NULL);
+    FILE *f = fopen(s, "w");
+    if (f == NULL) {
+        perror("fopen");
+        exit(EXIT_FAILURE);
+    }
+    fprintf(f, "%s", buffer);
+    fclose(f);
+    return s;
+}
+
+void read_equal_name(const char *filename, const char *buffer) {
+    assert(filename && "should not be NULL");
+    assert(buffer && "should not be NULL");
+
+    FILE *f = fopen(filename, "r");
+    if (f == NULL) {
+        perror("fopen");
+        exit(EXIT_FAILURE);
+    }
+
     char out[MAXMSG_SERV] = {0};
+    fread(out, 1, MAXMSG_SERV, f);
+    ASSERT_STREQ(buffer, out);
+}
+
+void read_equal(int fd, const char *buffer) {
+    assert(buffer && "should not be NULL");
+
     off_t off = lseek(fd, 0, SEEK_SET);
     assert(off != -1);
 
+    char out[MAXMSG_SERV] = {0};
     read(fd, out, MAXMSG_SERV);
     ASSERT_STREQ(buffer, out);
 }
 
 void read_not_equal(int fd, const char *buffer) {
-    char out[MAXMSG_SERV] = {0};
+    assert(fd >= 0 && "should be a valid file descriptor");
+    assert(buffer && "should not be NULL");
+
     off_t off = lseek(fd, 0, SEEK_SET);
     assert(off != -1);
 
+    char out[MAXMSG_SERV] = {0};
     read(fd, out, MAXMSG_SERV);
     ASSERT_STRNE(buffer, out);
 }
 
 void fill_fake_fd(int fd, const char * buffer, size_t size) {
+    assert(fd >= 0 && "should be a valid file descriptor");
+    assert(buffer && "should not be NULL");
+
     ssize_t n = write(fd, buffer, size);
     assert(n == (ssize_t)size);
     off_t off = lseek(fd, 0, SEEK_SET);
@@ -54,6 +91,8 @@ void fill_fake_fd(int fd, const char * buffer, size_t size) {
 }
 
 void fake_stdin(const char *buffer) {
+    assert(buffer && "should not be NULL");
+
     char *s = tmpnam(NULL);
     FILE *f = fopen(s, "w");
     if (f == NULL) {
@@ -79,14 +118,19 @@ void restore_stdin(void) {
 #define NULL ((void*)0)
 
 void assert_is_empty(const Clients *clients) {
+    assert(clients && "should not be NULL");
+
     ASSERT_EQ(clients->head, NULL);
     ASSERT_EQ(clients->nb, 0);
 }
 
-void assert_fds_are(const Clients *clients, const int *fds, int size) {
+void assert_fds_are(const Clients *clients, const int *fds, size_t size) {
+    assert(clients && "should not be NULL");
+    assert(fds && "should not be NULL");
+
     Client *c = clients->head;
     ASSERT_EQ(clients->nb, size);
-    for (int i = 0; i < size; i++) {
+    for (size_t i = 0; i < size; i++) {
         ASSERT_EQ(c->fd, fds[i]);
         c = c->next;
     }

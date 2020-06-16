@@ -4,19 +4,17 @@
 #include <unistd.h>
 
 #include "server/server_lib.c"
+#include "server/server_network.h"
 #include "tests/fake_functions.hpp"
 #include "tests/utils.hpp"
 
-//define fake code functions
-extern "C" {
 FAKE_VOID_FUNC_VARARG(info, const char *, ...)
-}
-
 
 class ServerLibTest : public ::testing::Test
 {
 protected:
     void SetUp() override {
+        epollfd = server_async_init(get_socket());
         clients = init_clients();
 
         // resets fake functions
@@ -47,6 +45,7 @@ protected:
     }
 
     Clients *clients;
+    int epollfd;
 };
 
 TEST_F(ServerLibTest, broadcast_message_no_client)
@@ -79,9 +78,8 @@ TEST_F(ServerLibTest, broadcast_message_multiple_clients)
     assert_broadcast_message_equal(buffer);
 }
 
-TEST_F(ServerLibTest, /*DISABLED_*/server_async_init)
+TEST_F(ServerLibTest, server_async_init)
 {
-    int epollfd = server_async_init(get_socket());
     EXPECT_GE(epollfd, 0);
 }
 
@@ -148,7 +146,7 @@ TEST_F(ServerLibTest, send_fd_info)
 TEST_F(ServerLibTest, send_fd_truncate)
 {
     char buffer[MAXMSG_SERV+100] = {0};
-    memset(buffer, 0x41, MAXMSG_SERV+100);
+    memset(buffer, 0x41, MAXMSG_SERV+99);
 
     Client *c = add_fake_client();
     send_fd(c->fd, "%s", buffer);
@@ -193,7 +191,7 @@ TEST_F(ServerLibTest, send_everyone_info)
 TEST_F(ServerLibTest, send_everyone_info_truncate)
 {
     char buffer[MAXMSG_SERV+100] = {0};
-    memset(buffer, 0x41, MAXMSG_SERV+100);
+    memset(buffer, 0x41, MAXMSG_SERV+99);
 
     add_fake_client();
     send_everyone(clients, "%s", buffer);
@@ -350,4 +348,14 @@ TEST_F(ServerLibTest, client_message_handling_command)
 
     ASSERT_GT(info_fake.call_count, 0);
     read_equal(c2->fd, "default_nick is now known as new_name\n");
+}
+
+TEST_F(ServerLibTest, DISABLED_connect_client)
+{
+    int fd = get_fake_fd();
+    Client *c = connect_client(clients, fd, epollfd);
+
+    //get_client(clients, c->fd); //it succeeds or assert_fail()
+    ASSERT_EQ(info_fake.call_count, 1);
+    read_equal(c->fd, "%s: connection opened\n");
 }

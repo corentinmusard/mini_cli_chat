@@ -176,8 +176,7 @@ void client_message_handling(Client *c) {
 
 /**
  * Add client to clients' list and store client's fd
- * Return NULL on failure
- * Return client on success
+ * Return client
  */
 static Client* connect_client(Clients *clients, int fd, int epollfd) {
     assert(clients && "should not be NULL");

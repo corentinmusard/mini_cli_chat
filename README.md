@@ -59,12 +59,12 @@ None for now because it's not really usable.
 
 ### Settings
 -   [ ] client: add setting configuration (nickname, server ip/port, log settings)
--   [ ] server: add setting configuration (server port, log settings)
+-   [x] server: add setting configuration (server port, log settings)
 
 ### Log system
--   [x] server: pseudo log system (print to stdout)
--   [ ] create or append to a file client.log/server.log
--   [ ] write every messages and errors to that file
+-   [x] server: pseudo log system (print to stderr)
+-   [x] create or append to a file client.log/server.log
+-   [x] write every messages and errors to that file
 
 ### Technical things
 -   [x] server: allow clients to connect
@@ -75,5 +75,6 @@ None for now because it's not really usable.
 -   [ ] make tests
 -   [ ] make code modular with plugins
 -   [ ] use portable code
+-   [ ] make client/server works outside localhost
 -   [ ] add IPv6 support
 -   [ ] connection to server with ssl

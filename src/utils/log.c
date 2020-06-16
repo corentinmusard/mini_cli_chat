@@ -18,6 +18,11 @@
 #define SIZE_TIME (8 + 1)
 
 /**
+ * The file to write log to
+ */
+static FILE *log_file = NULL;
+
+/**
  * Store locale time into `tm_s`
  */
 static void get_localtime(struct tm *tm_s) {
@@ -34,27 +39,36 @@ static void print_time(void) {
     struct tm tm_s;
     get_localtime(&tm_s);
 
-    printf(TIME_FORMAT, tm_s.tm_hour, tm_s.tm_min, tm_s.tm_sec);
+    fprintf(log_file, TIME_FORMAT, tm_s.tm_hour, tm_s.tm_min, tm_s.tm_sec);
 }
 
 __attribute__((__format__ (__printf__, 1, 2)))
 void info(const char *fmt, ...) {
     assert(fmt && "should not be NULL");
 
+    // On the first time, initialize log_file
+    if (log_file == NULL) {
+        set_logfile(NULL);
+    }
+
     print_time();
-    printf(" ");
+    fprintf(log_file, " ");
 
     va_list args;
     va_start(args, fmt);
-    vprintf(fmt, args);
+    vfprintf(log_file, fmt, args);
     va_end(args);
+
+    fflush(log_file);
 }
 
 char* log_format(const char *buffer, size_t size) {
     assert(buffer && "should not be NULL");
     assert(size > 0 && "should not be 0");
 
-    size_t m_size = SIZE_TIME + 1 + size; //+1 for space between time and buffer
+    //+1 for space between time and buffer
+    //+1 for '\0'
+    size_t m_size = SIZE_TIME + 1 + size + 1;
     char *message = calloc(m_size, sizeof(char));
 
     struct tm tm_s;
@@ -67,4 +81,27 @@ char* log_format(const char *buffer, size_t size) {
     }
 
     return message;
+}
+
+void set_logfile(const char *filename) {
+    if (filename == NULL) {
+        unset_logfile();
+        return;
+    }
+
+    FILE *f = fopen(filename, "a");
+    if (f == NULL) {
+        perror("fopen");
+        exit(EXIT_FAILURE);
+    }
+
+    unset_logfile();
+    log_file = f;
+}
+
+void unset_logfile(void) {
+    if (log_file != NULL) {
+        fclose(log_file);
+    }
+    log_file = stderr;
 }

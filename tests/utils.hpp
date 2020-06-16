@@ -22,6 +22,17 @@ int get_fake_fd(void);
 int get_socket(void);
 
 /**
+ * Fill a temporary file with `buffer`
+ * Return the file name
+ */
+char* fill_tmp_file(const char *buffer);
+
+/**
+ * Assert data read from `filename` equals to `buffer`
+ */
+void read_equal_name(const char *filename, const char *buffer);
+
+/**
  * Assert data read from `fd` equals to `buffer`
  */
 void read_equal(int fd, const char *buffer);
@@ -54,7 +65,7 @@ void assert_is_empty(const Clients *clients);
 /**
  * Assert that clients list are `fds` of size `size`
  */
-void assert_fds_are(const Clients *clients, const int *fds, int size);
+void assert_fds_are(const Clients *clients, const int *fds, size_t size);
 
 #ifdef __cplusplus
 }

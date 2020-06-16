@@ -4,8 +4,10 @@
 
 #include "asynchronous.h"
 #include "clients.h"
+#include "log.h"
 #include "server_lib.h"
 #include "server_network.h"
+#include "server_settings.h"
 #include "utils.h"
 
 int main(void) {
@@ -14,7 +16,10 @@ int main(void) {
         return EXIT_FAILURE;
     }
 
-    int server_fd = start_server(PORT);
+    Settings s = settings_init("server_config.json");
+    set_logfile(s.log_file);
+
+    int server_fd = start_server(s.port);
     if (server_fd < 0) {
         perror("start_server");
         return EXIT_FAILURE;

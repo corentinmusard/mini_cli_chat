@@ -1,3 +1,6 @@
 [submodule "3rd_party/fff"]
 	path = 3rd_party/fff
-	url = https://github.com/meekrosoft/fff
+	url = ../../meekrosoft/fff.git
+[submodule "3rd_party/cJSON"]
+	path = 3rd_party/cJSON
+	url = ../../DaveGamble/cJSON.git

@@ -6,6 +6,7 @@ package_add_test(asynchronous
 
 package_add_test(log
     log_test.cpp
+    ../utils.cpp
     ../../src/utils/log.c
 )
 

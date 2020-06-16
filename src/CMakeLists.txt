@@ -88,6 +88,13 @@ if (CMAKE_C_COMPILER_ID STREQUAL "GNU")
 
     # No new warning for gcc 9
 
+    if (CMAKE_C_COMPILER_VERSION VERSION_GREATER_EQUAL 10)
+        set(W
+            ${W}
+            -Warith-conversion
+        )
+    endif()
+
 elseif(CMAKE_C_COMPILER_ID MATCHES "Clang")
     set(W
         -pedantic

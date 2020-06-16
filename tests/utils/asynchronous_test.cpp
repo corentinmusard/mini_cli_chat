@@ -1,9 +1,9 @@
 #include <fcntl.h>
 #include <gtest/gtest.h>
+#include <limits.h>
 #include <sys/epoll.h>
 #include <sys/socket.h>
 #include <unistd.h>
-#include <limits.h>
 
 #include "asynchronous.h"
 #include "tests/utils.hpp"

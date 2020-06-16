@@ -17,6 +17,17 @@ void info(const char *fmt, ...);
  */
 char* log_format(const char *buffer, size_t size);
 
+/**
+ * Open `filename` if not NULL else set it to stderr.
+ * It will be the log file
+ */
+void set_logfile(const char *filename);
+
+/**
+ * Unset logfile, logs will now go to stderr 
+ */
+void unset_logfile(void);
+
 #ifdef __cplusplus
 }
 #endif
