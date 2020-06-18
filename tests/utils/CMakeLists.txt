@@ -20,4 +20,7 @@ package_add_test(settings
     ../utils.cpp
     ../../src/utils/log.c
     ../../src/utils/settings.c
+
+LIBS
+    cjson
 )

@@ -1,6 +1,9 @@
 package_add_test(cli
     cli_test.cpp
     ../fake_functions.cpp
+
+LIBS
+    ${CURSES_LIBRARIES}
 )
 
 package_add_test(client_lib
@@ -12,6 +15,9 @@ package_add_test(client_lib
     ../../src/utils/asynchronous.c
     ../../src/utils/log.c
     ../../src/utils/utils.c
+
+LIBS
+    ${CURSES_LIBRARIES}
 )
 
 package_add_test(client_network
@@ -25,6 +31,9 @@ package_add_test(screen
     ../fake_functions.cpp
     ../../src/client/cli.c
     ../../src/client/screen.c
+
+LIBS
+    ${CURSES_LIBRARIES}
 )
 
 package_add_test(client_settings
@@ -33,4 +42,7 @@ package_add_test(client_settings
     ../../src/client/client_settings.c
     ../../src/utils/log.c
     ../../src/utils/settings.c
+
+LIBS
+    cjson
 )

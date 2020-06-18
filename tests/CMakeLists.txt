@@ -32,11 +32,15 @@ set(W
 
 macro(package_add_test TESTNAME)
     # https://cliutils.gitlab.io/modern-cmake/chapters/testing/googletest.html
-    add_executable(${TESTNAME} ${ARGN})
+    set(options ) # empty
+    set(oneValueArgs ) # empty
+    set(multiValueArgs LIBS)
+    cmake_parse_arguments(MY "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
+
+    add_executable(${TESTNAME} ${MY_UNPARSED_ARGUMENTS})
 
     target_link_libraries(${TESTNAME}
-        ${CURSES_LIBRARIES}
-        cjson
+        ${MY_LIBS}
         gtest
         gtest_main
         "--coverage"
