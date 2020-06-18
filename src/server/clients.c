@@ -93,17 +93,12 @@ Client* get_client(const Clients *l, int fd) {
     assert(fd >= 0 && "should be a valid file descriptor");
 
     Client *c = l->head;
-    if (c->fd == fd) {
-        return c;
-    }
-
-    assert(c->next != NULL && "fd should be in l");
-    while (c->next->fd != fd) {
+    while (c->fd != fd) {
         c = c->next;
-        assert(c->next != NULL && "fd should be in l");
+        assert(c != NULL && "fd should be in l");
     }
 
-    return c->next;
+    return c;
 }
 
 void free_clients(Clients *l) {
@@ -123,20 +118,12 @@ bool is_available_username(const Clients *l, const char *username) {
     assert(l && "should not be NULL");
     assert(username && "should not be NULL");
 
-    if (l->head == NULL) {
-        return true;
-    }
-
     const Client *c = l->head;
-    if (strcmp(c->username, username) == 0) {
-        return false;
-    }
-
-    while (c->next != NULL && strcmp(c->username, username) != 0) {
+    while (c != NULL && strcmp(c->username, username) != 0) {
         c = c->next;
     }
 
-    if (c->next != NULL) {
+    if (c != NULL) {
         return false;
     }
 

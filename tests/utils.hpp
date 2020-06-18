@@ -28,6 +28,11 @@ int get_socket(void);
 char* fill_tmp_file(const char *buffer);
 
 /**
+ * Assert data read from `filename` equals to `buffer`, starting at `offset`
+ */
+void read_equal_name_offset(const char *filename, const char *buffer, size_t offset);
+
+/**
  * Assert data read from `filename` equals to `buffer`
  */
 void read_equal_name(const char *filename, const char *buffer);

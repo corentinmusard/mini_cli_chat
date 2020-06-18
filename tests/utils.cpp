@@ -42,7 +42,7 @@ char* fill_tmp_file(const char *buffer) {
     return s;
 }
 
-void read_equal_name(const char *filename, const char *buffer) {
+void read_equal_name_offset(const char *filename, const char *buffer, size_t offset) {
     assert(filename && "should not be NULL");
     assert(buffer && "should not be NULL");
 
@@ -54,7 +54,14 @@ void read_equal_name(const char *filename, const char *buffer) {
 
     char out[MAXMSG_SERV] = {0};
     fread(out, 1, MAXMSG_SERV, f);
-    ASSERT_STREQ(buffer, out);
+    ASSERT_STREQ(buffer+offset, out+offset);
+}
+
+void read_equal_name(const char *filename, const char *buffer) {
+    assert(filename && "should not be NULL");
+    assert(buffer && "should not be NULL");
+
+    read_equal_name_offset(filename, buffer, 0);
 }
 
 void read_equal(int fd, const char *buffer) {

@@ -77,6 +77,24 @@ static void reset_variables(Input *input) {
     input->i = 0;
 }
 
+int send_nickname(const char *nickname, int sockfd) {
+    assert(nickname && "should not be NULL");
+    assert(sockfd >= 0 && "should be a valid file descriptor");
+
+    char buffer[MAXMSG_CLI] = {0};
+    int len = snprintf(buffer, MAXMSG_CLI, "/nick %s", nickname);
+    assert(len > 0 && "snprintf return a positive number");
+    if ((size_t)len >= MAXMSG_CLI) {
+        info("%s: truncated output: len=%d, MAXMSG_CLI=%d\n", __func__, len, MAXMSG_CLI);
+    }
+
+    if (write(sockfd, buffer, strlen(buffer)) == -1) {
+        perror("write");
+        return -1;
+    }
+    return 0;
+}
+
 /**
  * Command is not in the whitelisted command
  */

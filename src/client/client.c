@@ -25,6 +25,10 @@ int main(void) {
         return EXIT_FAILURE;
     }
 
+    if (send_nickname(s.nickname, sockfd) == -1) {
+        return EXIT_FAILURE;
+    }
+
     int epollfd = client_async_init(sockfd);
     Screen *screen = screen_init();
 

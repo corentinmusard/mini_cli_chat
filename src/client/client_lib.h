@@ -7,6 +7,13 @@ extern "C" {
 #include "screen.h"
 
 /**
+ * Send nickname to `sockfd`
+ * Return 0 on success
+ * Return -1 on failure
+ */
+int send_nickname(const char *nickname, int sockfd);
+
+/**
  * Print recv message from `sockfd` and print it into messages window
  * Return -1 on failure and 0 on succes
  */

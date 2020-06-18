@@ -403,3 +403,35 @@ TEST_F(ClientLibTest, stdin_char_handling_bad_max)
     ASSERT_EQ(mvwprintw_fake.call_count, 0);
     restore_stdin();
 }
+
+TEST_F(ClientLibTest, send_nickname)
+{
+    int e = send_nickname("corentin", fake_fd);
+
+    EXPECT_EQ(e, 0);
+    read_equal(fake_fd, "/nick corentin");
+}
+
+TEST_F(ClientLibTest, send_nickname_bad_fd)
+{
+    int e = send_nickname("corentin", BAD_FD);
+
+    EXPECT_EQ(e, -1);
+}
+
+TEST_F(ClientLibTest, send_nickname_truncate)
+{
+    char buffer[MAXMSG_CLI+100] = {0};
+    memset(buffer, 0x41, MAXMSG_CLI+99);
+
+    char *logfile = tmpnam(NULL);
+    set_logfile(logfile);
+
+    int e = send_nickname(buffer, fake_fd);
+
+    EXPECT_EQ(e, 0);
+    read_not_equal(fake_fd, buffer);
+    read_equal_name_offset(logfile, "19:05:52 send_nickname: truncated output: len=205, MAXMSG_CLI=100\n", 9);
+
+    set_logfile(NULL);
+}
