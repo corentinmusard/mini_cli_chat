@@ -6,6 +6,7 @@ add_executable(server
     server_settings.c
     ../utils/asynchronous.c
     ../utils/log.c
+    ../utils/settings.c
     ../utils/utils.c
 )
 

@@ -26,3 +26,11 @@ package_add_test(screen
     ../../src/client/cli.c
     ../../src/client/screen.c
 )
+
+package_add_test(client_settings
+    client_settings_test.cpp
+    ../utils.cpp
+    ../../src/client/client_settings.c
+    ../../src/utils/log.c
+    ../../src/utils/settings.c
+)

@@ -6,10 +6,7 @@ extern "C" {
 
 #include <stdbool.h>
 
-/**
- * Max username length
- */
-#define MAX_USERNAME_LENGTH 20
+#include "utils.h"
 
 typedef struct Client_s Client;
 typedef struct Clients_s Clients;

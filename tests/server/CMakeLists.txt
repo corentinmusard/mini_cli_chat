@@ -23,4 +23,5 @@ package_add_test(server_settings
     ../utils.cpp
     ../../src/server/server_settings.c
     ../../src/utils/log.c
+    ../../src/utils/settings.c
 )

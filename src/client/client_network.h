@@ -17,6 +17,11 @@ extern "C" {
 #define CONNECT_FAILED (-2)
 
 /**
+ * ip is not a valid IPv4
+ */
+#define BAD_IP (-3)
+
+/**
  * Connect the client to ip:port
  * Return the socket fd
  * Return a negative value on failure

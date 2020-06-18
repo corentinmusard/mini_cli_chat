@@ -6,27 +6,24 @@ extern "C" {
 
 #include <netinet/in.h>
 
-/**
- * Max logfile length
- */
-#define MAX_LOGFILE_LENGTH 20
+#include "settings.h"
 
 typedef struct {
-    in_port_t port; // port number to run the server at
-    char log_file[MAX_LOGFILE_LENGTH + 1]; // log file to write debug info
-} Settings;
+    BASE_SETTINGS; //default settings fields (like port or log_file)
+
+    // define more values below
+} Server_settings;
 
 /**
  * Return default settings
  */
-Settings default_settings(void);
+Server_settings server_default_settings(void);
 
 /**
- * Intialize settings from `settings_file`
- * if `settings_file` is NULL, return default settings
- * Return a struct containing all the settings
+ * Register specific server settings
+ * Return settings from `settings_file` if not NULL
  */
-Settings settings_init(const char *settings_file);
+Server_settings server_settings_init(const char *settings_file);
 
 #ifdef __cplusplus
 }

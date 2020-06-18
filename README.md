@@ -13,7 +13,7 @@ It uses Berkeley sockets, epoll, ncurses, cmake, google test.
 
 ## Coding Process
 
-Project is conforming to C99 and newer. It requires POSIX and Linux (for epoll).
+Project is conforming to C11 and newer. It requires POSIX and Linux (for epoll).
 
 ### Using [Design by contract](//barrgroup.com/embedded-systems/how-to/design-by-contract-for-embedded-software) (DbC)
 Preconditions are checked with `assert`, postconditions are checked within tests.
@@ -58,7 +58,7 @@ None for now because it's not really usable.
 -   [ ] client: ncurses: add colors to nicknames, channels and more
 
 ### Settings
--   [ ] client: add setting configuration (nickname, server ip/port, log settings)
+-   [x] client: add setting configuration (nickname, server ip/port, log settings)
 -   [x] server: add setting configuration (server port, log settings)
 
 ### Log system
@@ -72,7 +72,9 @@ None for now because it's not really usable.
 -   [x] client: epoll: asynchrone gestion of output(new messages from server) and input(new messages from keyboard)
 -   [x] client: display with ncurses
 -   [x] write function docstring
--   [ ] make tests
+-   [ ] make unit tests
+-   [ ] make integration tests
+-   [ ] make performance tests
 -   [ ] make code modular with plugins
 -   [ ] use portable code
 -   [ ] make client/server works outside localhost

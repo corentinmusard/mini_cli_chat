@@ -5,6 +5,8 @@
 #include "asynchronous.h"
 #include "client_lib.h"
 #include "client_network.h"
+#include "client_settings.h"
+#include "log.h"
 #include "screen.h"
 #include "utils.h"
 
@@ -14,7 +16,10 @@ int main(void) {
         return EXIT_FAILURE;
     }
 
-    int sockfd = connect_client("127.0.0.1", PORT);
+    Client_settings s = client_settings_init("client_config.json");
+    set_logfile(s.log_file);
+
+    int sockfd = connect_client(s.ip, s.port);
     if (sockfd < 0) {
         perror("connect_client");
         return EXIT_FAILURE;

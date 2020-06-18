@@ -27,7 +27,7 @@ TEST_F(NetworkTest, connect_client)
 TEST_F(NetworkTest, connect_client_wrong_ip)
 {
     int fd = connect_client("ABCD", PORT);
-    ASSERT_EQ(fd, CONNECT_FAILED);
+    ASSERT_EQ(fd, BAD_IP);
 }
 
 TEST_F(NetworkTest, connect_client_wrong_port)

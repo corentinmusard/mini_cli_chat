@@ -1,4 +1,5 @@
 {
     "log_file": "server.log",
-    "port": 5000
+    "port": 5000,
+    "timeout": 425
 }

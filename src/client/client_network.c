@@ -13,10 +13,15 @@ int connect_client(const char *ip, in_port_t port) {
         return SOCKET_FAILED;
     }
 
+    struct in_addr ip_addr;
+    if (inet_pton(AF_INET, ip, &ip_addr) != 1) { //IPv4 only
+        return BAD_IP;
+    }
+
     const struct sockaddr_in addr = {
         .sin_family = AF_INET,
         .sin_port = htons(port),
-        .sin_addr.s_addr = inet_addr(ip)
+        .sin_addr = ip_addr
     };
     int e = connect(sockfd, (const struct sockaddr *)&addr, sizeof(addr));
     if (e == -1) {

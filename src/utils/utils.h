@@ -23,6 +23,11 @@ extern "C" {
 #define MAXMSG_SERV 150
 
 /**
+ * Max username length
+ */
+#define MAX_USERNAME_LENGTH 20
+
+/**
  * Default value is 0
  * If value is not 0 then client or server is going to exit
  */

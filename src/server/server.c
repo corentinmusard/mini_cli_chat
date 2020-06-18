@@ -16,7 +16,7 @@ int main(void) {
         return EXIT_FAILURE;
     }
 
-    Settings s = settings_init("server_config.json");
+    Server_settings s = server_settings_init("server_config.json");
     set_logfile(s.log_file);
 
     int server_fd = start_server(s.port);
