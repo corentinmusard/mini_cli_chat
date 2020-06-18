@@ -30,22 +30,11 @@ set(W
     -Wconversion
 )
 
-set(RUNTIME_CHECKS
-    -fsanitize=address
-    -fsanitize=float-cast-overflow
-    -fsanitize=float-divide-by-zero
-    -fsanitize=leak
-    -fsanitize=undefined
-    -fno-omit-frame-pointer
-    -fno-optimize-sibling-calls
-)
-
 macro(package_add_test TESTNAME)
     # https://cliutils.gitlab.io/modern-cmake/chapters/testing/googletest.html
     add_executable(${TESTNAME} ${ARGN})
 
     target_link_libraries(${TESTNAME}
-        ${RUNTIME_CHECKS}
         ${CURSES_LIBRARIES}
         cjson
         gtest
@@ -54,7 +43,6 @@ macro(package_add_test TESTNAME)
     )
 
     target_compile_options(${TESTNAME}
-        PUBLIC ${RUNTIME_CHECKS}
         PUBLIC ${W}
         PUBLIC "-fPIE"
         PUBLIC "--coverage"
