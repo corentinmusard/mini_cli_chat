@@ -103,7 +103,7 @@ struct Settings_s {
  */
 static struct Settings_s settings = {NULL};
 
-void add_setting(void (*update)(Settings *s, const cJSON *json)) {
+void add_setting(Update update) {
     assert(update && "should not be NULL");
 
     struct Setting_s *setting = malloc(sizeof(struct Setting_s));
@@ -200,7 +200,7 @@ void settings_init(const char *settings_file, Settings *s) {
 
     if (settings_file == NULL) {
         return;
-    }    
+    }
 
     FILE *f = fopen(settings_file, "r");
     if (f == NULL) {

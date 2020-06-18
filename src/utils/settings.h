@@ -29,11 +29,13 @@ typedef BASE_SETTINGS Settings;
  */
 Settings default_settings(void);
 
+typedef void (*Update)(Settings *s, const cJSON *json);
+
 /**
  * Register the function `update` to read from `json` and modify `s`.
  * It will be called when the `settings_init` function is called
  */
-void add_setting(void (*update)(Settings *s, const cJSON *json));
+void add_setting(Update update);
 
 /**
  * Intialize settings from `settings_file`

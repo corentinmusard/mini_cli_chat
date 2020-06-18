@@ -24,7 +24,7 @@ char* log_format(const char *buffer, size_t size);
 void set_logfile(const char *filename);
 
 /**
- * Unset logfile, logs will now go to stderr 
+ * Unset logfile, logs will now go to stderr
  */
 void unset_logfile(void);
 
