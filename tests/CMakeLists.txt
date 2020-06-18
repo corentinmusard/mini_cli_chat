@@ -45,19 +45,19 @@ macro(package_add_test TESTNAME)
     add_executable(${TESTNAME} ${ARGN})
 
     target_link_libraries(${TESTNAME}
+        ${RUNTIME_CHECKS}
+        ${CURSES_LIBRARIES}
         cjson
         gtest
         gtest_main
         "--coverage"
-        ${CURSES_LIBRARIES}
-        ${RUNTIME_CHECKS}
     )
 
     target_compile_options(${TESTNAME}
+        PUBLIC ${RUNTIME_CHECKS}
+        PUBLIC ${W}
         PUBLIC "-fPIE"
         PUBLIC "--coverage"
-        PUBLIC ${W}
-        PUBLIC ${RUNTIME_CHECKS}
     )
     # gtest_discover_tests replaces gtest_add_tests,
     # see https://cmake.org/cmake/help/v3.10/module/GoogleTest.html for more options to pass to it

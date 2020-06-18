@@ -8,11 +8,16 @@ project(mini_cli_chat VERSION 0.1
                 DESCRIPTION "description of mini_cli_chat"
                 LANGUAGES C CXX)
 
+# To build cJSON
+add_subdirectory(3rd_party/cJSON)
+
+# To include fff/fff.h and cJSON/cJSON.h
+include_directories(3rd_party)
+
 set(CMAKE_C_STANDARD 11) # or newer
 set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_C_EXTENSIONS OFF)
-# add_definitions(-D_POSIX_C_SOURCE=1) # POSIX.1 1990 
-add_definitions(-D_POSIX_C_SOURCE=200809L) # POSIX 2008
+add_definitions(-D_POSIX_C_SOURCE=1) # POSIX.1 1990 
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_POSITION_INDEPENDANT_CODE ON)
@@ -24,12 +29,6 @@ include_directories(${CURSES_INCLUDE_DIR})
 include_directories(.)
 include_directories(src)
 include_directories(src/utils)
-
-# To build cJSON
-add_subdirectory(3rd_party/cJSON)
-
-# To include fff/fff.h and cJSON/cJSON.h
-include_directories(3rd_party)
 
 # Build client and server
 add_subdirectory(src)
