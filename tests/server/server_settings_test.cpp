@@ -15,8 +15,8 @@ protected:
 
     void assert_default_settings() {
         Server_settings default_s = server_default_settings();
-        ASSERT_EQ(s.port, default_s.port);
-        ASSERT_STREQ(s.log_file, default_s.log_file);
+        EXPECT_EQ(s.port, default_s.port);
+        EXPECT_STREQ(s.log_file, default_s.log_file);
     }
 
     Server_settings s;

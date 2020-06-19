@@ -78,7 +78,7 @@ TEST_F(LogTest, log_ormat_empty_string)
     const char str[] = "";
     buffer = log_format(str, sizeof(str));
 
-    ASSERT_STREQ(buffer, "00:00:00 ");
+    EXPECT_STREQ(buffer, "00:00:00 ");
 }
 
 TEST_F(LogTest, log_ormat_constant_string)
@@ -86,7 +86,7 @@ TEST_F(LogTest, log_ormat_constant_string)
     const char str[] = "Hello you!\n";
     buffer = log_format(str, sizeof(str));
 
-    ASSERT_STREQ(buffer, "00:00:00 Hello you!\n");
+    EXPECT_STREQ(buffer, "00:00:00 Hello you!\n");
 }
 
 TEST_F(LogTest, log_ormat_non_null_time_less_than_one_day)
@@ -95,7 +95,7 @@ TEST_F(LogTest, log_ormat_non_null_time_less_than_one_day)
     set_time(2*3600 + 3*60 + 45);
     buffer = log_format(str, sizeof(str));
 
-    ASSERT_STREQ(buffer, "02:03:45 Hello you!");
+    EXPECT_STREQ(buffer, "02:03:45 Hello you!");
 }
 
 TEST_F(LogTest, log_ormat_non_null_time_greater_than_one_day)
@@ -104,7 +104,7 @@ TEST_F(LogTest, log_ormat_non_null_time_greater_than_one_day)
     set_time(18*24*3600 + 2*3600 + 3*60 + 45);
     buffer = log_format(str, sizeof(str));
 
-    ASSERT_STREQ(buffer, "02:03:45 Hello you!");
+    EXPECT_STREQ(buffer, "02:03:45 Hello you!");
 }
 
 TEST_F(LogTest, log_ormat_truncate)
@@ -112,7 +112,7 @@ TEST_F(LogTest, log_ormat_truncate)
     const char str[] = "Hello you!";
     buffer = log_format(str, 4);
 
-    ASSERT_STREQ(buffer, "00:00:00 Hello");
+    EXPECT_STREQ(buffer, "00:00:00 Hello");
     read_equal_name(logfile, "00:00:00 log_format: truncated output: len=19, m_size=15\n");
 }
 
@@ -146,7 +146,7 @@ TEST_F(LogInitTest, log_init_null)
 
     STDERR_TO_BUFFER(info("hello"));
 
-    ASSERT_STREQ(buffer, "00:00:00 hello");
+    EXPECT_STREQ(buffer, "00:00:00 hello");
 }
 
 TEST_F(LogInitTest, log_init)
@@ -156,6 +156,6 @@ TEST_F(LogInitTest, log_init)
 
     STDERR_TO_BUFFER(info("hello"));
 
-    ASSERT_STREQ(buffer, "");
+    EXPECT_STREQ(buffer, "");
     read_equal_name(logfile, "00:00:00 hello");
 }

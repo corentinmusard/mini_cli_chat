@@ -52,7 +52,7 @@ TEST_F(AsyncTest, wait_events)
 
     struct epoll_event events[MAX_EVENTS];
     int e = wait_events(epollfd, events);
-    ASSERT_EQ(e, 1);
+    EXPECT_EQ(e, 1);
 }
 
 TEST_F(AsyncTest, wait_events_multiple)
@@ -63,7 +63,7 @@ TEST_F(AsyncTest, wait_events_multiple)
 
     struct epoll_event events[MAX_EVENTS];
     int e = wait_events(epollfd, events);
-    ASSERT_EQ(e, 3);
+    EXPECT_EQ(e, 3);
 }
 
 TEST_F(AsyncTest, make_fd_non_blocking)
@@ -75,5 +75,5 @@ TEST_F(AsyncTest, make_fd_non_blocking)
     make_fd_non_blocking(fd);
 
     flags = fcntl(fd, F_GETFL, 0);
-    ASSERT_NE(flags & O_NONBLOCK, 0);
+    EXPECT_NE(flags & O_NONBLOCK, 0);
 }

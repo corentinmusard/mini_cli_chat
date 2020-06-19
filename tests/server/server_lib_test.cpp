@@ -58,22 +58,20 @@ TEST_F(ServerLibTest, broadcast_message_no_client)
 
 TEST_F(ServerLibTest, broadcast_message_one_client)
 {
-    char buffer[MAXMSG_SERV] = "Hello world!";
-
     add_fake_client();
 
+    char buffer[MAXMSG_SERV] = "Hello world!";
     broadcast_message(clients, buffer, MAXMSG_SERV);
     assert_broadcast_message_equal(buffer);
 }
 
 TEST_F(ServerLibTest, broadcast_message_multiple_clients)
 {
+    add_fake_client();
+    add_fake_client();
+    add_fake_client();
+
     char buffer[MAXMSG_SERV] = "Hello world!";
-
-    add_fake_client();
-    add_fake_client();
-    add_fake_client();
-
     broadcast_message(clients, buffer, MAXMSG_SERV);
     assert_broadcast_message_equal(buffer);
 }
@@ -95,39 +93,36 @@ TEST_F(ServerLibTest, disconnect_client_info)
 {
     Client *c = add_client(clients, 2);
     disconnect_client(c);
-    ASSERT_EQ(info_fake.call_count, 1);
+
+    EXPECT_EQ(info_fake.call_count, 1);
 }
 
 TEST_F(ServerLibTest, disconnect_client_duplicate)
 {
-    int fds[2] = {1, 2};
-
     Client *c = add_client(clients, 2);
     add_client(clients, 2);
     add_client(clients, 1);
     disconnect_client(c);
 
-    assert_fds_are(clients, fds, 2);
+    assert_fds_are(clients, (const int[]){1, 2}, 2);
 }
 
 TEST_F(ServerLibTest, disconnect_client_multiple_clients)
 {
-    int fds[3] = {1, 3, 4};
-
     add_client(clients, 4);
     Client *c = add_client(clients, 2);
     add_client(clients, 3);
     add_client(clients, 1);
     disconnect_client(c);
 
-    assert_fds_are(clients, fds, 3);
+    assert_fds_are(clients, (const int[]){1, 3, 4}, 3);
 }
 
 TEST_F(ServerLibTest, send_fd)
 {
-    char buffer[MAXMSG_SERV] = "Hello world!";
-
     Client *c = add_fake_client();
+
+    char buffer[MAXMSG_SERV] = "Hello world!";
     send_fd(c->fd, "%s", buffer);
 
     read_equal(c->fd, buffer);
@@ -135,31 +130,31 @@ TEST_F(ServerLibTest, send_fd)
 
 TEST_F(ServerLibTest, send_fd_info)
 {
-    char buffer[MAXMSG_SERV] = "Hello world!";
-
     Client *c = add_fake_client();
+
+    char buffer[MAXMSG_SERV] = "Hello world!";
     send_fd(c->fd, "%s", buffer);
 
-    ASSERT_EQ(info_fake.call_count, 1);
+    EXPECT_EQ(info_fake.call_count, 1);
 }
 
 TEST_F(ServerLibTest, send_fd_truncate)
 {
+    Client *c = add_fake_client();
+
     char buffer[MAXMSG_SERV+100] = {0};
     memset(buffer, 0x41, MAXMSG_SERV+99);
-
-    Client *c = add_fake_client();
     send_fd(c->fd, "%s", buffer);
 
     read_not_equal(c->fd, buffer);
-    ASSERT_EQ(info_fake.call_count, 2);
+    EXPECT_EQ(info_fake.call_count, 2);
 }
 
 TEST_F(ServerLibTest, send_everyone_one_client)
 {
-    char buffer[MAXMSG_SERV] = "Hello world!";
-
     add_fake_client();
+
+    char buffer[MAXMSG_SERV] = "Hello world!";
     send_everyone(clients, "%s", buffer);
 
     assert_broadcast_message_equal(buffer);
@@ -167,36 +162,36 @@ TEST_F(ServerLibTest, send_everyone_one_client)
 
 TEST_F(ServerLibTest, send_everyone_multiple_clients)
 {
-    char buffer[MAXMSG_SERV] = "Hello world!";
+    add_fake_client();
+    add_fake_client();
+    add_fake_client();
 
-    add_fake_client();
-    add_fake_client();
-    add_fake_client();
+    char buffer[MAXMSG_SERV] = "Hello world!";
     send_everyone(clients, "%s", buffer);
 
     assert_broadcast_message_equal(buffer);
-    ASSERT_EQ(info_fake.call_count, 1);
+    EXPECT_EQ(info_fake.call_count, 1);
 }
 
 TEST_F(ServerLibTest, send_everyone_info)
 {
-    char buffer[MAXMSG_SERV] = "Hello world!";
-
     add_fake_client();
+
+    char buffer[MAXMSG_SERV] = "Hello world!";
     send_everyone(clients, "%s", buffer);
 
-    ASSERT_EQ(info_fake.call_count, 1);
+    EXPECT_EQ(info_fake.call_count, 1);
 }
 
 TEST_F(ServerLibTest, send_everyone_info_truncate)
 {
+    add_fake_client();
+
     char buffer[MAXMSG_SERV+100] = {0};
     memset(buffer, 0x41, MAXMSG_SERV+99);
-
-    add_fake_client();
     send_everyone(clients, "%s", buffer);
 
-    ASSERT_EQ(info_fake.call_count, 2);
+    EXPECT_EQ(info_fake.call_count, 2);
 }
 
 TEST_F(ServerLibTest, command_nick_null)
@@ -211,7 +206,7 @@ TEST_F(ServerLibTest, command_nick_null)
 
     command_nick(c, saveptr);
 
-    ASSERT_STREQ(c->username, "default_nick");
+    EXPECT_STREQ(c->username, "default_nick");
     read_equal(c->fd, "/nick <nickname>\n");
 }
 
@@ -227,7 +222,7 @@ TEST_F(ServerLibTest, command_nick_not_available)
 
     command_nick(c, saveptr);
 
-    ASSERT_STREQ(c->username, "used");
+    EXPECT_STREQ(c->username, "used");
     read_equal(c->fd, "Nickname not available\n");
 }
 
@@ -243,7 +238,7 @@ TEST_F(ServerLibTest, command_nick_available)
 
     command_nick(c, saveptr);
 
-    ASSERT_STREQ(c->username, "new_name");
+    EXPECT_STREQ(c->username, "new_name");
     read_equal(c->fd, "old_name is now known as new_name\n");
 }
 
@@ -272,7 +267,7 @@ TEST_F(ServerLibTest, special_command_handling_info)
     special_command_handling(c, buffer);
 
     ASSERT_GT(info_fake.call_count, 1);
-    ASSERT_STREQ(info_fake.arg0_history[0], "%s: %s\n");
+    EXPECT_STREQ(info_fake.arg0_history[0], "%s: %s\n");
 }
 
 TEST_F(ServerLibTest, special_command_handling_unknown_command)
@@ -283,7 +278,7 @@ TEST_F(ServerLibTest, special_command_handling_unknown_command)
     special_command_handling(c, buffer);
 
     read_equal(c->fd, "Unknown command /my,custom~command\n");
-    ASSERT_EQ(info_fake.call_count, 2);
+    EXPECT_EQ(info_fake.call_count, 2);
 }
 
 TEST_F(ServerLibTest, special_command_handling_nick)
@@ -294,7 +289,7 @@ TEST_F(ServerLibTest, special_command_handling_nick)
 
     special_command_handling(c, buffer);
 
-    ASSERT_STREQ(c->username, "new_name");
+    EXPECT_STREQ(c->username, "new_name");
     read_equal(c->fd, "old_name is now known as new_name\n");
 }
 
@@ -308,7 +303,7 @@ TEST_F(ServerLibTest, client_message_handling)
     fill_fake_fd(c->fd, buffer, sizeof(buffer));
     client_message_handling(c);
 
-    ASSERT_GT(info_fake.call_count, 0);
+    EXPECT_GT(info_fake.call_count, 0);
     read_equal(c2->fd, "default_nick: Hello world!\n");
 }
 
@@ -320,7 +315,7 @@ TEST_F(ServerLibTest, client_message_handling_bad_fd)
 
     client_message_handling(c);
 
-    ASSERT_EQ(info_fake.call_count, 0);
+    EXPECT_EQ(info_fake.call_count, 0);
     read_equal(c2->fd, "");
 }
 
@@ -332,7 +327,7 @@ TEST_F(ServerLibTest, client_message_handling_leave)
 
     client_message_handling(c);
 
-    ASSERT_GT(info_fake.call_count, 0);
+    EXPECT_GT(info_fake.call_count, 0);
     read_equal(c2->fd, "default_nick: leave the server\n");
 }
 
@@ -346,7 +341,7 @@ TEST_F(ServerLibTest, client_message_handling_command)
     fill_fake_fd(c->fd, buffer, sizeof(buffer));
     client_message_handling(c);
 
-    ASSERT_GT(info_fake.call_count, 0);
+    EXPECT_GT(info_fake.call_count, 0);
     read_equal(c2->fd, "default_nick is now known as new_name\n");
 }
 
@@ -356,6 +351,6 @@ TEST_F(ServerLibTest, DISABLED_connect_client)
     Client *c = connect_client(clients, fd, epollfd);
 
     //get_client(clients, c->fd); //it succeeds or assert_fail()
-    ASSERT_EQ(info_fake.call_count, 1);
+    EXPECT_EQ(info_fake.call_count, 1);
     read_equal(c->fd, "%s: connection opened\n");
 }

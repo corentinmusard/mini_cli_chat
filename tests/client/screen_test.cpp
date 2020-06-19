@@ -20,7 +20,7 @@ protected:
 
 TEST_F(InputTest, input_init)
 {
-    ASSERT_EQ(input->i, 0);
+    EXPECT_EQ(input->i, 0);
 }
 
 
@@ -40,7 +40,7 @@ protected:
 
 TEST_F(MessagesTest, messages_init)
 {
-    ASSERT_EQ(messages->y, 0);
+    EXPECT_EQ(messages->y, 0);
 }
 
 class ScreenTest : public ::testing::Test
@@ -72,6 +72,6 @@ TEST_F(ScreenTest, screen_init)
 TEST_F(ScreenTest, refresh_screen)
 {
     refresh_screen(screen);
-    ASSERT_EQ(wnoutrefresh_fake.call_count, 2);
-    ASSERT_EQ(doupdate_fake.call_count, 1);
+    EXPECT_EQ(wnoutrefresh_fake.call_count, 2);
+    EXPECT_EQ(doupdate_fake.call_count, 1);
 }

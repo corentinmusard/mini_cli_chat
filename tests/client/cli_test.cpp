@@ -29,28 +29,28 @@ protected:
 
 TEST_F(CliTest, init_cli)
 {
-    ASSERT_NE(window_msgs, nullptr);
-    ASSERT_NE(window_input, nullptr);
+    EXPECT_NE(window_msgs, nullptr);
+    EXPECT_NE(window_input, nullptr);
 }
 
 TEST_F(CliTest, reset_message_cursor)
 {
     reset_message_cursor(window_msgs);
     ASSERT_EQ(wmove_fake.call_count, 1);
-    ASSERT_EQ(wmove_fake.arg0_history[0], window_msgs);
-    ASSERT_EQ(wmove_fake.arg1_history[0], INITIAL_MESSAGE_Y);
-    ASSERT_EQ(wmove_fake.arg2_history[0], INITIAL_MESSAGE_X);
+    EXPECT_EQ(wmove_fake.arg0_history[0], window_msgs);
+    EXPECT_EQ(wmove_fake.arg1_history[0], INITIAL_MESSAGE_Y);
+    EXPECT_EQ(wmove_fake.arg2_history[0], INITIAL_MESSAGE_X);
 }
 
 TEST_F(CliTest, refresh_cli)
 {
     refresh_cli(window_msgs, window_input);
-    ASSERT_EQ(wnoutrefresh_fake.call_count, 2);
-    ASSERT_EQ(doupdate_fake.call_count, 1);
+    EXPECT_EQ(wnoutrefresh_fake.call_count, 2);
+    EXPECT_EQ(doupdate_fake.call_count, 1);
 }
 
 TEST_F(CliTest, clear_message_area)
 {
     clear_message_area(window_msgs);
-    ASSERT_EQ(wclrtoeol_fake.call_count, 1);
+    EXPECT_EQ(wclrtoeol_fake.call_count, 1);
 }

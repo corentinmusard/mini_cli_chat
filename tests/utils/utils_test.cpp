@@ -16,41 +16,41 @@ protected:
 
 TEST_F(UtilsTest, register_sigint)
 {
-    ASSERT_EQ(err, 0);
+    EXPECT_EQ(err, 0);
 }
 
 TEST_F(UtilsTest, exit_not_wanted)
 {
-    ASSERT_TRUE(exit_not_wanted(0));
+    EXPECT_TRUE(exit_not_wanted(0));
 }
 
 TEST_F(UtilsTest, exit_not_wanted_err)
 {
-    ASSERT_FALSE(exit_not_wanted(-1));
+    EXPECT_FALSE(exit_not_wanted(-1));
 }
 
 TEST_F(UtilsTest, exit_not_wanted_interrupt)
 {
     int e = raise(SIGINT);
-    ASSERT_EQ(e, 0);
-    ASSERT_FALSE(exit_not_wanted(0));
+    EXPECT_EQ(e, 0);
+    EXPECT_FALSE(exit_not_wanted(0));
 }
 
 TEST_F(UtilsTest, exit_not_wanted_err_interrupt)
 {
     int e = raise(SIGINT);
-    ASSERT_EQ(e, 0);
-    ASSERT_FALSE(exit_not_wanted(-1));
+    EXPECT_EQ(e, 0);
+    EXPECT_FALSE(exit_not_wanted(-1));
 }
 
 TEST_F(UtilsTest, want_to_exit)
 {
-    ASSERT_TRUE(exit_not_wanted(0));
+    EXPECT_TRUE(exit_not_wanted(0));
     want_to_exit();
-    ASSERT_FALSE(exit_not_wanted(0));
+    EXPECT_FALSE(exit_not_wanted(0));
 }
 
 TEST(is_stdin, False)
 {
-    ASSERT_FALSE(is_stdin(STDIN_FILENO + 1));
+    EXPECT_FALSE(is_stdin(STDIN_FILENO + 1));
 }

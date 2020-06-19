@@ -15,8 +15,8 @@ protected:
 
     void assert_default_settings() {
         Client_settings default_s = client_default_settings();
-        ASSERT_EQ(s.port, default_s.port);
-        ASSERT_STREQ(s.log_file, default_s.log_file);
+        EXPECT_EQ(s.port, default_s.port);
+        EXPECT_STREQ(s.log_file, default_s.log_file);
     }
 
     Client_settings s;
@@ -46,7 +46,7 @@ TEST_F(ClientSettingsTest, settings_init_ip)
 
     s = client_settings_init(settings_file);
 
-    ASSERT_STREQ(s.ip, "1.2.3.4");
+    EXPECT_STREQ(s.ip, "1.2.3.4");
 }
 
 TEST_F(ClientSettingsTest, settings_init_ip_wrong_type)
@@ -86,7 +86,7 @@ TEST_F(ClientSettingsTest, settings_init_nickname)
 
     s = client_settings_init(settings_file);
 
-    ASSERT_STREQ(s.nickname, "corentin");
+    EXPECT_STREQ(s.nickname, "corentin");
 }
 
 TEST_F(ClientSettingsTest, settings_init_nickname_wrong_type)

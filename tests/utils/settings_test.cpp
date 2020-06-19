@@ -13,8 +13,8 @@ protected:
 
     void assert_default_settings() {
         Settings default_s = default_settings();
-        ASSERT_EQ(s.port, default_s.port);
-        ASSERT_STREQ(s.log_file, default_s.log_file);
+        EXPECT_EQ(s.port, default_s.port);
+        EXPECT_STREQ(s.log_file, default_s.log_file);
     }
 
     Settings s;
@@ -64,7 +64,7 @@ TEST_F(SettingsTest, settings_init_port)
 
     settings_init(settings_file, &s);
 
-    ASSERT_EQ(s.port, 42);
+    EXPECT_EQ(s.port, 42);
 }
 
 TEST_F(SettingsTest, settings_init_port_bad_type)
@@ -104,7 +104,7 @@ TEST_F(SettingsTest, settings_init_log_file)
 
     settings_init(settings_file, &s);
 
-    ASSERT_STREQ(s.log_file, "myserver.log");
+    EXPECT_STREQ(s.log_file, "myserver.log");
 }
 
 TEST_F(SettingsTest, settings_init_log_file_bad_type)

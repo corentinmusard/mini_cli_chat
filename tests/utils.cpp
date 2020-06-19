@@ -54,28 +54,17 @@ void read_equal_name_offset(const char *filename, const char *buffer, size_t off
 
     char out[MAXMSG_SERV] = {0};
     fread(out, 1, MAXMSG_SERV, f);
-    ASSERT_STREQ(buffer+offset, out+offset);
+    EXPECT_STREQ(buffer+offset, out+offset);
 }
 
 void read_equal_name(const char *filename, const char *buffer) {
-    assert(filename && "should not be NULL");
-    assert(buffer && "should not be NULL");
-
     read_equal_name_offset(filename, buffer, 0);
 }
 
-void read_equal(int fd, const char *buffer) {
-    assert(buffer && "should not be NULL");
-
-    off_t off = lseek(fd, 0, SEEK_SET);
-    assert(off != -1);
-
-    char out[MAXMSG_SERV] = {0};
-    read(fd, out, MAXMSG_SERV);
-    ASSERT_STREQ(buffer, out);
-}
-
-void read_not_equal(int fd, const char *buffer) {
+/**
+ * Assert data read from `fd` equals to `buffer` or not
+ */
+static void read_expect(int fd, const char *buffer, bool equal) {
     assert(fd >= 0 && "should be a valid file descriptor");
     assert(buffer && "should not be NULL");
 
@@ -84,7 +73,20 @@ void read_not_equal(int fd, const char *buffer) {
 
     char out[MAXMSG_SERV] = {0};
     read(fd, out, MAXMSG_SERV);
-    ASSERT_STRNE(buffer, out);
+
+    if (equal) {
+        EXPECT_STREQ(buffer, out);
+    } else {
+        EXPECT_STRNE(buffer, out);
+    }
+}
+
+void read_equal(int fd, const char *buffer) {
+    read_expect(fd, buffer, true);
+}
+
+void read_not_equal(int fd, const char *buffer) {
+    read_expect(fd, buffer, false);
 }
 
 void fill_fake_fd(int fd, const char * buffer, size_t size) {
@@ -127,8 +129,8 @@ void restore_stdin(void) {
 void assert_is_empty(const Clients *clients) {
     assert(clients && "should not be NULL");
 
-    ASSERT_EQ(clients->head, NULL);
-    ASSERT_EQ(clients->nb, 0);
+    EXPECT_EQ(clients->head, NULL);
+    EXPECT_EQ(clients->nb, 0);
 }
 
 void assert_fds_are(const Clients *clients, const int *fds, size_t size) {
@@ -138,8 +140,8 @@ void assert_fds_are(const Clients *clients, const int *fds, size_t size) {
     Client *c = clients->head;
     ASSERT_EQ(clients->nb, size);
     for (size_t i = 0; i < size; i++) {
-        ASSERT_EQ(c->fd, fds[i]);
+        EXPECT_EQ(c->fd, fds[i]);
         c = c->next;
     }
-    ASSERT_EQ(c, NULL);
+    EXPECT_EQ(c, NULL);
 }

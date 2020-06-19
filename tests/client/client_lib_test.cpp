@@ -54,7 +54,7 @@ protected:
 TEST_F(ClientLibTest, increment_indice_message)
 {
     increment_indice_message(input);
-    ASSERT_EQ(input->i, 1);
+    EXPECT_EQ(input->i, 1);
 }
 
 TEST_F(ClientLibTest, increment_indice_message_max_minus_one)
@@ -63,7 +63,7 @@ TEST_F(ClientLibTest, increment_indice_message_max_minus_one)
     input->i = i;
 
     increment_indice_message(input);
-    ASSERT_EQ(input->i, i + 1);
+    EXPECT_EQ(input->i, i + 1);
 }
 
 TEST_F(ClientLibTest, increment_indice_message_equal_max)
@@ -72,7 +72,7 @@ TEST_F(ClientLibTest, increment_indice_message_equal_max)
     input->i = i;
 
     increment_indice_message(input);
-    ASSERT_EQ(input->i, i);
+    EXPECT_EQ(input->i, i);
 }
 
 TEST_F(ClientLibTest, increment_indice_message_superior_max)
@@ -81,7 +81,7 @@ TEST_F(ClientLibTest, increment_indice_message_superior_max)
     input->i = i;
 
     increment_indice_message(input);
-    ASSERT_EQ(input->i, get_max_x() - INITIAL_MESSAGE_X);
+    EXPECT_EQ(input->i, get_max_x() - INITIAL_MESSAGE_X);
 }
 
 TEST_F(ClientLibTest, reset_variables)
@@ -94,22 +94,22 @@ TEST_F(ClientLibTest, reset_variables)
 
     reset_variables(input);
 
-    ASSERT_STREQ(input->buffer, "");
-    ASSERT_EQ(input->i, 0);
+    EXPECT_STREQ(input->buffer, "");
+    EXPECT_EQ(input->i, 0);
 }
 
 TEST_F(ClientLibTest, print_message)
 {
     print_message(msgs, "helloo");
     ASSERT_EQ(mvwprintw_fake.call_count, 1);
-    ASSERT_STREQ(mvwprintw_fake.arg3_history[0], "helloo");
+    EXPECT_STREQ(mvwprintw_fake.arg3_history[0], "helloo");
 }
 
 TEST_F(ClientLibTest, print_message_inc_y)
 {
     int old_y = msgs->y;
     print_message(msgs, "helloo");
-    ASSERT_EQ(msgs->y, old_y + 1);
+    EXPECT_EQ(msgs->y, old_y + 1);
 }
 
 TEST_F(ClientLibTest, print_input_char)
@@ -117,7 +117,7 @@ TEST_F(ClientLibTest, print_input_char)
     print_input_char(input, 'b');
     // fff don't enable uses of arg4_history to check if it equals 'b'
     ASSERT_EQ(mvwprintw_fake.call_count, 1);
-    ASSERT_STREQ(mvwprintw_fake.arg3_history[0], "%c");
+    EXPECT_STREQ(mvwprintw_fake.arg3_history[0], "%c");
 }
 
 TEST_F(ClientLibTest, delete_message_character_remove_char_buffer)
@@ -128,7 +128,7 @@ TEST_F(ClientLibTest, delete_message_character_remove_char_buffer)
     input->buffer[2] =  'C';
     input->buffer[3] =  'D';
     delete_message_character(input);
-    ASSERT_STREQ(input->buffer, "ABC");
+    EXPECT_STREQ(input->buffer, "ABC");
 }
 
 TEST_F(ClientLibTest, delete_message_character_remove_char_window)
@@ -140,7 +140,7 @@ TEST_F(ClientLibTest, delete_message_character_remove_char_window)
     input->buffer[3] =  'D';
     delete_message_character(input);
     ASSERT_EQ(wdelch_fake.call_count, 1);
-    ASSERT_EQ(wdelch_fake.arg0_history[0], input->window);
+    EXPECT_EQ(wdelch_fake.arg0_history[0], input->window);
 }
 
 TEST_F(ClientLibTest, delete_message_character_update_i)
@@ -151,14 +151,14 @@ TEST_F(ClientLibTest, delete_message_character_update_i)
     input->buffer[2] =  'C';
     input->buffer[3] =  'D';
     delete_message_character(input);
-    ASSERT_EQ(input->i, 2);
+    EXPECT_EQ(input->i, 2);
 }
 
 TEST_F(ClientLibTest, delete_message_character_update_i_zero)
 {
     input->i = 0;
     delete_message_character(input);
-    ASSERT_EQ(input->i, 0);
+    EXPECT_EQ(input->i, 0);
 }
 
 TEST_F(ClientLibTest, delete_message_character_move_cursor)
@@ -170,93 +170,93 @@ TEST_F(ClientLibTest, delete_message_character_move_cursor)
     input->buffer[3] =  'D';
     delete_message_character(input);
     ASSERT_EQ(wmove_fake.call_count, 1);
-    ASSERT_EQ(wmove_fake.arg2_history[0], INITIAL_MESSAGE_X + 3 - 1);
+    EXPECT_EQ(wmove_fake.arg2_history[0], INITIAL_MESSAGE_X + 3 - 1);
 }
 
 TEST_F(ClientLibTest, input_char_handling_update_i)
 {
     input_char_handling(input, 'A');
-    ASSERT_EQ(input->i, 1);
+    EXPECT_EQ(input->i, 1);
 }
 
 TEST_F(ClientLibTest, input_char_handling_store_c)
 {
     input_char_handling(input, 'A');
-    ASSERT_EQ(input->buffer[0], 'A');
+    EXPECT_EQ(input->buffer[0], 'A');
 }
 
 TEST_F(ClientLibTest, input_char_handling_print_c)
 {
     input_char_handling(input, 'A');
-    ASSERT_EQ(mvwprintw_fake.call_count, 1);
+    EXPECT_EQ(mvwprintw_fake.call_count, 1);
 }
 
 TEST_F(ClientLibTest, execute_command)
 {
     int e = execute_command("", fake_fd);
-    ASSERT_EQ(e, UNKNOWN_COMMAND);
+    EXPECT_EQ(e, UNKNOWN_COMMAND);
 }
 
 TEST_F(ClientLibTest, execute_command_quit)
 {
-    ASSERT_TRUE(exit_not_wanted(1));
+    EXPECT_TRUE(exit_not_wanted(1));
     int e = execute_command("/quit", fake_fd);
-    ASSERT_EQ(e, 0);
-    ASSERT_FALSE(exit_not_wanted(1));
+    EXPECT_EQ(e, 0);
+    EXPECT_FALSE(exit_not_wanted(1));
 }
 
 TEST_F(ClientLibTest, execute_command_q)
 {
-    ASSERT_TRUE(exit_not_wanted(1));
+    EXPECT_TRUE(exit_not_wanted(1));
     int e = execute_command("/q", fake_fd);
-    ASSERT_EQ(e, 0);
-    ASSERT_FALSE(exit_not_wanted(1));
+    EXPECT_EQ(e, 0);
+    EXPECT_FALSE(exit_not_wanted(1));
 }
 
 TEST_F(ClientLibTest, execute_command_nick)
 {
     int e = execute_command("/nick my_nick", fake_fd);
-    ASSERT_EQ(e, 0);
+    EXPECT_EQ(e, 0);
     read_equal(fake_fd, "/nick my_nick");
 }
 
 TEST_F(ClientLibTest, execute_command_nick_bad_fd)
 {
     int e = execute_command("/nick my_nick", BAD_FD);
-    ASSERT_EQ(e, -1);
+    EXPECT_EQ(e, -1);
 }
 
 TEST_F(ClientLibTest, execute_command_nick_empty)
 {
     int e = execute_command("/nick", fake_fd);
-    ASSERT_EQ(e, UNKNOWN_COMMAND);
+    EXPECT_EQ(e, UNKNOWN_COMMAND);
 }
 
 TEST_F(ClientLibTest, execute_command_send)
 {
     int e = execute_command("/send my msg :)", fake_fd);
-    ASSERT_EQ(e, 0);
+    EXPECT_EQ(e, 0);
     read_equal(fake_fd, "my msg :)");
 }
 
 TEST_F(ClientLibTest, execute_command_send_bad_fd)
 {
     int e = execute_command("/send my msg :)", BAD_FD);
-    ASSERT_EQ(e, -1);
+    EXPECT_EQ(e, -1);
 }
 
 TEST_F(ClientLibTest, execute_command_send_empty)
 {
     int e = execute_command("/send ", fake_fd);
-    ASSERT_EQ(e, 0);
+    EXPECT_EQ(e, 0);
 }
 
 TEST_F(ClientLibTest, display_message)
 {
     display_message(msgs, "helloo", 7+1);
-    ASSERT_EQ(mvwprintw_fake.call_count, 1);
+    EXPECT_EQ(mvwprintw_fake.call_count, 1);
     //todo: fix the line below
-    //ASSERT_STREQ(mvwprintw_fake.arg3_history[0], "helloo");
+    //EXPECT_STREQ(mvwprintw_fake.arg3_history[0], "helloo");
 }
 
 TEST_F(ClientLibTest, evaluate_complete_message)
@@ -264,7 +264,7 @@ TEST_F(ClientLibTest, evaluate_complete_message)
     screen->input->i = 1;
     screen->input->buffer[0] = 'A';
     int e = evaluate_complete_message(screen, fake_fd);
-    ASSERT_EQ(e, 0);
+    EXPECT_EQ(e, 0);
 }
 
 TEST_F(ClientLibTest, evaluate_complete_message_bad_fd)
@@ -272,14 +272,14 @@ TEST_F(ClientLibTest, evaluate_complete_message_bad_fd)
     screen->input->i = 1;
     screen->input->buffer[0] = 'A';
     int e = evaluate_complete_message(screen, BAD_FD);
-    ASSERT_EQ(e, -1);
+    EXPECT_EQ(e, -1);
 }
 
 
 TEST_F(ClientLibTest, evaluate_complete_message_blank_message)
 {
     int e = evaluate_complete_message(screen, fake_fd);
-    ASSERT_EQ(e, 0);
+    EXPECT_EQ(e, 0);
 }
 
 TEST_F(ClientLibTest, evaluate_complete_message_command)
@@ -288,7 +288,7 @@ TEST_F(ClientLibTest, evaluate_complete_message_command)
     screen->input->buffer[0] = '/';
     screen->input->buffer[1] = 'q';
     int e = evaluate_complete_message(screen, fake_fd);
-    ASSERT_EQ(e, 0);
+    EXPECT_EQ(e, 0);
 }
 
 TEST_F(ClientLibTest, evaluate_complete_message_command_bad_fd)
@@ -301,7 +301,7 @@ TEST_F(ClientLibTest, evaluate_complete_message_command_bad_fd)
     screen->input->buffer[4] = 'k';
     screen->input->buffer[5] = ' ';
     int e = evaluate_complete_message(screen, BAD_FD);
-    ASSERT_EQ(e, -1);
+    EXPECT_EQ(e, -1);
 }
 
 TEST_F(ClientLibTest, evaluate_complete_message_command_unknown)
@@ -310,7 +310,7 @@ TEST_F(ClientLibTest, evaluate_complete_message_command_unknown)
     screen->input->buffer[0] = '/';
     screen->input->buffer[1] = ')';
     int e = evaluate_complete_message(screen, fake_fd);
-    ASSERT_EQ(e, 0);
+    EXPECT_EQ(e, 0);
 }
 
 TEST_F(ClientLibTest, DISABLED_client_async_init)
@@ -325,7 +325,7 @@ TEST_F(ClientLibTest, server_message_handling)
 
     int e = server_message_handling(msgs, fake_fd);
     EXPECT_EQ(e, 0);
-    ASSERT_EQ(mvwprintw_fake.call_count, 1);
+    EXPECT_EQ(mvwprintw_fake.call_count, 1);
 }
 
 TEST_F(ClientLibTest, server_message_handling_trailing_nullbyte)
@@ -334,7 +334,7 @@ TEST_F(ClientLibTest, server_message_handling_trailing_nullbyte)
 
     int e = server_message_handling(msgs, fake_fd);
     EXPECT_EQ(e, 0);
-    ASSERT_EQ(mvwprintw_fake.call_count, 1);
+    EXPECT_EQ(mvwprintw_fake.call_count, 1);
 }
 
 TEST_F(ClientLibTest, server_message_handling_multiple)
@@ -343,7 +343,7 @@ TEST_F(ClientLibTest, server_message_handling_multiple)
 
     int e = server_message_handling(msgs, fake_fd);
     EXPECT_EQ(e, 0);
-    ASSERT_EQ(mvwprintw_fake.call_count, 3);
+    EXPECT_EQ(mvwprintw_fake.call_count, 3);
 }
 
 TEST_F(ClientLibTest, server_message_handling_connection_closed)
@@ -363,7 +363,7 @@ TEST_F(ClientLibTest, stdin_char_handling_bad_fd)
     fake_stdin("A");
     int a = stdin_char_handling(screen, fake_fd);
     EXPECT_EQ(a, 0);
-    ASSERT_EQ(mvwprintw_fake.call_count, 1);
+    EXPECT_EQ(mvwprintw_fake.call_count, 1);
     restore_stdin();
 }
 
@@ -372,7 +372,7 @@ TEST_F(ClientLibTest, stdin_char_handling_bad_fd_tab)
     fake_stdin("\t");
     int a = stdin_char_handling(screen, fake_fd);
     EXPECT_EQ(a, 0);
-    ASSERT_EQ(mvwprintw_fake.call_count, 0);
+    EXPECT_EQ(mvwprintw_fake.call_count, 0);
     restore_stdin();
 }
 
@@ -381,7 +381,7 @@ TEST_F(ClientLibTest, stdin_char_handling_bad_fd_del)
     fake_stdin("\x7f"); //DEL
     int a = stdin_char_handling(screen, fake_fd);
     EXPECT_EQ(a, 0);
-    ASSERT_EQ(wdelch_fake.call_count, 1);
+    EXPECT_EQ(wdelch_fake.call_count, 1);
     restore_stdin();
 }
 
@@ -400,7 +400,7 @@ TEST_F(ClientLibTest, stdin_char_handling_bad_max)
     screen->input->i = MAXMSG_CLI - 1;
     int a = stdin_char_handling(screen, fake_fd);
     EXPECT_EQ(a, 0);
-    ASSERT_EQ(mvwprintw_fake.call_count, 0);
+    EXPECT_EQ(mvwprintw_fake.call_count, 0);
     restore_stdin();
 }
 
