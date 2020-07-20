@@ -10,7 +10,9 @@ package_add_test(server_lib
     ../utils.cpp
     ../../src/server/clients.c
     ../../src/server/server_network.c
-    ../../src/utils/asynchronous.c
+
+LIBS
+    common
 )
 
 package_add_test(server_network
@@ -22,9 +24,8 @@ package_add_test(server_settings
     server_settings_test.cpp
     ../utils.cpp
     ../../src/server/server_settings.c
-    ../../src/utils/log.c
-    ../../src/utils/settings.c
 
 LIBS
     cjson
+    common
 )

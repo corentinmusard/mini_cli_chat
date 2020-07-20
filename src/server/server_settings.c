@@ -1,13 +1,6 @@
-#include <assert.h>
-#include <cJSON/cJSON.h>
-#include <limits.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include "utils/utils.h"
 
-#include "log.h"
 #include "server_settings.h"
-#include "utils.h"
 
 Server_settings server_default_settings(void) {
     Server_settings s = {

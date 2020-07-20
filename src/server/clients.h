@@ -6,7 +6,7 @@ extern "C" {
 
 #include <stdbool.h>
 
-#include "utils.h"
+#include "utils/utils.h"
 
 typedef struct Client_s Client;
 typedef struct Clients_s Clients;

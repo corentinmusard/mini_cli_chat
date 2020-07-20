@@ -1,65 +1,48 @@
-set(W
-    -g
-    -pedantic
-    -Wall
-    -Wextra
-
-    -Wunreachable-code
-    -Wmissing-include-dirs
-    -Wfloat-equal
-    -Wwrite-strings
-    -Wpointer-arith
-    -Wcast-qual
-    -Wcast-align
-    -Wshadow
-    #-Wredundant-decls
-    -Wdouble-promotion
-    -Winit-self
-    -Wswitch-default
-    -Wswitch-enum
-    -Wundef
-    -Winline
-    -Wformat-security
-    -Wformat=2
-    -Wunused-macros
-    -Wdate-time
-    -Wpacked
-    -Winvalid-pch
-    -Wvla
-    -Wdisabled-optimization
-    -Wconversion
-)
-
-macro(package_add_test TESTNAME)
+function(package_add_test TESTNAME)
     # https://cliutils.gitlab.io/modern-cmake/chapters/testing/googletest.html
     set(options ) # empty
     set(oneValueArgs ) # empty
-    set(multiValueArgs LIBS)
+    set(multiValueArgs DEFINE LIBS)
     cmake_parse_arguments(MY "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
 
     add_executable(${TESTNAME} ${MY_UNPARSED_ARGUMENTS})
 
+    target_compile_definitions(${TESTNAME}
+    PRIVATE
+        ${MY_DEFINE}
+    )
+
+    target_include_directories(${TESTNAME}
+    PRIVATE
+        ${CMAKE_SOURCE_DIR}
+        ${CMAKE_SOURCE_DIR}/src
+        ${CMAKE_SOURCE_DIR}/3rd_party
+    )
+
     target_link_libraries(${TESTNAME}
+    PRIVATE
         ${MY_LIBS}
-        gtest
-        gtest_main
+        GTest::GTest
+        GTest::Main
         "--coverage"
     )
 
     target_compile_options(${TESTNAME}
-        PUBLIC ${W}
-        PUBLIC "-fPIE"
-        PUBLIC "--coverage"
+    PRIVATE
+        -Wall
+        -Wextra
+        "-fPIE"
+        "--coverage"
     )
     # gtest_discover_tests replaces gtest_add_tests,
-    # see https://cmake.org/cmake/help/v3.10/module/GoogleTest.html for more options to pass to it
+    # See https://cmake.org/cmake/help/v3.10/module/GoogleTest.html for more options to pass to it
     gtest_discover_tests(${TESTNAME}
-        # set a working directory so your project root so that you can find test data via paths relative to the project root
+        # Set a working directory so your project root so that you can find test data via paths relative to the project root
         WORKING_DIRECTORY ${PROJECT_DIR}
         PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY "${PROJECT_DIR}"
     )
     set_target_properties(${TESTNAME} PROPERTIES FOLDER tests)
-endmacro()
+endfunction()
 
 add_subdirectory(client)
 add_subdirectory(server)

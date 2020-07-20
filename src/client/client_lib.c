@@ -6,12 +6,13 @@
 #include <sys/epoll.h>
 #include <unistd.h>
 
-#include "asynchronous.h"
+#include "utils/asynchronous.h"
+#include "utils/log.h"
+#include "utils/utils.h"
+
 #include "cli.h"
 #include "client_lib.h"
-#include "log.h"
 #include "screen.h"
-#include "utils.h"
 
 /**
  * ASCII char 0x7f = 127
@@ -96,6 +97,13 @@ int send_nickname(const char *nickname, int sockfd) {
 }
 
 /**
+ * Return true if `str` start with `pre`.
+ */
+static bool start_with(const char *str, const char *pre) {
+    return strncmp(pre, str, strlen(pre)) == 0;
+}
+
+/**
  * Command is not in the whitelisted command
  */
 #define UNKNOWN_COMMAND (-2)
@@ -110,18 +118,18 @@ static int execute_command(const char *command, int sockfd) {
     assert(command && "should not be NULL");
     assert(sockfd >= 0 && "should be a valid file descriptor");
 
-    if (strncmp("/quit", command, 5) == 0 || strncmp("/q", command, 2) == 0) {
+    if (start_with(command, "/quit") || start_with(command, "/q")) {
         want_to_exit();
         return 0;
     }
-    if (strncmp("/nick ", command, 6) == 0) {
+    if (start_with(command, "/nick ")) {
         if (write(sockfd, command, strlen(command)) == -1) {
             perror("write");
             return -1;
         }
         return 0;
     }
-    if (strncmp("/send ", command, 6) == 0) {
+    if (start_with(command, "/send ")) {
         const char *buffer = command + 6;
         size_t len = strlen(buffer);
         if (len == 0) { // command is just "/send "

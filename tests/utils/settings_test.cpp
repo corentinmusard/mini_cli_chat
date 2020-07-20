@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include <signal.h>
 
-#include "settings.h"
+#include "utils/settings.h"
 #include "tests/utils.hpp"
 
 class SettingsTest : public ::testing::Test

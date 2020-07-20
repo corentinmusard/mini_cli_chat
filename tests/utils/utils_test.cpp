@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include <signal.h>
 
-#include "utils.h"
+#include "utils/utils.h"
 
 class UtilsTest : public ::testing::Test
 {

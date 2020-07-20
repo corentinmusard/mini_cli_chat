@@ -12,11 +12,9 @@ package_add_test(client_lib
     ../utils.cpp
     ../../src/client/cli.c
     ../../src/client/screen.c
-    ../../src/utils/asynchronous.c
-    ../../src/utils/log.c
-    ../../src/utils/utils.c
 
 LIBS
+    common
     ${CURSES_LIBRARIES}
 )
 
@@ -24,6 +22,9 @@ package_add_test(client_network
     network_test.cpp
     ../../src/client/client_network.c
     ../../src/server/server_network.c
+
+DEFINE
+    -D_POSIX_C_SOURCE=1 # POSIX.1 1990
 )
 
 package_add_test(screen
@@ -40,9 +41,8 @@ package_add_test(client_settings
     client_settings_test.cpp
     ../utils.cpp
     ../../src/client/client_settings.c
-    ../../src/utils/log.c
-    ../../src/utils/settings.c
 
 LIBS
     cjson
+    common
 )

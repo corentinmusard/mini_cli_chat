@@ -7,11 +7,12 @@
 #include <sys/socket.h>
 #include <unistd.h>
 
-#include "asynchronous.h"
+#include "utils/asynchronous.h"
+#include "utils/log.h"
+#include "utils/utils.h"
+
 #include "clients.h"
-#include "log.h"
 #include "server_lib.h"
-#include "utils.h"
 
 /**
  * Message sent by server to a client after sucessful connection

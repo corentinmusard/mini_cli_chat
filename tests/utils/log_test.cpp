@@ -1,7 +1,7 @@
 #include <assert.h>
 #include <gtest/gtest.h>
 
-#include "log.h"
+#include "utils/log.h"
 #include "tests/utils.hpp"
 
 /**

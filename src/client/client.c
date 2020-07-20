@@ -2,13 +2,14 @@
 #include <stdlib.h>
 #include <sys/epoll.h>
 
-#include "asynchronous.h"
+#include "utils/asynchronous.h"
+#include "utils/log.h"
+#include "utils/utils.h"
+
 #include "client_lib.h"
 #include "client_network.h"
 #include "client_settings.h"
-#include "log.h"
 #include "screen.h"
-#include "utils.h"
 
 int main(void) {
     if (register_sigint() == -1) {

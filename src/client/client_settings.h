@@ -4,10 +4,8 @@
 extern "C" {
 #endif
 
-#include <netinet/in.h>
-
-#include "settings.h"
-#include "utils.h"
+#include "utils/settings.h"
+#include "utils/utils.h"
 
 /**
  * See https://stackoverflow.com/a/1076755

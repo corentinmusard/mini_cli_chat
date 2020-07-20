@@ -2,7 +2,7 @@
 
 #include "client/client_network.h"
 #include "server/server_network.h"
-#include "utils.h"
+#include "utils/utils.h"
 
 class NetworkTest : public ::testing::Test
 {

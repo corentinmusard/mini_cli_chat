@@ -30,6 +30,21 @@ if (CMAKE_VERSION VERSION_LESS 2.8.11)
   include_directories("${gtest_SOURCE_DIR}/include")
 endif()
 
-set(GTEST_LIBRARY gtest CACHE INTERNAL "Documentation for GTEST_LIBRARY")
-set(GTEST_MAIN_LIBRARY gtest_main CACHE INTERNAL "Documentation for GTEST_MAIN_LIBRARY")
-set(GTEST_INCLUDE_DIR ${CMAKE_CURRENT_BINARY_DIR}/googletest-src CACHE INTERNAL "Documentation for GTEST_INCLUDE_DIR")
+set(GTEST_LIBRARY gtest
+    CACHE INTERNAL
+    "Documentation for GTEST_LIBRARY"
+)
+set(GTEST_MAIN_LIBRARY gtest_main
+    CACHE INTERNAL
+    "Documentation for GTEST_MAIN_LIBRARY"
+)
+set(GTEST_INCLUDE_DIR ${CMAKE_CURRENT_BINARY_DIR}/googletest-src
+    CACHE INTERNAL
+    "Documentation for GTEST_INCLUDE_DIR"
+)
+
+# Add aliases for GTest and GMock libraries
+add_library(GTest::GTest ALIAS gtest)
+add_library(GTest::Main ALIAS gtest_main)
+add_library(GMock::GMock ALIAS gmock)
+add_library(GMock::Main ALIAS gmock_main)

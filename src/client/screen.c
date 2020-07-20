@@ -1,9 +1,10 @@
 #include <assert.h>
 #include <stdlib.h>
 
+#include "utils/utils.h"
+
 #include "cli.h"
 #include "screen.h"
-#include "utils.h"
 
 Input* input_init(void) {
     Input *input = malloc(sizeof(Input));

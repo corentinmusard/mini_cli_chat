@@ -4,9 +4,7 @@
 extern "C" {
 #endif
 
-#include <netinet/in.h>
-
-#include "settings.h"
+#include "utils/settings.h"
 
 typedef struct {
     BASE_SETTINGS; //default settings fields (like port or log_file)

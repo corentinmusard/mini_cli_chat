@@ -1,14 +1,15 @@
 #include <arpa/inet.h>
 #include <assert.h>
 #include <cJSON/cJSON.h>
-#include <limits.h>
+#include <netinet/in.h>
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
+#include <sys/socket.h>
 
-#include "log.h"
+#include "utils/log.h"
+#include "utils/utils.h"
+
 #include "client_settings.h"
-#include "utils.h"
 
 Client_settings client_default_settings(void) {
     Client_settings s = {

@@ -13,19 +13,29 @@ It uses Berkeley sockets, epoll, ncurses, cmake, google test.
 
 ## Coding Process
 
-Project is conforming to C11 and newer. It requires POSIX and Linux (for epoll).
+Project is conforming to C11 and newer. It requires POSIX and Linux (for epoll). It uses modern CMake (or at least try to).
 
 ### Using [Design by contract](//barrgroup.com/embedded-systems/how-to/design-by-contract-for-embedded-software) (DbC)
 Preconditions are checked with `assert`, postconditions are checked within tests.
 
 ### Tools used to ensure good code
--   [scan-build](//clang-analyzer.llvm.org/scan-build.html)
 -   [clang-tidy](//clang.llvm.org/extra/clang-tidy/)
 -   [iwyu](//github.com/include-what-you-use/include-what-you-use)
 -   [cppcheck](//github.com/danmar/cppcheck)
 -   [fsanitize](//clang.llvm.org/docs/AddressSanitizer.html) runtime checks instead of `valgrind`
 
 ## Getting Started
+
+### Build options
+| Flag name         | Default | Explanation                                           |
+| ----------------- | ------- | ----------------------------------------------------- |
+| CLANG_TIDY_CHECKS | OFF     | Run clang-tidy to lint the code                       |
+| FSANITIZE_FLAGS   | ON      | Build with -fsanitize= flags                          |
+| IWYU_CHECKS       | OFF     | Run include-what-you-use to find unnecessary #include |
+| LWYU_CHECKS       | OFF     | Show unused linked libraries                          |
+
+### Build
+
 To build both client and server binaries:
 ```sh
 mkdir build
@@ -46,6 +56,7 @@ None for now because it's not really usable.
 -   [x] server: notify clients when someone join/leave server
 -   [x] add nicknames support (default name, renaming and uniques nicknames)
 -   [ ] client: when screen is full, scroll messsages and display new messages
+-   [ ] client: when input line is full, shift messsages and shift back when deleting or moving with the cursor keys
 -   [ ] add privates messages support
 -   [ ] add a way to login into a specific nickname with a password
 -   [ ] server: protect a nickname when it has been registred
