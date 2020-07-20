@@ -20,5 +20,4 @@ PRIVATE
 target_link_libraries(common
 PRIVATE
     cjson
-    ${RUNTIME_CHECKS}
 )
