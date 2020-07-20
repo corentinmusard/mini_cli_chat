@@ -16,3 +16,9 @@ target_include_directories(common
 PRIVATE
     ${CMAKE_SOURCE_DIR}/3rd_party
 )
+
+target_link_libraries(common
+PRIVATE
+    cjson
+    ${RUNTIME_CHECKS}
+)
