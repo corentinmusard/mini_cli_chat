@@ -29,7 +29,7 @@ Preconditions are checked with `assert`, postconditions are checked within tests
 ### Build options
 | Flag name         | Default | Explanation                                           |
 | ----------------- | ------- | ----------------------------------------------------- |
-| CLANG_TIDY_CHECKS | OFF     | Run clang-tidy to lint the code                       |
+| CLANG_TIDY_CHECKS | ON      | Run clang-tidy to lint the code                       |
 | FSANITIZE_FLAGS   | ON      | Build with -fsanitize= flags                          |
 | IWYU_CHECKS       | OFF     | Run include-what-you-use to find unnecessary #include |
 | LWYU_CHECKS       | OFF     | Show unused linked libraries                          |
