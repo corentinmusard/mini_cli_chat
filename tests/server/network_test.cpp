@@ -5,7 +5,7 @@
 
 class NetworkTest : public ::testing::Test
 {
-    //nothing
+    // nothing
 };
 
 TEST_F(NetworkTest, start_server)

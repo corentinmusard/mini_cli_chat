@@ -13,7 +13,7 @@ extern "C" {
 #define MAX_IP_LENGTH 45
 
 typedef struct {
-    BASE_SETTINGS; //default settings fields (like port or log_file)
+    BASE_SETTINGS; // default settings fields (like port or log_file)
 
     // define more values below
     char ip[MAX_IP_LENGTH + 1];

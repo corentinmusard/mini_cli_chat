@@ -14,7 +14,7 @@ int connect_client(const char *ip, in_port_t port) {
     }
 
     struct in_addr ip_addr;
-    if (inet_pton(AF_INET, ip, &ip_addr) != 1) { //IPv4 only
+    if (inet_pton(AF_INET, ip, &ip_addr) != 1) { // IPv4 only
         return BAD_IP;
     }
 

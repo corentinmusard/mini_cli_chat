@@ -7,7 +7,7 @@ extern "C" {
 #include "utils/settings.h"
 
 typedef struct {
-    BASE_SETTINGS; //default settings fields (like port or log_file)
+    BASE_SETTINGS; // default settings fields (like port or log_file)
 
     // define more values below
 } Server_settings;

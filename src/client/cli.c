@@ -38,7 +38,7 @@ void init_cli(WINDOW **messages_window, WINDOW **input_window) {
     assert(*messages_window);
     assert(*input_window);
 
-    touchwin(stdscr); //necessary before refreshing subwindows
+    touchwin(stdscr); // necessary before refreshing subwindows
 
     mvwprintw(*input_window, INITIAL_MESSAGE_Y, INPUT_PROMPT_X, INPUT_PROMPT);
     box(*messages_window, ACS_VLINE, ACS_HLINE);

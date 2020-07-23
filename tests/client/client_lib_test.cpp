@@ -255,8 +255,8 @@ TEST_F(ClientLibTest, display_message)
 {
     display_message(msgs, "helloo", 7+1);
     EXPECT_EQ(mvwprintw_fake.call_count, 1);
-    //todo: fix the line below
-    //EXPECT_STREQ(mvwprintw_fake.arg3_history[0], "helloo");
+    // todo: fix the line below
+    // EXPECT_STREQ(mvwprintw_fake.arg3_history[0], "helloo");
 }
 
 TEST_F(ClientLibTest, evaluate_complete_message)
@@ -378,7 +378,7 @@ TEST_F(ClientLibTest, stdin_char_handling_bad_fd_tab)
 
 TEST_F(ClientLibTest, stdin_char_handling_bad_fd_del)
 {
-    fake_stdin("\x7f"); //DEL
+    fake_stdin("\x7f"); // DEL
     int a = stdin_char_handling(screen, fake_fd);
     EXPECT_EQ(a, 0);
     EXPECT_EQ(wdelch_fake.call_count, 1);
@@ -390,7 +390,7 @@ TEST_F(ClientLibTest, stdin_char_handling_bad_fd_return)
     fake_stdin("\r");
     int a = stdin_char_handling(screen, fake_fd);
     EXPECT_EQ(a, 0);
-    //todo: add assert to check if function is doing the good something
+    // todo: add assert to check if function is doing the good something
     restore_stdin();
 }
 

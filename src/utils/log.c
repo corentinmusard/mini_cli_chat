@@ -67,8 +67,8 @@ char* log_format(const char *buffer, size_t size) {
     assert(buffer && "should not be NULL");
     assert(size > 0 && "should not be 0");
 
-    //+1 for space between time and buffer
-    //+1 for '\0'
+    // +1 for space between time and buffer
+    // +1 for '\0'
     size_t m_size = SIZE_TIME + 1 + size + 1;
     char *message = calloc(m_size, sizeof(char));
 

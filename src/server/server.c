@@ -35,9 +35,9 @@ int main(void) {
         nfds = wait_events(epollfd, events);
 
         for (int i = 0; i < nfds && nfds != -1; i++) {
-            if (events[i].data.fd == server_fd) { //event from server socket
+            if (events[i].data.fd == server_fd) { // event from server socket
                 accept_client(clients, epollfd, server_fd);
-            } else { //event from client socket
+            } else { // event from client socket
                 Client *c = get_client(clients, events[i].data.fd);
                 client_message_handling(c);
             }

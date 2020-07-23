@@ -101,7 +101,7 @@ TEST_F(ClientSettingsTest, settings_init_nickname_wrong_type)
 
 TEST_F(ClientSettingsTest, settings_init_nickname_too_long)
 {
-    //todo: make file length using MAX_USERNAME_LENGTH
+    // todo: make file length using MAX_USERNAME_LENGTH
     const char buffer[] = "{\"nickname\": \"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\"}";
     char *settings_file = fill_tmp_file(buffer);
 

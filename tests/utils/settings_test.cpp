@@ -129,7 +129,7 @@ TEST_F(SettingsTest, settings_init_log_file_empty_field)
 
 TEST_F(SettingsTest, settings_init_log_file_too_long)
 {
-    //todo: make file length using MAX_LOGFILE_LENGTH
+    // todo: make file length using MAX_LOGFILE_LENGTH
     const char buffer[] = "{\"log_file\": \"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA.log\"}";
     char *settings_file = fill_tmp_file(buffer);
 

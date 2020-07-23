@@ -346,12 +346,40 @@ TEST_F(ServerLibTest, client_message_handling_command)
     read_equal(c2->fd, "default_nick is now known as new_name\n");
 }
 
+TEST_F(ServerLibTest, client_message_handling_trim)
+{
+    const char buffer[MAXMSG_CLI] = " Hello world!    \t \n";
+    Client *c = add_fake_client();
+    strncpy(c->username, "default_nick", MAX_USERNAME_LENGTH);
+    Client *c2 = add_fake_client();
+
+    fill_fake_fd(c->fd, buffer, sizeof(buffer));
+    client_message_handling(c);
+
+    EXPECT_GT(info_fake.call_count, 0);
+    read_equal(c2->fd, "default_nick:  Hello world!\n");
+}
+
+TEST_F(ServerLibTest, client_message_handling_trim_empty_message)
+{
+    const char buffer[MAXMSG_CLI] = "     \t \n";
+    Client *c = add_fake_client();
+    strncpy(c->username, "default_nick", MAX_USERNAME_LENGTH);
+    Client *c2 = add_fake_client();
+
+    fill_fake_fd(c->fd, buffer, sizeof(buffer));
+    client_message_handling(c);
+
+    EXPECT_EQ(info_fake.call_count, 0);
+    read_equal(c2->fd, "");
+}
+
 TEST_F(ServerLibTest, DISABLED_connect_client)
 {
     int fd = get_fake_fd();
     Client *c = connect_client(clients, fd, epollfd);
 
-    //get_client(clients, c->fd); //it succeeds or assert_fail()
+    // get_client(clients, c->fd); // it succeeds or assert_fail()
     EXPECT_EQ(info_fake.call_count, 1);
     read_equal(c->fd, "%s: connection opened\n");
 }

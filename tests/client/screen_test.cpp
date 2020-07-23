@@ -65,7 +65,7 @@ protected:
 
 TEST_F(ScreenTest, screen_init)
 {
-    //tested code are in SetUp and TearDown
+    // tested code are in SetUp and TearDown
     SUCCEED();
 }
 

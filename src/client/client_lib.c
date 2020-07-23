@@ -181,7 +181,7 @@ static void display_message(Messages *msgs, const char *buffer, size_t size) {
 
     info(buffer); // log message
 
-    //print message to screen
+    // print message to screen
     char *formated_message = log_format(buffer, size);
     print_message(msgs, formated_message);
     free(formated_message);
@@ -208,7 +208,13 @@ int server_message_handling(Messages *msgs, int sockfd) {
             if (msg_len == 0) {  // no more message
                 break;
             }
+            //store_message();
+            /*if (start_with(msg, username)) {
+                //pass
+            } else {*/
             display_message(msgs, msg, sizeof(msg));
+            //}
+
             // reset variables
             memset(msg, 0, sizeof(msg));
             msg_len = 0;
@@ -269,7 +275,7 @@ int stdin_char_handling(const Screen *s, int sockfd) {
             delete_message_character(s->input);
             break;
         default:
-            if (s->input->i == (MAXMSG_CLI - 1)) {  // max message length reached
+            if (s->input->i == (MAXMSG_CLI - 1)) { // max message length reached
                 break; // ignore character for now
             }
             input_char_handling(s->input, c);

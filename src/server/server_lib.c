@@ -1,4 +1,5 @@
 #include <assert.h>
+#include <ctype.h>
 #include <stdarg.h>
 #include <stddef.h>
 #include <stdio.h>
@@ -147,9 +148,24 @@ static void special_command_handling(Client *c, char *buffer) {
 
     if (strcmp("/nick", token) == 0) {
         command_nick(c, saveptr);
-    } else { //unknown command
+    } else { // unknown command
         send_fd(c->fd, "Unknown command %s\n", buffer);
     }
+}
+
+/**
+ * Trim end of `buffer`
+ * Return the new len of `buffer`
+ */
+static size_t trim_left(char *buffer) {
+    assert(buffer && "should not be NULL");
+
+    size_t len = strlen(buffer);
+    while (len > 0 && isspace(buffer[len - 1])) {
+        buffer[len - 1] = '\0';
+        len--;
+    }
+    return len;
 }
 
 void client_message_handling(Client *c) {
@@ -157,13 +173,18 @@ void client_message_handling(Client *c) {
 
     char buffer[MAXMSG_CLI] = {0};
     ssize_t status = read(c->fd, buffer, sizeof(buffer));
-    if (status == -1) { //error
+    if (status == -1) { // error
         return;
     }
 
-    if (status == 0) { //connection closed
+    if (status == 0) { // connection closed
         send_everyone(c->list, "%s: leave the server\n", c->username);
         disconnect_client(c);
+        return;
+    }
+
+    size_t len = trim_left(buffer);
+    if (len == 0) { // empty message
         return;
     }
 
