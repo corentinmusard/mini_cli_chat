@@ -1,4 +1,5 @@
 #include <assert.h>
+#include <limits.h>
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -104,4 +105,14 @@ void unset_logfile(void) {
         fclose(log_file);
     }
     log_file = stderr;
+}
+
+ssize_t log_and_write(int fd, const void *buf, size_t count) {
+    assert(fd >= 0 && "should be a valid file descriptor");
+    assert(fd <= INT_MAX && "should be a valid int");
+    assert(buf && "should not be NULL");
+    assert(count > 0 && "should not be 0");
+
+    info("%.*s\n", (int)count, (const char *)buf);
+    return write(fd, buf, count);
 }

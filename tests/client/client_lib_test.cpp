@@ -429,7 +429,7 @@ TEST_F(ClientLibTest, send_nickname_truncate)
 
     int e = send_nickname(buffer, fake_fd);
 
-    EXPECT_EQ(e, 0);
+    EXPECT_EQ(e, -1);
     read_not_equal(fake_fd, buffer);
     read_equal_name_offset(logfile, "19:05:52 send_nickname: truncated output: len=205, MAXMSG_CLI=100\n", 9);
 

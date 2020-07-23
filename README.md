@@ -50,23 +50,33 @@ Binaries are built into `bin/` directory.
 None for now because it's not really usable.
 
 ## TODO LIST
-### Features (ordered)
--   [x] add date to message
--   [x] server: forward messages received from a client to each clients connected to the server
--   [x] server: notify clients when someone join/leave server
+
+### Core features
 -   [x] add nicknames support (default name, renaming and uniques nicknames)
--   [ ] client: when screen is full, scroll messsages and display new messages
--   [ ] client: when input line is full, shift messsages and shift back when deleting or moving with the cursor keys
 -   [ ] add privates messages support
--   [ ] add a way to login into a specific nickname with a password
--   [ ] server: protect a nickname when it has been registred
 -   [ ] add channels support
 -   [ ] add moderation support
 -   [ ] add roles (modo/admin/muted) support
 
-### Optionnal features
--   [ ] client: add command starting with a slash like /list, /me, /whoami, /whois
--   [ ] client: ncurses: add colors to nicknames, channels and more
+### Client
+-   [x] display with ncurses
+-   [ ] when screen is full, scroll messsages and display new messages
+-   [ ] when input line is full, shift messsages and shift back when deleting or moving with the cursor keys
+-   [ ] add command starting with a slash like /list, /me, /whoami, /whois
+-   [ ] ncurses: add colors to nicknames, channels and more
+-   [ ] add utf-8 support
+-   [ ] add acknowledgment of receipt
+
+### Server
+-   [x] allow clients to connect
+-   [x] forward messages received from a client to every clients connected to the server
+-   [x] notify clients when someone join/leave the server
+-   [ ] add a way to login into a specific nickname with a password
+-   [ ] protect a nickname when it has been registred
+
+### Asynchrone
+-   [x] client: asynchrone gestion of output(new messages from server) and input(new messages from keyboard)
+-   [x] server: asynchrone connections 
 
 ### Settings
 -   [x] client: add setting configuration (nickname, server ip/port, log settings)
@@ -74,20 +84,26 @@ None for now because it's not really usable.
 
 ### Log system
 -   [x] server: pseudo log system (print to stderr)
+-   [x] add date to message
 -   [x] create or append to a file client.log/server.log
 -   [x] write every messages and errors to that file
 
-### Technical things
--   [x] server: allow clients to connect
--   [x] server: epoll: asynchrone connections 
--   [x] client: epoll: asynchrone gestion of output(new messages from server) and input(new messages from keyboard)
--   [x] client: display with ncurses
+### Build
+-   [x] use modern cmake
+-   [x] add build options
+-   [x] automatize uses of linters (at compile time, at runtime and during Continuous Integration)
+
+### Code quality
 -   [x] write function docstring
+-   [ ] write documentation about client's commands starting with a slash
 -   [ ] make unit tests
 -   [ ] make integration tests
 -   [ ] make performance tests
--   [ ] make code modular with plugins
+-   [ ] use a fuzzer
 -   [ ] use portable code
+
+### Optional features
 -   [ ] make client/server works outside localhost
 -   [ ] add IPv6 support
 -   [ ] connection to server with ssl
+-   [ ] make code modular with plugins

@@ -37,7 +37,7 @@ if(CMAKE_VERSION VERSION_GREATER 3.3)
 endif()
 
 if(CMAKE_VERSION VERSION_GREATER 3.6)
-    option(CLANG_TIDY_CHECKS "Run clang-tidy to lint the code" OFF)
+    option(CLANG_TIDY_CHECKS "Run clang-tidy to lint the code" ON)
     find_program(CLANG_TIDY_EXE
         NAMES "clang-tidy"
         DOC "Path to clang-tidy executable"

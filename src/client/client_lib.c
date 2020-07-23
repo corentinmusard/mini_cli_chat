@@ -87,9 +87,10 @@ int send_nickname(const char *nickname, int sockfd) {
     assert(len > 0 && "snprintf return a positive number");
     if ((size_t)len >= MAXMSG_CLI) {
         info("%s: truncated output: len=%d, MAXMSG_CLI=%d\n", __func__, len, MAXMSG_CLI);
+        return -1;
     }
 
-    if (write(sockfd, buffer, strlen(buffer)) == -1) {
+    if (log_and_write(sockfd, buffer, strlen(buffer)) == -1) {
         perror("write");
         return -1;
     }
@@ -123,7 +124,7 @@ static int execute_command(const char *command, int sockfd) {
         return 0;
     }
     if (start_with(command, "/nick ")) {
-        if (write(sockfd, command, strlen(command)) == -1) {
+        if (log_and_write(sockfd, command, strlen(command)) == -1) {
             perror("write");
             return -1;
         }
@@ -136,7 +137,7 @@ static int execute_command(const char *command, int sockfd) {
             return 0;
         }
 
-        if (write(sockfd, buffer, len) == -1) {
+        if (log_and_write(sockfd, buffer, len) == -1) {
             perror("write");
             return -1;
         }
@@ -178,9 +179,11 @@ static void display_message(Messages *msgs, const char *buffer, size_t size) {
     assert(buffer && "should not be NULL");
     assert(size > 0 && "should not be 0");
 
+    info(buffer); // log message
+
+    //print message to screen
     char *formated_message = log_format(buffer, size);
     print_message(msgs, formated_message);
-
     free(formated_message);
 }
 
@@ -203,7 +206,7 @@ int server_message_handling(Messages *msgs, int sockfd) {
             msg_len++;
         } else { // end of string
             if (msg_len == 0) {  // no more message
-                return 0;
+                break;
             }
             display_message(msgs, msg, sizeof(msg));
             // reset variables
@@ -233,11 +236,12 @@ static int evaluate_complete_message(const Screen *s, int sockfd) {
             return -1;
         }
         if (e == UNKNOWN_COMMAND) {
-            print_message(s->msgs, "Command unknown");
+            const char msg[] = "Command unknown\n";
+            display_message(s->msgs, msg, sizeof(msg));
         }
         return 0;
     }
-    if (write(sockfd, s->input->buffer, (size_t)s->input->i) == -1) {
+    if (log_and_write(sockfd, s->input->buffer, (size_t)s->input->i) == -1) {
         perror("write");
         return -1;
     }

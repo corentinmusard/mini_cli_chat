@@ -17,6 +17,11 @@ PRIVATE
     ${CMAKE_SOURCE_DIR}/3rd_party
 )
 
+target_compile_options(common 
+PRIVATE
+    ${W}
+)
+
 target_link_libraries(common
 PRIVATE
     cjson

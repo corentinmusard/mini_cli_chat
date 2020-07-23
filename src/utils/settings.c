@@ -87,8 +87,7 @@ static void update_logfile(Settings *s, const cJSON *json) {
  */
 struct Setting_s {
     struct Setting_s *next; // next setting or NULL
-
-    void (*update)(Settings *s, const cJSON *json);
+    Update update;
 };
 
 /**

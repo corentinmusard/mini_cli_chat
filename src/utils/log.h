@@ -5,9 +5,11 @@ extern "C" {
 #endif
 
 #include <stddef.h>
+#include <unistd.h>
 
 /**
  * It's like printf but fmt is preceded by TIME_FORMAT and a space
+ * Write to logfile.
  */
 void info(const char *fmt, ...);
 
@@ -27,6 +29,11 @@ void set_logfile(const char *filename);
  * Unset logfile, logs will now go to stderr
  */
 void unset_logfile(void);
+
+/**
+ * Log `buf` of len `count`, then call and return write(2).
+ */
+ssize_t log_and_write(int fd, const void *buf, size_t count);
 
 #ifdef __cplusplus
 }

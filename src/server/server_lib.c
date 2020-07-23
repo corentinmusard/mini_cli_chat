@@ -17,7 +17,7 @@
 /**
  * Message sent by server to a client after sucessful connection
  */
-#define CHAT_BANNER "Welcome to the basic chat!"
+#define CHAT_BANNER "Welcome to the basic chat!\n"
 
 /**
  * Send message `buffer` of size `size` to each client in `clients`
