@@ -169,3 +169,11 @@ TEST_F(LogInitTest, log_init)
     EXPECT_STREQ(buffer, "");
     read_equal_name(logfile, "00:00:00 hello");
 }
+
+using LogInitDeathTest = LogInitTest;
+
+TEST_F(LogInitDeathTest, log_init)
+{
+    const char *logfile = "/not/a/file";
+    EXPECT_DEATH(set_logfile(logfile), "fopen: No such file or directory");
+}

@@ -77,3 +77,15 @@ TEST_F(AsyncTest, make_fd_non_blocking)
     flags = fcntl(fd, F_GETFL, 0);
     EXPECT_NE(flags & O_NONBLOCK, 0);
 }
+
+using AsyncDeathTest = AsyncTest;
+
+TEST_F(AsyncDeathTest, async_add)
+{
+    EXPECT_DEATH(async_add(epollfd, BAD_FD, 0), "epoll_ctl: Bad file descriptor");
+}
+
+TEST_F(AsyncDeathTest, make_fd_non_blocking)
+{
+    EXPECT_DEATH(make_fd_non_blocking(BAD_FD), "fcntl: Bad file descriptor");
+}
