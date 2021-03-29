@@ -193,31 +193,24 @@ int server_message_handling(Messages *msgs, int sockfd) {
 
     char buffer[MAXMSG_SERV] = {0};
     ssize_t status = read(sockfd, buffer, sizeof(buffer));
-    if (status == -1 || status == 0) {  // error or connection to server closed
+    if (status == -1 || status == 0) { // error or connection to server closed
         perror("read");
         return -1;
     }
 
     char msg[MAXMSG_SERV] = {0};
     int msg_len = 0;
-    for (int i = 0; i < status; i++) {
-        if (buffer[i] != '\0') {
-            msg[msg_len] = buffer[i];
-            msg_len++;
-        } else { // end of string
-            if (msg_len == 0) {  // no more message
-                break;
-            }
-            //store_message();
-            /*if (start_with(msg, username)) {
-                //pass
-            } else {*/
+    for (int i = 0; i < status && (buffer[i] != '\0' || msg_len != 0); i++) {
+        if (buffer[i] == '\0') { // end of string
+            store_message(msgs, msg);
             display_message(msgs, msg, sizeof(msg));
-            //}
 
             // reset variables
             memset(msg, 0, sizeof(msg));
             msg_len = 0;
+        } else { 
+            msg[msg_len] = buffer[i];
+            msg_len++;
         }
     }
 

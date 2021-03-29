@@ -88,13 +88,13 @@ None for now because it's not really usable.
 -   [x] create or append to a file client.log/server.log
 -   [x] write every messages and errors to that file
 
-### Build
+### Build system
 -   [x] use modern cmake
 -   [x] add build options
--   [x] automatize uses of linters (at compile time, at runtime and during Continuous Integration)
 
 ### Code quality
 -   [x] write function docstring
+-   [x] automatize uses of linters (at compile time, at runtime and during Continuous Integration)
 -   [ ] write documentation about client's commands starting with a slash
 -   [ ] make unit tests
 -   [ ] make integration tests

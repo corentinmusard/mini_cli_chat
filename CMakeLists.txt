@@ -151,6 +151,7 @@ if (CMAKE_C_COMPILER_ID STREQUAL "GNU")
         set(W
             ${W}
             -Warith-conversion
+            #-fanalyzer
         )
     endif()
 

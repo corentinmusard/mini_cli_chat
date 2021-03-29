@@ -6,6 +6,8 @@ extern "C" {
 
 #include <curses.h>
 
+#include "utils/utils.h"
+
 typedef struct {
     WINDOW *window; // to type new message
     int i; // cursor indice
@@ -22,9 +24,19 @@ Input* input_init(void);
  */
 void free_input(Input *input);
 
+typedef struct Message_line_s Message_line;
+
+struct Message_line_s {
+    Message_line *previous; // previous message or NULL
+    Message_line *next; // next message or NULL
+    char msg[MAXMSG_SERV + 1]; // the message
+};
+//solution: array à taille fixe
 typedef struct {
     WINDOW *window; // to display messages received from server
     int y; // last message line
+    Message_line *last_msg; // last message visible on the windows
+    Message_line *first_msg; // first message visible on the windows
 } Messages;
 
 /**
@@ -36,6 +48,11 @@ Messages* messages_init(void);
  * Free messages
  */
 void free_messages(Messages *messages);
+
+/**
+ *
+ */
+void store_message(Messages *messages, const char *msg);
 
 typedef struct {
     Messages *msgs;
